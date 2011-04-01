@@ -1,5 +1,4 @@
 package com.banno.salat.avro.test
-import org.specs2.matcher.Matcher
 
 import com.banno.salat.avro._
 import global._
@@ -8,6 +7,7 @@ import scala.collection.JavaConversions._
 import org.specs2.mutable._
 import org.apache.avro.Schema
 import org.apache.avro.io.{DatumWriter, EncoderFactory}
+import org.specs2.matcher.Matcher
 
 import java.io.ByteArrayOutputStream
 
@@ -20,6 +20,7 @@ object BasicCaseClassSpec extends Specification {
       println(schema)
       schema must containField("a" -> Schema.Type.STRING)
       schema must containField("b" -> Schema.Type.INT)
+      schema must containField("c" -> Schema.Type.DOUBLE)
     }
 
     "make a datum writer for a basic case class" in {
@@ -32,8 +33,10 @@ object BasicCaseClassSpec extends Specification {
       encoder flush
 
       val json = new String(baos.toByteArray)
+      println(json)
       json must /("a" -> ed.a)
       json must /("b" -> ed.b)
+      json must /("c" -> ed.c)
     }
   }
 

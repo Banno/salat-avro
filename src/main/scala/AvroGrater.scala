@@ -26,6 +26,7 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
     typeName.name match {
       case "String" => Schema.create(Schema.Type.STRING)
       case "Int" => Schema.create(Schema.Type.INT)
+      case "BigDecimal" => Schema.create(Schema.Type.DOUBLE)
       case _ => throw new RuntimeException("I don't know this type")
     }
   }
@@ -34,7 +35,13 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
 
   protected val avroGenericData = new GenericData {
     override def getField(record: Any, name: String, pos: Int): Object = {
-      record.asInstanceOf[X].productIterator.toList.apply(pos).asInstanceOf[AnyRef]
+      val caseClass = record.asInstanceOf[X]
+      val (value, field) = caseClass.productIterator.zip(indexedFields.iterator).toList.apply(pos)
+      field.out_!(value) match {
+        case Some(None) => None
+        case Some(serialized) => serialized.asInstanceOf[AnyRef]
+        case _ => None
+      }
     }
   }
 }
