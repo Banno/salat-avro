@@ -15,11 +15,17 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
 
   lazy val recordFields: Seq[SField] = {
     indexedFields.map { field =>
-      new SField(field.name, schemaTypeFor(field.typeRefType), "", null)
+      new SField(field.name, schemaTypeFor(field.typeRefType), null, null)
     }
   }
 
   protected def schemaTypeFor(typeRefType: TypeRefType): Schema = {
-    Schema.create(Schema.Type.STRING)
+    val TypeRefType(_, typeName, _) = typeRefType
+    typeName.name match {
+      case "String"        => Schema.create(Schema.Type.STRING)
+      case "Int"           => Schema.create(Schema.Type.INT)
+      case "BigDecimal"    => Schema.create(Schema.Type.FLOAT)
+      case _ => throw new RuntimeException("I don't know this type")
+    }
   }
 }

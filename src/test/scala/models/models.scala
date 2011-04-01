@@ -1,3 +1,5 @@
 package com.banno.salat.avro.test.models
 
-case class Edward(a: String)
+import scala.math.{BigDecimal => ScalaBigDecimal}
+
+case class Edward(a: String, b: Int, c: ScalaBigDecimal)
