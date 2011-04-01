@@ -24,6 +24,9 @@ object BasicCaseClassSpec extends Specification {
       schema must containField("aa", List(Schema.Type.STRING, Schema.Type.NULL))
       schema must containField("bb", List(Schema.Type.INT, Schema.Type.NULL))
       schema must containField("cc", List(Schema.Type.DOUBLE, Schema.Type.NULL))
+      schema must containField("aaa", List(Schema.Type.STRING, Schema.Type.NULL))
+      schema must containField("bbb", List(Schema.Type.INT, Schema.Type.NULL))
+      schema must containField("ccc", List(Schema.Type.DOUBLE, Schema.Type.NULL))
     }
 
     "make a datum writer for a basic case class" in {
@@ -43,6 +46,9 @@ object BasicCaseClassSpec extends Specification {
       json must /("aa") /("string" -> ed.aa.get)
       json must /("bb") /("int" -> ed.bb.get)
       json must /("cc") /("double" -> ed.cc.get)
+      json must /("aaa" -> null)
+      json must /("bbb" -> null)
+      json must /("ccc" -> null)
     }
   }
 

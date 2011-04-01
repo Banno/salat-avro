@@ -23,8 +23,8 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
 
   protected def schemaTypeFor(typeRefType: Type): Schema = {
     val TypeRefType(_, typeName, typeArgs) = typeRefType
-    println("typeName = %s".format(typeName.name))
-    println("typeRefType.typeArgs = %s".format(typeArgs))
+//    println("typeName = %s".format(typeName.name))
+//    println("typeRefType.typeArgs = %s".format(typeArgs))
     typeName.name match {
       case "String" => Schema.create(Schema.Type.STRING)
       case "Int" => Schema.create(Schema.Type.INT)
@@ -44,11 +44,14 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
       val (value, field) = caseClass.productIterator.zip(indexedFields.iterator).toList.apply(pos)
       field.out_!(value) match {
         case Some(None) => None
-        case Some(serialized) => println("getField = " + serialized); serialized.asInstanceOf[AnyRef]
+        case Some(serialized) => serialized.asInstanceOf[AnyRef]
         case _ => None
       }
     }
 
-    override def resolveUnion(union: Schema, datum: Any): Int = 0
+    override def resolveUnion(union: Schema, datum: Any): Int = datum match {
+      case None    => 1
+      case _       => 0
+    }
   }
 }
