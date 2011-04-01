@@ -18,6 +18,8 @@ object BasicCaseClassSpec extends Specification {
     "make an avro schema for a basic case class" in {
       val schema = grater[Edward].asAvroSchema
       println(schema)
+      schema.getName must_== "Edward"
+      schema.getNamespace must_== "com.banno.salat.avro.test.models"
       schema must containField("a", Schema.Type.STRING)
       schema must containField("b", Schema.Type.INT)
       schema must containField("c", Schema.Type.DOUBLE)

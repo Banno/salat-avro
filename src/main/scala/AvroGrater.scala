@@ -11,7 +11,11 @@ import scala.tools.scalap.scalax.rules.scalasig.{Type,TypeRefType}
 class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   extends Grater[X](clazz) {
 
-  lazy val asAvroSchema: Schema = Schema.createRecord(recordFields)
+  lazy val asAvroSchema: Schema = {
+    val schema = Schema.createRecord(clazz.getName, "", "", false)
+    schema.setFields(recordFields)
+    schema
+  }
 
   lazy val asDatumWriter: DatumWriter[X] = new AvroGenericDatumWriter[X]
 
