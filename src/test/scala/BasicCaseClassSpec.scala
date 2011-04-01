@@ -6,7 +6,7 @@ import global._
 import scala.collection.JavaConversions._
 import org.specs2.mutable._
 import org.apache.avro.Schema
-import org.apache.avro.io.{DatumWriter, EncoderFactory}
+import org.apache.avro.io.{ DatumWriter, EncoderFactory }
 import org.specs2.matcher.Matcher
 
 import java.io.ByteArrayOutputStream
@@ -18,9 +18,12 @@ object BasicCaseClassSpec extends Specification {
     "make an avro schema for a basic case class" in {
       val schema = grater[Edward].asAvroSchema
       println(schema)
-      schema must containField("a" -> Schema.Type.STRING)
-      schema must containField("b" -> Schema.Type.INT)
-      schema must containField("c" -> Schema.Type.DOUBLE)
+      schema must containField("a", Schema.Type.STRING)
+      schema must containField("b", Schema.Type.INT)
+      schema must containField("c", Schema.Type.DOUBLE)
+      schema must containField("aa", List(Schema.Type.STRING, Schema.Type.NULL))
+      schema must containField("bb", List(Schema.Type.INT, Schema.Type.NULL))
+      schema must containField("cc", List(Schema.Type.DOUBLE, Schema.Type.NULL))
     }
 
     "make a datum writer for a basic case class" in {
@@ -37,9 +40,17 @@ object BasicCaseClassSpec extends Specification {
       json must /("a" -> ed.a)
       json must /("b" -> ed.b)
       json must /("c" -> ed.c)
+      json must /("aa") /("string" -> ed.aa.get)
+      json must /("bb") /("int" -> ed.bb.get)
+      json must /("cc") /("double" -> ed.cc.get)
     }
   }
 
-  def containField(pair: Pair[String, Schema.Type]): Matcher[Schema] = ((_: Schema).getFields.map(f => (f.name, f.schema.getType)).contains(pair),
-                                                                       (schema: Schema) => "Schema\n\t%s\n\tdoesn't have a field named '%s' of type '%s'".format(schema, pair._1, pair._2))
+  def containField(name: String, schemaType: Schema.Type): Matcher[Schema] =
+    ((_: Schema).getFields.map(f => (f.name, f.schema.getType)).contains(Pair(name, schemaType)),
+     (schema: Schema) => "Schema\n\t%s\n\tdoesn't have a field named '%s' of type '%s'".format(schema, name, schemaType))
+
+  def containField(name: String, schemaTypes: List[Schema.Type]): Matcher[Schema] =
+    ((_: Schema).getFields.filter(_.schema.getType eq Schema.Type.UNION).map(f => (f.name, f.schema.getTypes.map(_.getType).toList)).contains(Pair(name, schemaTypes)),
+      (schema: Schema) => "Schema\n\t%s\n\tdoesn't have a field named '%s' of union types '%s'".format(schema, name, schemaTypes))
 }
