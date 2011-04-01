@@ -3,9 +3,13 @@ import org.specs2.matcher.Matcher
 
 import com.banno.salat.avro._
 import global._
+
+import scala.collection.JavaConversions._
 import org.specs2.mutable._
 import org.apache.avro.Schema
-import scala.collection.JavaConversions._
+import org.apache.avro.io.{DatumWriter, EncoderFactory}
+
+import java.io.ByteArrayOutputStream
 
 object BasicCaseClassSpec extends Specification {
   import models._
@@ -16,7 +20,20 @@ object BasicCaseClassSpec extends Specification {
       println(schema)
       schema must containField("a" -> Schema.Type.STRING)
       schema must containField("b" -> Schema.Type.INT)
-      schema must containField("c" -> Schema.Type.FLOAT)
+    }
+
+    "make a datum writer for a basic case class" in {
+      val datumWriter: DatumWriter[Edward] = grater[Edward].asDatumWriter
+
+      val baos = new ByteArrayOutputStream
+      val encoder = EncoderFactory.get.jsonEncoder(grater[Edward].asAvroSchema, baos)
+
+      datumWriter.write(ed, encoder)
+      encoder flush
+
+      val json = new String(baos.toByteArray)
+      json must /("a" -> ed.a)
+      json must /("b" -> ed.b)
     }
   }
 
