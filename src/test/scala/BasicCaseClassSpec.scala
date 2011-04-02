@@ -6,7 +6,7 @@ import global._
 import scala.collection.JavaConversions._
 import org.specs2.mutable._
 import org.apache.avro.Schema
-import org.apache.avro.io.{ DatumWriter, EncoderFactory }
+import org.apache.avro.io.{ DatumReader, DatumWriter, DecoderFactory, EncoderFactory }
 import org.specs2.matcher.Matcher
 
 import java.io.ByteArrayOutputStream
@@ -51,6 +51,22 @@ object BasicCaseClassSpec extends Specification {
       json must /("aaa" -> null)
       json must /("bbb" -> null)
       json must /("ccc" -> null)
+    }
+
+    "make a datum reader for a basic case class" in {
+      val oldEd = ed.copy(bbb = Some(2), ccc = Some(2.2))
+      val datumWriter: DatumWriter[Edward] = grater[Edward].asDatumWriter
+      val baos = new ByteArrayOutputStream
+      val encoder = EncoderFactory.get.binaryEncoder(baos, null)
+      datumWriter.write(oldEd, encoder)
+      encoder flush
+
+      val datumReader: AvroDatumReader[Edward] = grater[Edward].asDatumReader
+      val decoder = DecoderFactory.get.binaryDecoder(baos.toByteArray, null)
+
+      val newEd: Edward = datumReader.read(decoder)
+      println(newEd)
+      newEd must_== oldEd
     }
   }
 

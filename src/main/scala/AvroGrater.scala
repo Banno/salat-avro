@@ -4,9 +4,14 @@ import com.novus.salat._
 import scala.collection.JavaConversions._
 import org.apache.avro.Schema
 import Schema.{ Field => SField }
-import org.apache.avro.io.DatumWriter
-import org.apache.avro.generic.{ GenericData, GenericDatumWriter }
+import org.apache.avro.io.{Decoder, DatumReader, DatumWriter}
+import org.apache.avro.generic.{ GenericData, GenericDatumReader, GenericDatumWriter }
+import org.apache.avro.util.Utf8
 import scala.tools.scalap.scalax.rules.scalasig.{Type,TypeRefType}
+
+trait AvroDatumReader[X] extends DatumReader[X] {
+  def read(decoder: Decoder): X
+}
 
 class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   extends Grater[X](clazz) {
@@ -18,6 +23,7 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   }
 
   lazy val asDatumWriter: DatumWriter[X] = new AvroGenericDatumWriter[X]
+  lazy val asDatumReader: AvroDatumReader[X] = new AvroGenericDatumReader[X]
 
   protected lazy val recordFields: Seq[SField] = {
     indexedFields.map { field =>
@@ -38,10 +44,8 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
     }
   }
 
-  private def optional(schema: Schema) = Schema.createUnion(schema :: Schema.create(Schema.Type.NULL) :: Nil)
-
   protected class AvroGenericDatumWriter[X] extends GenericDatumWriter[X](asAvroSchema, avroGenericData)
-
+    
   protected val avroGenericData = new GenericData {
     override def getField(record: Any, name: String, pos: Int): Object = {
       val caseClass = record.asInstanceOf[X]
@@ -56,6 +60,42 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
     override def resolveUnion(union: Schema, datum: Any): Int = datum match {
       case None    => 1
       case _       => 0
+    }
+  }
+
+  private def optional(schema: Schema) = Schema.createUnion(schema :: Schema.create(Schema.Type.NULL) :: Nil)
+
+  protected class AvroGenericDatumReader[X] extends GenericDatumReader[X](asAvroSchema) with AvroDatumReader[X] {
+    val collectingGenericData = new CollectingGenericData          
+    val colletingReader = new GenericDatumReader[Object](asAvroSchema, asAvroSchema, collectingGenericData)
+              
+    def read(decoder: Decoder): X = {
+      colletingReader.read(null, decoder)
+      val recordFields: Seq[Object] = collectingGenericData.fields
+      
+      val arguments = indexedFields.zip(recordFields).map {
+        case (field, value) =>
+          // println("setting value %s for %s".format(value, field));
+          field.in_!(value)
+      }.map(_.get.asInstanceOf[AnyRef])
+      // arguments.foreach {arg => println("arg %s is of type %s".format(arg, arg.getClass))}
+      
+      constructor.newInstance(arguments: _*).asInstanceOf[X]
+    }
+  }
+    
+  import scala.collection.mutable.ListBuffer
+  protected class CollectingGenericData extends GenericData {
+    val fields = new ListBuffer[Object]
+    override def setField(record: Any, name: String, pos: Int, obj: Object) {
+      // println("pos = " + pos)
+      // println("obj = " + obj)
+      // println("fields = " + fields)
+      val scalaObj = obj match {
+        case utf8: Utf8 => utf8.toString
+        case x => x
+      }
+      fields.insert(pos, scalaObj)
     }
   }
 }
