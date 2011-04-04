@@ -32,10 +32,9 @@ object CaseClassGraphSpecs extends SalatAvroSpec {
     }
     
     "serialize and deserialize an object" in {
-      pending
-      // val oldGraph = graph()
-      // val newGraph = serializeAndDeserialize(oldGraph)
-      // newGraph must_== oldGraph
+      val oldGraph = graph()
+      val newGraph = serializeAndDeserialize(oldGraph)
+      newGraph must_== oldGraph
     }
   }
 }

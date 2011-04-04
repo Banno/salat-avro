@@ -82,27 +82,47 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
 
   private def optional(schema: Schema) = Schema.createUnion(schema :: Schema.create(Schema.Type.NULL) :: Nil)
 
+  import scala.collection.mutable.{HashMap, ListBuffer}
   protected class AvroGenericDatumReader[X] extends GenericDatumReader[X](asAvroSchema) with AvroDatumReader[X] {
     val collectingGenericData = new CollectingGenericData          
     val colletingReader = new GenericDatumReader[Object](asAvroSchema, asAvroSchema, collectingGenericData)
-              
+
     def read(decoder: Decoder): X = {
       colletingReader.read(null, decoder)
-      val recordFields: Seq[Object] = collectingGenericData.fields
       
-      val arguments = indexedFields.zip(recordFields).map {
+      val rootRecord = collectingGenericData.rootRecord.get
+      val recordFields = collectingGenericData.fields
+      val rootValues: ListBuffer[Object] = recordFields.get(rootRecord).get
+      
+      applyValues(rootRecord, rootValues, recordFields).asInstanceOf[X]
+    }
+    
+    def applyValues(genericRecord: GenericData.Record, values: ListBuffer[Object], index: HashMap[GenericData.Record, ListBuffer[Object]]): Object = {
+      // println("-------- apply values -------")
+      // println("record = " + genericRecord)
+      // println("values = " + values)
+      
+      val grater: AvroGrater[_] = ctx.lookup(genericRecord.getSchema.getFullName).get.asInstanceOf[AvroGrater[_]]
+
+      val arguments = grater.indexedFields.zip(values).map {
+        case (field, Some(record: GenericData.Record)) => Some(applyValues(record, index.get(record).get, index))
         case (field, Some(value)) => field.in_!(value)
         case (field, _) => safeDefault(field)
       }.map(_.get.asInstanceOf[AnyRef])
       
-      constructor.newInstance(arguments: _*).asInstanceOf[X]
+      grater.constructor.newInstance(arguments: _*).asInstanceOf[AnyRef]
     }
   }
     
-  import scala.collection.mutable.ListBuffer
   protected class CollectingGenericData extends GenericData {
-    val fields = new ListBuffer[Object]
+    var rootRecord: Option[GenericData.Record] = None
+    val fields = new HashMap[GenericData.Record, ListBuffer[Object]]
     override def setField(record: Any, name: String, pos: Int, obj: Object) {
+      val genericRecord = record.asInstanceOf[GenericData.Record]
+      rootRecord = Some(rootRecord.getOrElse(genericRecord))
+      // println("------- set field --------")
+      // println("record = " + record)
+      // println("name = " + name)
       // println("pos = " + pos)
       // println("obj = " + obj)
       // println("fields = " + fields)
@@ -110,7 +130,9 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
         case utf8: Utf8 => utf8.toString
         case x => x
       }
-      fields.insert(pos, Option(scalaObj))
+      val recordFields = fields.getOrElse(genericRecord, new ListBuffer[Object])
+      recordFields.insert(pos, Option(scalaObj))
+      fields.update(genericRecord, recordFields)
     }
   }
 }
