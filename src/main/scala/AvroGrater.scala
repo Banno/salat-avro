@@ -4,7 +4,7 @@ import com.novus.salat._
 import scala.collection.JavaConversions._
 import org.apache.avro.Schema
 import Schema.{ Field => SField }
-import org.apache.avro.io.{Decoder, DatumReader, DatumWriter}
+import org.apache.avro.io.{Decoder, Encoder, DatumReader, DatumWriter}
 import org.apache.avro.generic.{ GenericData, GenericDatumReader, GenericDatumWriter }
 import org.apache.avro.util.Utf8
 import scala.tools.scalap.scalax.rules.scalasig.{Type,TypeRefType}
@@ -24,6 +24,14 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
 
   lazy val asDatumWriter: DatumWriter[X] = new AvroGenericDatumWriter[X]
   lazy val asDatumReader: AvroDatumReader[X] = new AvroGenericDatumReader[X]
+
+  def serialize(x: X, encoder: Encoder): Encoder = {
+    asDatumWriter.write(x, encoder)
+    encoder.flush
+    encoder
+  }
+
+  def asObject(decoder: Decoder): X = asDatumReader.read(decoder)    
 
   protected lazy val recordFields: Seq[SField] = {
     indexedFields.map { field =>

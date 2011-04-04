@@ -2,6 +2,7 @@ package com.banno.salat.avro.test
 
 import com.banno.salat.avro._
 import global._
+import com.novus.salat.CaseClass
 
 import scala.collection.JavaConversions._
 import org.specs2.mutable._
@@ -55,20 +56,24 @@ object BasicCaseClassSpec extends Specification {
 
     "make a datum reader for a basic case class" in {
       val oldEd = ed
-      val datumWriter: DatumWriter[Edward] = grater[Edward].asDatumWriter
-      val baos = new ByteArrayOutputStream
-      val encoder = EncoderFactory.get.binaryEncoder(baos, null)
-      datumWriter.write(oldEd, encoder)
-      encoder flush
-
-      val datumReader: AvroDatumReader[Edward] = grater[Edward].asDatumReader
-      val decoder = DecoderFactory.get.binaryDecoder(baos.toByteArray, null)
-
-      val newEd: Edward = datumReader.read(decoder)
+      val newEd: Edward = serializeAndDeserialize(oldEd)
       println(newEd)
       newEd must_== oldEd
     }
   }
+
+  def serializeAndDeserialize[X <: CaseClass : Manifest](old: X): X = {
+      val baos = byteArrayOuputStream()
+      val encoder = binaryEncoder(baos)
+      grater[X].serialize(old, encoder)
+      
+      val decoder = binaryDecoder(baos.toByteArray)
+      grater[X].asObject(decoder)
+  }
+
+  def byteArrayOuputStream(): ByteArrayOutputStream = new ByteArrayOutputStream
+  def binaryEncoder(byteArrayOS: ByteArrayOutputStream) = EncoderFactory.get().binaryEncoder(byteArrayOS, null)
+  def binaryDecoder(bytes: Array[Byte]) = DecoderFactory.get().binaryDecoder(bytes, null)
 
   def containField(name: String, schemaType: Schema.Type): Matcher[Schema] =
     ((_: Schema).getFields.map(f => (f.name, f.schema.getType)).contains(Pair(name, schemaType)),
