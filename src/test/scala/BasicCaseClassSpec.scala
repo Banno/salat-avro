@@ -2,17 +2,12 @@ package com.banno.salat.avro.test
 
 import com.banno.salat.avro._
 import global._
-import com.novus.salat.CaseClass
-
-import scala.collection.JavaConversions._
-import org.specs2.mutable._
-import org.apache.avro.Schema
-import org.apache.avro.io.{ DatumReader, DatumWriter, DecoderFactory, EncoderFactory }
-import org.specs2.matcher.Matcher
 
 import java.io.ByteArrayOutputStream
+import org.apache.avro.io.{ DatumReader, DatumWriter, DecoderFactory, EncoderFactory }
+import org.apache.avro.Schema
 
-object BasicCaseClassSpec extends Specification {
+object BasicCaseClassSpec extends SalatAvroSpec {
   import models._
 
   "a grater" should {
@@ -33,15 +28,7 @@ object BasicCaseClassSpec extends Specification {
     }
 
     "make a datum writer for a basic case class" in {
-      val datumWriter: DatumWriter[Edward] = grater[Edward].asDatumWriter
-
-      val baos = new ByteArrayOutputStream
-      val encoder = EncoderFactory.get.jsonEncoder(grater[Edward].asAvroSchema, baos)
-
-      datumWriter.write(ed, encoder)
-      encoder flush
-
-      val json = new String(baos.toByteArray)
+      val json = serializeToJSON(ed)
       println(json)
       json must /("a" -> ed.a)
       json must /("b" -> ed.b)
@@ -62,24 +49,4 @@ object BasicCaseClassSpec extends Specification {
     }
   }
 
-  def serializeAndDeserialize[X <: CaseClass : Manifest](old: X): X = {
-      val baos = byteArrayOuputStream()
-      val encoder = binaryEncoder(baos)
-      grater[X].serialize(old, encoder)
-      
-      val decoder = binaryDecoder(baos.toByteArray)
-      grater[X].asObject(decoder)
-  }
-
-  def byteArrayOuputStream(): ByteArrayOutputStream = new ByteArrayOutputStream
-  def binaryEncoder(byteArrayOS: ByteArrayOutputStream) = EncoderFactory.get().binaryEncoder(byteArrayOS, null)
-  def binaryDecoder(bytes: Array[Byte]) = DecoderFactory.get().binaryDecoder(bytes, null)
-
-  def containField(name: String, schemaType: Schema.Type): Matcher[Schema] =
-    ((_: Schema).getFields.map(f => (f.name, f.schema.getType)).contains(Pair(name, schemaType)),
-     (schema: Schema) => "Schema\n\t%s\n\tdoesn't have a field named '%s' of type '%s'".format(schema, name, schemaType))
-
-  def containField(name: String, schemaTypes: List[Schema.Type]): Matcher[Schema] =
-    ((_: Schema).getFields.filter(_.schema.getType eq Schema.Type.UNION).map(f => (f.name, f.schema.getTypes.map(_.getType).toList)).contains(Pair(name, schemaTypes)),
-      (schema: Schema) => "Schema\n\t%s\n\tdoesn't have a field named '%s' of union types '%s'".format(schema, name, schemaTypes))
 }
