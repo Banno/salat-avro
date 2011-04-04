@@ -13,4 +13,8 @@ class Project(info: ProjectInfo) extends DefaultProject(info) {
   val specs2 = "org.specs2" %% "specs2" % "1.0.1" % "test"
   def specs2Framework = new TestFramework("org.specs2.runner.SpecsFramework")
   override def testFrameworks = super.testFrameworks ++ Seq(specs2Framework)
+
+  Credentials(Path.userHome / ".ivy2" / ".banno_credentials", log)
+  lazy val publishTo = "Banno Snapshots Repo" at "http://10.3.0.26:8081/nexus/content/repositories/snapshots"
+
 }
