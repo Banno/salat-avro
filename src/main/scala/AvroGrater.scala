@@ -74,11 +74,9 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
       val recordFields: Seq[Object] = collectingGenericData.fields
       
       val arguments = indexedFields.zip(recordFields).map {
-        case (field, value) =>
-          // println("setting value %s for %s".format(value, field));
-          field.in_!(value)
+        case (field, Some(value)) => field.in_!(value)
+        case (field, _) => safeDefault(field)
       }.map(_.get.asInstanceOf[AnyRef])
-      // arguments.foreach {arg => println("arg %s is of type %s".format(arg, arg.getClass))}
       
       constructor.newInstance(arguments: _*).asInstanceOf[X]
     }
@@ -95,7 +93,7 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
         case utf8: Utf8 => utf8.toString
         case x => x
       }
-      fields.insert(pos, scalaObj)
+      fields.insert(pos, Option(scalaObj))
     }
   }
 }

@@ -54,7 +54,7 @@ object BasicCaseClassSpec extends Specification {
     }
 
     "make a datum reader for a basic case class" in {
-      val oldEd = ed.copy(bbb = Some(2), ccc = Some(2.2))
+      val oldEd = ed
       val datumWriter: DatumWriter[Edward] = grater[Edward].asDatumWriter
       val baos = new ByteArrayOutputStream
       val encoder = EncoderFactory.get.binaryEncoder(baos, null)
