@@ -1,6 +1,7 @@
 package com.banno.salat.avro.test.models
 
 import scala.math.{BigDecimal => ScalaBigDecimal}
+import org.scala_tools.time.Imports._
 
 // from salat's test models
 // case class Alice(x: String, y: Option[String] = Some("default y"), z: Basil)
@@ -23,4 +24,5 @@ object Frakked extends Enumeration {
 }
 
 case class Me(name: String, state: Frakked.Value = Frakked.BeyondRepair)
-  
+
+case class Neville(ennui: Boolean = true, asOf: DateTime = new DateTime)  

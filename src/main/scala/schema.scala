@@ -28,8 +28,10 @@ object AvroSalatSchema {
     // println("in context: " + ctx.lookup(symbol.path))
     (symbol.path, typeRef, ctx.lookup(symbol.path)) match {
       case ("scala.Predef.String", _, _) => Schema.create(Schema.Type.STRING)
+      case ("scala.Boolean", _, _) => Schema.create(Schema.Type.BOOLEAN)
       case (path, _, _) if isInt(path) => Schema.create(Schema.Type.INT)
       case (path, _, _) if isBigDecimal(path) => Schema.create(Schema.Type.DOUBLE)
+      case (path, _, _) if isJodaDateTime(path) => Schema.create(Schema.Type.STRING)
       case ("scala.Option", _, _) => optional(schemaTypeFor(typeArgs(0)))
       case (_, IsEnum(prefix), _) => enumSchema(prefix)
       case (_, _, Some(recordGrater)) => recordGrater.asInstanceOf[AvroGrater[_]].asAvroSchema

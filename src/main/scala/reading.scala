@@ -35,7 +35,9 @@ class AvroGenericDatumReader[X <: CaseClass](rootGrater: AvroGrater[X])(implicit
 
     val arguments = grater._indexedFields.zip(values).map {
       case (field, Some(record: GenericData.Record)) => Some(applyValues(record, index.get(record).get, index))
-      case (field, Some(value)) => field.in_!(value)
+      case (field, Some(value)) =>
+        val inTransformer = Injectors.select(field.typeRefType).getOrElse(field.in)
+        inTransformer.transform_!(value)
       case (field, _) => grater.safeDefault(field)
     }.map(_.get.asInstanceOf[AnyRef])
 
