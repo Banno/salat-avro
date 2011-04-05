@@ -14,3 +14,13 @@ case class Basil(p: Option[Int], q: Int = 1067)
 case class Edward(a:          String,           b:        Int,           c:        ScalaBigDecimal,
                   aa:  Option[String] = None,   bb: Option[Int] = None,  cc: Option[ScalaBigDecimal] = None,
                   aaa:  Option[String] = None,  bbb: Option[Int] = None, ccc: Option[ScalaBigDecimal] = None)
+
+object Frakked extends Enumeration {
+  val JustALittle = Value("just a little")
+  val QuiteABit = Value("quite a bit")
+  val Majorly = Value("majorly")
+  val BeyondRepair = Value("beyond repair")
+}
+
+case class Me(name: String, state: Frakked.Value = Frakked.BeyondRepair)
+  
