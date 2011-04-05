@@ -13,19 +13,23 @@ object Extractors {
   def select(t: TypeRefType, hint: Boolean = false)(implicit ctx: Context): Option[Transformer] = t match {
 
     case IsOption(t@TypeRefType(_, _, _)) => t match {
-      case TypeRefType(_, symbol, _) if hint || ctx.lookup(symbol.path).isDefined =>
-        Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor)
+      
       case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
         Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor with JodaTimeToString)
+      
+      case TypeRefType(_, symbol, _) if hint || ctx.lookup(symbol.path).isDefined =>
+        Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor)
 
       case _ => None
     }
 
     case TypeRefType(_, symbol, _) => t match {
-      case TypeRefType(_, symbol, _) if hint || ctx.lookup(symbol.path).isDefined =>
-        Some(new Transformer(symbol.path, t)(ctx) {})
+      
       case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
         Some(new Transformer(symbol.path, t)(ctx) with JodaTimeToString)
+
+      case TypeRefType(_, symbol, _) if hint || ctx.lookup(symbol.path).isDefined =>
+        Some(new Transformer(symbol.path, t)(ctx) {})
       
       case _ => None
     }
