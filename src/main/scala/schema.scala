@@ -1,6 +1,7 @@
 package com.banno.salat.avro
 
 import com.novus.salat._
+import transformers._
 import scala.collection.JavaConversions._
 import org.apache.avro.Schema
 import Schema.{ Field => SField }
@@ -25,13 +26,13 @@ object AvroSalatSchema {
     // println("typeName = %s".format(symbol.name))
     // println("typeRefType.typeArgs = %s".format(typeArgs))
     // println("in context: " + ctx.lookup(symbol.path))
-    (symbol.name, ctx.lookup(symbol.path)) match {
-      case ("String", _) => Schema.create(Schema.Type.STRING)
-      case ("Int", _) => Schema.create(Schema.Type.INT)
-      case ("BigDecimal", _) => Schema.create(Schema.Type.DOUBLE)
-      case ("Option", _) => optional(schemaTypeFor(typeArgs(0)))
+    (symbol.path, ctx.lookup(symbol.path)) match {
+      case ("scala.Predef.String", _) => Schema.create(Schema.Type.STRING)
+      case (path, _) if isInt(path) => Schema.create(Schema.Type.INT)
+      case (path, _) if isBigDecimal(path) => Schema.create(Schema.Type.DOUBLE)
+      case ("scala.Option", _) => optional(schemaTypeFor(typeArgs(0)))
       case (_, Some(recordGrater)) => recordGrater.asInstanceOf[AvroGrater[_]].asAvroSchema
-      case _ => throw new UnknownTypeForAvroSchema(symbol.name)
+      case (path, _) => throw new UnknownTypeForAvroSchema(path)
     }
   }
   
@@ -39,4 +40,4 @@ object AvroSalatSchema {
 
 }
 
-class UnknownTypeForAvroSchema(symbolName: String) extends Exception("Unknown Type for Avro Serialization: " + symbolName)
+class UnknownTypeForAvroSchema(symbolPath: String) extends Exception("Unknown Type for Avro Serialization: " + symbolPath)
