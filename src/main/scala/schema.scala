@@ -31,10 +31,12 @@ object AvroSalatSchema {
       case ("BigDecimal", _) => Schema.create(Schema.Type.DOUBLE)
       case ("Option", _) => optional(schemaTypeFor(typeArgs(0)))
       case (_, Some(recordGrater)) => recordGrater.asInstanceOf[AvroGrater[_]].asAvroSchema
-      case _ => throw new RuntimeException("I don't know this type")
+      case _ => throw new UnknownTypeForAvroSchema(symbol.name)
     }
   }
   
   private def optional(schema: Schema) = Schema.createUnion(schema :: Schema.create(Schema.Type.NULL) :: Nil)
 
 }
+
+class UnknownTypeForAvroSchema(symbolName: String) extends Exception("Unknown Type for Avro Serialization: " + symbolName)
