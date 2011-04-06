@@ -13,10 +13,10 @@ trait AvroDatumReader[X] extends DatumReader[X] {
 class AvroGenericDatumReader[X <: CaseClass](rootGrater: AvroGrater[X])(implicit ctx: Context)
   extends GenericDatumReader[X](rootGrater.asAvroSchema) with AvroDatumReader[X] {
 
-  val collectingGenericData = new CollectingGenericData
-  val colletingReader = new GenericDatumReader[Object](rootGrater.asAvroSchema, rootGrater.asAvroSchema, collectingGenericData)
-
   def read(decoder: Decoder): X = {
+    val collectingGenericData = new CollectingGenericData
+    val colletingReader = new GenericDatumReader[Object](rootGrater.asAvroSchema, rootGrater.asAvroSchema, collectingGenericData)
+
     colletingReader.read(null, decoder)
 
     val rootRecord = collectingGenericData.rootRecord.get

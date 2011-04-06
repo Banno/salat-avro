@@ -15,9 +15,17 @@ object DateTimeSupportSpec extends SalatAvroSpec {
       schema must containField("asOf", Schema.Type.STRING)
     }
 
-    "serialize and deserizlize with a date" in {
+    "serialize and deserizlize with a org.scala_tools.time.Imports.DateTime" in {
       import org.scala_tools.time.Imports._
       val dt = DateTime.now
+      val oldNeville = Neville(asOf = dt)
+      val newNeville = serializeAndDeserialize(oldNeville)
+      newNeville must_== oldNeville
+    }
+    
+    "serialize and deserizlize with a org.joda.time.DateTime" in {
+      import org.joda.time._
+      val dt = new DateTime
       val oldNeville = Neville(asOf = dt)
       val newNeville = serializeAndDeserialize(oldNeville)
       newNeville must_== oldNeville
