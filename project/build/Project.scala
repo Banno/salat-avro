@@ -18,4 +18,5 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ApacheLicense
   lazy val publishTo = "Banno Snapshots Repo" at "http://10.3.0.26:8081/nexus/content/repositories/snapshots"
 
   def copyrightLine = "Copyright 2011 T8 Webware"
+  override def compileAction = super.compileAction dependsOn formatLicenseHeaders
 }
