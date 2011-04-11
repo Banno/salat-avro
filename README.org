@@ -1,0 +1,60 @@
+#+OPTIONS:   H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+STARTUP: oddeven
+
+* salat-avro
+=salat-avro= is library to quickly encode and decode Scala case classes to and from serialized [[http://avro.apache.org/][Apache Avro]] encodings using [[https://github.com/novus/salat][salat]]. It is very fast.
+** Usage
+   Using salat-avro is very similar to how you would use salat. Given a case class and an implicit context, it will give you a grater which can serialize and deserialize.
+
+   A major difference is that you must supply your own Encoder and Decoder. These can be had from the Avro [[http://avro.apache.org/docs/1.5.0/api/java/org/apache/avro/io/EncoderFactory.html][EncoderFactory]] and [[http://avro.apache.org/docs/1.5.0/api/java/org/apache/avro/io/DecoderFactory.html][DecoderFactory]]
+ 
+   Here's a quick example:
+#+BEGIN_SRC scala
+  import com.banno.salat.avro._
+  import global._
+  
+  val oldAlice = Alice("abcd", Some(new DateTime()), 123, None, Bob("abc"))
+  
+  val baos = new ByteArrayOutputStream
+  val encoder = EncoderFactory.get().binaryEncoder(baos, null)
+  
+  grater[Alice].serialize(oldAlice, encoder)
+  
+  val bytes = baos.toByteArray
+  val decoder = DecoderFactory.get().binaryDecoder(bytes, null)
+  
+  val sameAlice: Alice = grater[Alice].asObject(decoder)
+  
+#+END_SRC
+   
+   In the case that you need an Avro schema (say for the JsonEncoder), you can get it via:
+#+BEGIN_SRC scala
+  val schema: Schema = grater[Alice].asAvroSchema
+#+END_SRC
+*** Types that salat-avro supports
+    - Boolean
+    - String
+    - Int
+    - BigDecimal
+    - Enumeration values
+    - JodaTime date times
+    - Option types of any other type salat-avro supports
+    - Other case classes
+** Why?
+   With many serialization schemes, you have an external schema that you use to generate your classes in your language du jour. This can be a hassle if you're only using Scala to serialize and deserialize. It introduces a clunky step using a un-natural interface. It also becomes a problem with evolving schemas. Avro allows us to supply a schema at runtime which it will store along side the serialized instance. Avro will use that to reconcile any differences that may have occured in the schema between when it was serialized and when it is being deserialized.
+
+ salat uses the ScalaSig (scalap) library for inspecting case classes without the use of reflection. It is also able to extract values without reflection. This makes it fast.
+** Installation
+   =salat-avro= is not yet published anywhere. Sorry. The git repository must be cloned locally and a ~sbt publish-local~ must be given. It currently has a dependency on salat 0.0.7-SNAPSHOT and avro 1.5.
+** Still To Do
+   There are some basic types left to do:
+   - Array/List/Seq/Set
+   - Map
+   - etc.
+   Look at [[https://github.com/novus/salat/tree/master/salat-core/src/test/scala/com/novus/salat/test][salat-core's tests]] for inspiration.
+** Contributing
+   Fork away, commit, and send off a pull request to me. Make sure your tests pass before you send the pull request.
+** License
+   =salat-avro= is licensed under the [[http://www.apache.org/licenses/LICENSE-2.0.txt][Apache 2 License]].
+** Copyright 2011 T8 Webware
