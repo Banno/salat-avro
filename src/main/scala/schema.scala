@@ -45,6 +45,8 @@ object AvroSalatSchema {
       case ("scala.Predef.String", _, _) => Schema.create(Schema.Type.STRING)
       case ("scala.Boolean", _, _) => Schema.create(Schema.Type.BOOLEAN)
       case (path, _, _) if isInt(path) => Schema.create(Schema.Type.INT)
+      case (path, _, _) if isLong(path) => Schema.create(Schema.Type.LONG)
+      case (path, _, _) if isDouble(path) => Schema.create(Schema.Type.DOUBLE) //is it ok to override Double & BigDecimal like this?
       case (path, _, _) if isBigDecimal(path) => Schema.create(Schema.Type.DOUBLE)
       case (path, _, _) if isJodaDateTime(path) => Schema.create(Schema.Type.STRING)
       case ("scala.Option", _, _) => optional(schemaTypeFor(typeArgs(0)))
@@ -52,6 +54,18 @@ object AvroSalatSchema {
       case (_, _, Some(recordGrater)) => recordGrater.asInstanceOf[AvroGrater[_]].asAvroSchema
       case (path, _, _) => throw new UnknownTypeForAvroSchema(path)
     }
+  }
+
+  def isLong(path: String) = path match {
+    case "java.lang.Long" => true
+    case "scala.Long" => true
+    case _ => false
+  }
+
+  def isDouble(path: String) = path match {
+    case "java.lang.Double" => true
+    case "scala.Double" => true
+    case _ => false
   }
 
   private def enumSchema(prefix: SingleType): Schema = {
