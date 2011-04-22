@@ -26,3 +26,7 @@ object Frakked extends Enumeration {
 case class Me(name: String, state: Frakked.Value = Frakked.BeyondRepair)
 
 case class Neville(ennui: Boolean = true, asOf: DateTime = new DateTime)  
+
+case class Louis(id: Long)
+case class Dirk(awesomeness: Double)
+
