@@ -30,3 +30,6 @@ case class Neville(ennui: Boolean = true, asOf: DateTime = new DateTime)
 case class Louis(id: Long)
 case class Dirk(awesomeness: Double)
 
+case class Location(latitude: Double, longitude: Double)
+case class User(username: String)
+case class UserAt(user: User, location: Location)

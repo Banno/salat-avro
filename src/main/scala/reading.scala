@@ -34,7 +34,7 @@ class AvroGenericDatumReader[X <: CaseClass](rootGrater: AvroGrater[X])(implicit
 
     colletingReader.read(null, decoder)
 
-    val rootRecord = collectingGenericData.rootRecord.get
+    val rootRecord = collectingGenericData.fields.keys.find(record => rootGrater.asAvroSchema == record.getSchema).get
     val recordFields = collectingGenericData.fields
     val rootValues: ListBuffer[Object] = recordFields.get(rootRecord).get
 
@@ -60,11 +60,9 @@ class AvroGenericDatumReader[X <: CaseClass](rootGrater: AvroGrater[X])(implicit
   }
     
   protected class CollectingGenericData extends GenericData {
-    var rootRecord: Option[GenericData.Record] = None
     val fields = new HashMap[GenericData.Record, ListBuffer[Object]]
     override def setField(record: Any, name: String, pos: Int, obj: Object) {
       val genericRecord = record.asInstanceOf[GenericData.Record]
-      rootRecord = Some(rootRecord.getOrElse(genericRecord))
       // println("------- set field --------")
       // println("record = " + record)
       // println("name = " + name)

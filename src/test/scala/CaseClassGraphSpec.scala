@@ -4,7 +4,7 @@ import com.banno.salat.avro._
 import global._
 import org.apache.avro.Schema
 
-object CaseClassGraphSpecs extends SalatAvroSpec {
+object CaseClassGraphSpec extends SalatAvroSpec {
   import models._
 
   "a grater for nested case classes" should {
@@ -35,6 +35,13 @@ object CaseClassGraphSpecs extends SalatAvroSpec {
       val oldGraph = graph()
       val newGraph = serializeAndDeserialize(oldGraph)
       newGraph must_== oldGraph
+    }
+
+    "serialize and deserialize an object that was stored in some arbitrary way" in {
+      val oldUser = UserAt(User("luke"), Location(2,3))
+      val newUser = serializeAndDeserialize(oldUser)
+      println("new user = " + newUser)
+      newUser must_== oldUser
     }
   }
 }
