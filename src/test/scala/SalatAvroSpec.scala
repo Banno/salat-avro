@@ -45,6 +45,15 @@ trait SalatAvroSpec extends Specification {
       grater[X].asObject(decoder)
   }
 
+  // def serializeAndDeserializeMulti[X <: CaseClass : Manifest](old: X, mg: MultiAvroGrater): Any = {
+  //     val baos = byteArrayOuputStream()
+  //     val encoder = binaryEncoder(baos)
+  //     mg.serialize(old, encoder)
+      
+  //     val decoder = binaryDecoder(baos.toByteArray)
+  //     mg.asObject(decoder)
+  // }
+
   def byteArrayOuputStream(): ByteArrayOutputStream = new ByteArrayOutputStream
   def binaryEncoder(byteArrayOS: ByteArrayOutputStream) = EncoderFactory.get().binaryEncoder(byteArrayOS, null)
   def binaryDecoder(bytes: Array[Byte]) = DecoderFactory.get().binaryDecoder(bytes, null)

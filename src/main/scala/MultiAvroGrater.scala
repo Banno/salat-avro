@@ -26,9 +26,9 @@ import scala.collection.JavaConversions._
 class UnsupportedCaseClassMultiException(obj: Any)
 extends RuntimeException("Cannot serialize " + obj)
 
-class MultiAvroGrater(val graters: AvroGrater[_]*)(implicit ctx: Context) {
+class MultiAvroGrater(val graters: SingleAvroGrater[_]*)(implicit ctx: Context) {
   def +(other: MultiAvroGrater) = new MultiAvroGrater((graters ++ other.graters): _*)
-  def +(other: AvroGrater[_]) = new MultiAvroGrater((graters :+ other): _*)
+  def +(other: SingleAvroGrater[_]) = new MultiAvroGrater((graters :+ other): _*)
 
   def asAvroSchema: Schema = Schema.createUnion(graters.map(_.asAvroSchema))
   
@@ -39,7 +39,7 @@ class MultiAvroGrater(val graters: AvroGrater[_]*)(implicit ctx: Context) {
   }
 
 //  def asObject(decoder: Decoder): Any = asDatumReader.read(decoder)
-  lazy val asDutumWriter: DatumWriter[Any] = new AvroGenericDatumWriter[Any](asAvroSchema)
 //  lazy val asDatumReader: AvroDatumReader[Any] = new AvroGenericDatumReader[Any](asAvroSchema)
+  lazy val asDutumWriter: DatumWriter[Any] = new AvroGenericDatumWriter[Any](asAvroSchema)
 }
 

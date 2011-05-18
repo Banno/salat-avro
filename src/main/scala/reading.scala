@@ -47,7 +47,7 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
     // println("record = " + genericRecord)
     // println("values = " + values)
 
-    val grater: AvroGrater[_] = ctx.lookup(genericRecord.getSchema.getFullName).get.asInstanceOf[AvroGrater[_]]
+    val grater: SingleAvroGrater[_] = ctx.lookup(genericRecord.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
 
     val arguments = grater._indexedFields.zip(values).map {
       case (field, Some(record: GenericData.Record)) => Some(applyValues(record, index.get(record).get, index))

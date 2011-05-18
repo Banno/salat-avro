@@ -19,7 +19,7 @@ import com.novus.salat._
 import org.apache.avro.Schema
 import org.apache.avro.io.{ Decoder, Encoder, DatumReader, DatumWriter }
 
-class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
+class SingleAvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   extends Grater[X](clazz) {
 
   def serialize(x: X, encoder: Encoder): Encoder = {
@@ -31,7 +31,7 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   def asObject(decoder: Decoder): X = asDatumReader.read(decoder)
 
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = manifest.erasure == clazz
-  def +(other: AvroGrater[_]) = new MultiAvroGrater(this, other)
+  def +(other: SingleAvroGrater[_]) = new MultiAvroGrater(this, other)
 
   lazy val asAvroSchema: Schema = AvroSalatSchema.schemeFor(clazz, this)
   // TODO: not sure if the writer and readers should be exposed
