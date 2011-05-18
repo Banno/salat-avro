@@ -29,7 +29,7 @@ trait SalatAvroSpec extends Specification {
 
   def serializeToJSONMulti[X <: CaseClass : Manifest](x: X, mg: MultiAvroGrater): String = {
     val baos = new ByteArrayOutputStream
-    val encoder = EncoderFactory.get.jsonEncoder(grater[X].asAvroSchema, baos)
+    val encoder = EncoderFactory.get.jsonEncoder(mg.asAvroSchema, baos)
 
     mg.serialize(x, encoder)
     encoder.flush()

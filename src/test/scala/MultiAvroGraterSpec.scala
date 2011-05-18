@@ -27,14 +27,17 @@ object MultiGraterSpec extends SalatAvroSpec {
     "be able to serialize _any_ of graters that it contains" in {
       val mg = grater[Alice] + grater[Edward]
       val json = serializeToJSONMulti(ed, mg)
-      println(json)
-      json must /("a" -> ed.a)
-      json must /("b" -> ed.b)
-      json must /("c" -> ed.c)
+      json must /("com.banno.salat.avro.test.models.Edward") /("a" -> ed.a)
+      json must /("com.banno.salat.avro.test.models.Edward") /("b" -> ed.b)
+      json must /("com.banno.salat.avro.test.models.Edward") /("c" -> ed.c)
     }
     
     "be able to deserialize _any_ of graters that it contains" in {
       pending
+      // val oldEd = ed
+      // val mg = grater[Alice] + grater[Edward]
+      // val newEd = serializeAndDeserializeMulti(oldEd, mg)
+      // newEd must_== oldEd
     }
   }
 }
