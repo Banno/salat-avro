@@ -16,6 +16,7 @@
 package com.banno.salat.avro
 
 import com.novus.salat._
+import org.apache.avro.Schema
 import scala.collection.mutable.{ HashMap, ListBuffer }
 import org.apache.avro.io.{ Decoder, DatumReader }
 import org.apache.avro.generic.{ GenericData, GenericDatumReader }
@@ -25,16 +26,16 @@ trait AvroDatumReader[X] extends DatumReader[X] {
   def read(decoder: Decoder): X
 }
 
-class AvroGenericDatumReader[X <: CaseClass](rootGrater: AvroGrater[X])(implicit ctx: Context)
-  extends GenericDatumReader[X](rootGrater.asAvroSchema) with AvroDatumReader[X] {
+class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
+  extends GenericDatumReader[X](schema) with AvroDatumReader[X] {
 
   def read(decoder: Decoder): X = {
     val collectingGenericData = new CollectingGenericData
-    val colletingReader = new GenericDatumReader[Object](rootGrater.asAvroSchema, rootGrater.asAvroSchema, collectingGenericData)
+    val colletingReader = new GenericDatumReader[Object](schema, schema, collectingGenericData)
 
     colletingReader.read(null, decoder)
 
-    val rootRecord = collectingGenericData.fields.keys.find(record => rootGrater.asAvroSchema == record.getSchema).get
+    val rootRecord = collectingGenericData.fields.keys.find(record => schema == record.getSchema).get
     val recordFields = collectingGenericData.fields
     val rootValues: ListBuffer[Object] = recordFields.get(rootRecord).get
 

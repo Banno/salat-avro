@@ -30,14 +30,13 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
 
   def asObject(decoder: Decoder): X = asDatumReader.read(decoder)
 
-  def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean =
-    manifest.erasure == clazz
+  def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = manifest.erasure == clazz
   def +(other: AvroGrater[_]) = new MultiAvroGrater(this, other)
 
   lazy val asAvroSchema: Schema = AvroSalatSchema.schemeFor(clazz, this)
   // TODO: not sure if the writer and readers should be exposed
   lazy val asDatumWriter: DatumWriter[X] = new AvroGenericDatumWriter[X](asAvroSchema)
-  lazy val asDatumReader: AvroDatumReader[X] = new AvroGenericDatumReader[X](this)
+  lazy val asDatumReader: AvroDatumReader[X] = new AvroGenericDatumReader[X](asAvroSchema)
 
   // expose some nice methods for Datum Writers/Readers
   private[avro] lazy val _indexedFields = indexedFields
