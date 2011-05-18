@@ -26,11 +26,16 @@ import scala.collection.JavaConversions._
 class UnsupportedCaseClassMultiException(obj: Any)
 extends RuntimeException("Cannot serialize " + obj)
 
-class MultiAvroGrater(val graters: SingleAvroGrater[_]*)(implicit ctx: Context) {
-  def +(other: MultiAvroGrater) = new MultiAvroGrater((graters ++ other.graters): _*)
-  def +(other: SingleAvroGrater[_]) = new MultiAvroGrater((graters :+ other): _*)
-
+class MultiAvroGrater(val graters: SingleAvroGrater[_]*)(implicit val ctx: Context)
+extends AvroGrater[CaseClass] {
+  def +(other: AvroGrater[_]) = other match {
+    case mg: MultiAvroGrater => new MultiAvroGrater((graters ++ mg.graters): _*)
+    case sg: SingleAvroGrater[_] => new MultiAvroGrater((graters :+ sg): _*)
+  }
   def asAvroSchema: Schema = Schema.createUnion(graters.map(_.asAvroSchema))
+  // TODO
+  def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean =
+    graters.exists(_.supports(x))
   
   def serialize[X <: CaseClass : Manifest](x: X, encoder: Encoder): Encoder = {
     asDutumWriter.write(x, encoder)

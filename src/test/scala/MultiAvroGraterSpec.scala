@@ -10,7 +10,7 @@ object MultiGraterSpec extends SalatAvroSpec {
 
   "a multi-grater" should {
     "make an avro schema that includes multiple records" in {
-      val mg = multiGrater[Alice] + multiGrater[Basil]
+      val mg = grater[Alice] + grater[Basil]
       val schema = mg.asAvroSchema
       schema.getName must_== "union"
       val types: Iterable[Schema] = schema.getTypes
@@ -19,15 +19,20 @@ object MultiGraterSpec extends SalatAvroSpec {
     }
 
     "be able to be created via a combining regular graters" in {
-//      val mg = grater[Alice] + grater[Basil] + grater[Edward]
-      val mg = grater[Alice] + grater[Basil]
+      val mg = grater[Alice] + (grater[Louis] + grater[Basil]) + grater[Edward]
       val schema = mg.asAvroSchema
       schema.getName must_== "union"
+    }
+
+    "be able to support any type if any of its graters support it" in {
+      val mg = grater[Alice] + grater[Edward]
+      mg.supports(ed) must beTrue
     }
 
     "be able to serialize _any_ of graters that it contains" in {
       val mg = grater[Alice] + grater[Edward]
       val json = serializeToJSONMulti(ed, mg)
+      println("json = " + json)
       json must /("com.banno.salat.avro.test.models.Edward") /("a" -> ed.a)
       json must /("com.banno.salat.avro.test.models.Edward") /("b" -> ed.b)
       json must /("com.banno.salat.avro.test.models.Edward") /("c" -> ed.c)

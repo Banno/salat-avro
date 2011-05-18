@@ -42,7 +42,6 @@ class AvroProductGenericData(implicit ctx: Context) extends GenericData {
   }
 
   override def resolveUnion(union: Schema, datum: Any): Int = {
-    println("resolving union for datum " + datum)
     datum match {
       case None => 1
       case d: AnyRef => {

@@ -20,8 +20,6 @@ import com.novus.salat._
 package object avro {
   def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.lookup_![X](m).asInstanceOf[AvroGrater[X]]
   
-  def multiGrater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): MultiAvroGrater = new MultiAvroGrater(ctx.lookup_![X](m).asInstanceOf[SingleAvroGrater[X]])
-  
   protected[avro] def getCaseClass(c: String)(implicit ctx: Context): Option[Class[CaseClass]] =
     getClassNamed(c).map(_.asInstanceOf[Class[CaseClass]])
 

@@ -19,9 +19,9 @@ import com.novus.salat._
 import org.apache.avro.Schema
 import org.apache.avro.io.{ Decoder, Encoder, DatumReader, DatumWriter }
 
-trait AvroGrater[X <: CaseClass] extends Grater[X] {
+trait AvroGrater[X <: CaseClass] {
+  implicit val ctx: Context
   def asAvroSchema: Schema
-  // TODO
   def +(other: AvroGrater[_]): MultiAvroGrater
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean
 
@@ -37,19 +37,3 @@ trait AvroGrater[X <: CaseClass] extends Grater[X] {
   lazy val asDatumReader: AvroDatumReader[X] = new AvroGenericDatumReader[X](asAvroSchema)
 }
   
-class SingleAvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
-  extends Grater[X](clazz) with AvroGrater[X] {
-    
-  lazy val asAvroSchema: Schema = AvroSalatSchema.schemeFor(clazz, this)
-  def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = manifest.erasure == clazz
-
-  def +(other: AvroGrater[_]): MultiAvroGrater = other match {
-    case sg: SingleAvroGrater[_] => new MultiAvroGrater(this, sg)
-    // TODO: when adding (sg + mg)
-  }
-
-  // expose some nice methods for Datum Writers/Readers
-  private[avro] lazy val _indexedFields = indexedFields
-  private[avro] lazy val _constructor = constructor
-  protected[avro] override def safeDefault(field: Field) = super.safeDefault(field)
-}
