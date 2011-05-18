@@ -35,7 +35,13 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
 
     colletingReader.read(null, decoder)
 
-    val rootRecord = collectingGenericData.fields.keys.find(record => schema == record.getSchema).get
+    val fields = collectingGenericData.fields
+    val rootRecord =
+      if (fields.size == 1) {
+        fields.keys.head
+      } else {
+        fields.keys.find(record => schema == record.getSchema).get
+      }
     val recordFields = collectingGenericData.fields
     val rootValues: ListBuffer[Object] = recordFields.get(rootRecord).get
 

@@ -25,13 +25,14 @@ trait SalatAvroSpec extends Specification {
     new String(baos.toByteArray())
   }
 
-  def serializeAndDeserialize[X <: CaseClass : Manifest](old: X): X = {
-      val baos = byteArrayOuputStream()
-      val encoder = binaryEncoder(baos)
-      grater[X].serialize(old, encoder)
-      
-      val decoder = binaryDecoder(baos.toByteArray)
-      grater[X].asObject(decoder)
+  def serializeAndDeserialize[X <: CaseClass : Manifest](old: X, maybeGrater: Option[AvroGrater[X]] = None): X = {
+    val g = maybeGrater.getOrElse(grater[X])
+    val baos = byteArrayOuputStream()
+    val encoder = binaryEncoder(baos)
+    g.serialize(old, encoder)
+    
+    val decoder = binaryDecoder(baos.toByteArray)
+    g.asObject(decoder)
   }
 
   def byteArrayOuputStream(): ByteArrayOutputStream = new ByteArrayOutputStream
