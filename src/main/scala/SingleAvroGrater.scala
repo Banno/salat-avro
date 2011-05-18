@@ -25,8 +25,8 @@ class SingleAvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = manifest.erasure == clazz
 
   def +(other: AvroGrater[_]): MultiAvroGrater = other match {
-    case sg: SingleAvroGrater[_] => new MultiAvroGrater(this, sg)
-    case mg: MultiAvroGrater => new MultiAvroGrater((mg.graters :+ this): _*)
+    case sg: SingleAvroGrater[_] => new MultiAvroGrater(Set(this, sg))
+    case mg: MultiAvroGrater => new MultiAvroGrater(mg.graters + this)
   }
 
   // expose some nice methods for Datum Writers/Readers

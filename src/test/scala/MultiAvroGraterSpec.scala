@@ -10,18 +10,20 @@ object MultiGraterSpec extends SalatAvroSpec {
 
   "a multi-grater" should {
     "make an avro schema that includes multiple records" in {
-      val mg = grater[Alice] + grater[Basil]
+      val mg = grater[Alice] + (grater[Louis] + grater[Basil]) + grater[Edward]
       val schema = mg.asAvroSchema
       schema.getName must_== "union"
       val types: Iterable[Schema] = schema.getTypes
       types must have(_.getName == "Alice")
-      types must have(_.getName == "Basil")
+      types must have(_.getName == "Louis")
+      types must have(_.getName == "Alice")
+      types must have(_.getName == "Edward")
     }
 
-    "be able to be created via a combining regular graters" in {
-      val mg = grater[Alice] + (grater[Louis] + grater[Basil]) + grater[Edward]
+    "adding the same grater should not add it to the union twice" in {
+      val mg = grater[Alice] + grater[Edward] + grater[Alice]
       val schema = mg.asAvroSchema
-      schema.getName must_== "union"
+      schema.getTypes.size must_== 2 
     }
 
     "be able to support any type if any of its graters support it" in {

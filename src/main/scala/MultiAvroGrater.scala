@@ -26,25 +26,17 @@ import scala.collection.JavaConversions._
 class UnsupportedCaseClassMultiException(obj: Any)
 extends RuntimeException("Cannot serialize " + obj)
 
-class MultiAvroGrater(val graters: SingleAvroGrater[_]*)(implicit val ctx: Context)
+class MultiAvroGrater(val graters: Set[SingleAvroGrater[_]])(implicit val ctx: Context)
 extends AvroGrater[CaseClass] {
+  
   def +(other: AvroGrater[_]) = other match {
-    case mg: MultiAvroGrater => new MultiAvroGrater((graters ++ mg.graters): _*)
-    case sg: SingleAvroGrater[_] => new MultiAvroGrater((graters :+ sg): _*)
+    case mg: MultiAvroGrater => new MultiAvroGrater(graters ++ mg.graters)
+    case sg: SingleAvroGrater[_] => new MultiAvroGrater(graters + sg)
   }
-  def asAvroSchema: Schema = Schema.createUnion(graters.map(_.asAvroSchema))
-  // TODO
+  
+  lazy val asAvroSchema: Schema = Schema.createUnion(graters.toList.map(_.asAvroSchema))
+  
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean =
     graters.exists(_.supports(x))
-  
-  def serialize[X <: CaseClass : Manifest](x: X, encoder: Encoder): Encoder = {
-    asDutumWriter.write(x, encoder)
-    encoder.flush
-    encoder
-  }
-
-//  def asObject(decoder: Decoder): Any = asDatumReader.read(decoder)
-//  lazy val asDatumReader: AvroDatumReader[Any] = new AvroGenericDatumReader[Any](asAvroSchema)
-  lazy val asDutumWriter: DatumWriter[Any] = new AvroGenericDatumWriter[Any](asAvroSchema)
 }
 
