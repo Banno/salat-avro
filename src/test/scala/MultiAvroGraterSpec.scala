@@ -19,7 +19,8 @@ object MultiGraterSpec extends SalatAvroSpec {
     }
 
     "be able to be created via a combining regular graters" in {
-      val mg = grater[Alice] + grater[Basil] + grater[Edward]
+//      val mg = grater[Alice] + grater[Basil] + grater[Edward]
+      val mg = grater[Alice] + grater[Basil]
       val schema = mg.asAvroSchema
       schema.getName must_== "union"
     }
