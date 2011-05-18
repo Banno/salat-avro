@@ -17,22 +17,11 @@ trait SalatAvroSpec extends Specification {
   import scala.collection.JavaConversions._
 
   
-  def serializeToJSON[X <: CaseClass : Manifest](x: X): String = {
-    val datumWriter = grater[X].asDatumWriter
+  def serializeToJSON[X <: CaseClass : Manifest](x: X, maybeGrater: Option[AvroGrater[X]] = None): String = {
+    val g = maybeGrater.getOrElse(grater[X])
     val baos = new ByteArrayOutputStream
-    val encoder = EncoderFactory.get.jsonEncoder(grater[X].asAvroSchema, baos)
-
-    datumWriter.write(x, encoder)
-    encoder.flush()
-    new String(baos.toByteArray())
-  }
-
-  def serializeToJSONMulti[X <: CaseClass : Manifest](x: X, mg: MultiAvroGrater): String = {
-    val baos = new ByteArrayOutputStream
-    val encoder = EncoderFactory.get.jsonEncoder(mg.asAvroSchema, baos)
-
-    mg.serialize(x, encoder)
-    encoder.flush()
+    val encoder = EncoderFactory.get.jsonEncoder(g.asAvroSchema, baos)
+    g.serialize(x, encoder)
     new String(baos.toByteArray())
   }
 
@@ -44,15 +33,6 @@ trait SalatAvroSpec extends Specification {
       val decoder = binaryDecoder(baos.toByteArray)
       grater[X].asObject(decoder)
   }
-
-  // def serializeAndDeserializeMulti[X <: CaseClass : Manifest](old: X, mg: MultiAvroGrater): Any = {
-  //     val baos = byteArrayOuputStream()
-  //     val encoder = binaryEncoder(baos)
-  //     mg.serialize(old, encoder)
-      
-  //     val decoder = binaryDecoder(baos.toByteArray)
-  //     mg.asObject(decoder)
-  // }
 
   def byteArrayOuputStream(): ByteArrayOutputStream = new ByteArrayOutputStream
   def binaryEncoder(byteArrayOS: ByteArrayOutputStream) = EncoderFactory.get().binaryEncoder(byteArrayOS, null)
