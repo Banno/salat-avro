@@ -21,6 +21,7 @@ import scala.collection.JavaConversions._
 
 class MultiAvroGrater(val graters: AvroGrater[_]*) {
   def +(other: MultiAvroGrater) = new MultiAvroGrater((graters ++ other.graters): _*)
+  def +(other: AvroGrater[_]) = new MultiAvroGrater((graters :+ other): _*)
 
-  def asUnionAvroSchema: Schema = Schema.createUnion(graters.map(_.asAvroSchema))
+  def asAvroSchema: Schema = Schema.createUnion(graters.map(_.asAvroSchema))
 }
