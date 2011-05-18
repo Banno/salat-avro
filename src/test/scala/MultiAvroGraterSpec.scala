@@ -18,13 +18,23 @@ object MultiGraterSpec extends SalatAvroSpec {
       types must have(_.getName == "Basil")
     }
 
-    "should be able to be created via a combining regular graters" in {
+    "be able to be created via a combining regular graters" in {
       val mg = grater[Alice] + grater[Basil] + grater[Edward]
       val schema = mg.asAvroSchema
       schema.getName must_== "union"
     }
 
-    // be able to serialize _any_ of graters that it contains 
-    // be able to deserialize _any_ of graters that it contains 
+    "be able to serialize _any_ of graters that it contains" in {
+      val mg = grater[Alice] + grater[Edward]
+      val json = serializeToJSONMulti(ed, mg)
+      println(json)
+      json must /("a" -> ed.a)
+      json must /("b" -> ed.b)
+      json must /("c" -> ed.c)
+    }
+    
+    "be able to deserialize _any_ of graters that it contains" in {
+      pending
+    }
   }
 }

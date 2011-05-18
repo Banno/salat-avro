@@ -36,7 +36,7 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
 
   lazy val asAvroSchema: Schema = AvroSalatSchema.schemeFor(clazz, this)
   // TODO: not sure if the writer and readers should be exposed
-  lazy val asDatumWriter: DatumWriter[X] = new AvroGenericDatumWriter[X](this)
+  lazy val asDatumWriter: DatumWriter[X] = new AvroGenericDatumWriter[X](asAvroSchema)
   lazy val asDatumReader: AvroDatumReader[X] = new AvroGenericDatumReader[X](this)
 
   // expose some nice methods for Datum Writers/Readers

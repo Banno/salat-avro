@@ -20,8 +20,7 @@ import org.apache.avro.Schema
 import org.apache.avro.generic.{ GenericData, GenericDatumWriter }
 import org.apache.avro.util.Utf8
 
-class AvroGenericDatumWriter[X <: CaseClass](grater: AvroGrater[X])(implicit ctx: Context)
-  extends GenericDatumWriter[X](grater.asAvroSchema, new AvroProductGenericData)
+class AvroGenericDatumWriter[X](schema: Schema)(implicit ctx: Context) extends GenericDatumWriter[X](schema, new AvroProductGenericData)
 
 class AvroProductGenericData(implicit ctx: Context) extends GenericData {
   override def getField(record: Any, name: String, pos: Int): Object = {

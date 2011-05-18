@@ -1,4 +1,5 @@
 package com.banno.salat.avro.test
+import com.banno.salat.avro.MultiAvroGrater
 
 import com.banno.salat.avro._
 import global._
@@ -22,6 +23,15 @@ trait SalatAvroSpec extends Specification {
     val encoder = EncoderFactory.get.jsonEncoder(grater[X].asAvroSchema, baos)
 
     datumWriter.write(x, encoder)
+    encoder.flush()
+    new String(baos.toByteArray())
+  }
+
+  def serializeToJSONMulti[X <: CaseClass : Manifest](x: X, mg: MultiAvroGrater): String = {
+    val baos = new ByteArrayOutputStream
+    val encoder = EncoderFactory.get.jsonEncoder(grater[X].asAvroSchema, baos)
+
+    mg.serialize(x, encoder)
     encoder.flush()
     new String(baos.toByteArray())
   }
