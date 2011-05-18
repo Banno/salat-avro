@@ -2,6 +2,8 @@ package com.banno.salat.avro.test
 
 import com.banno.salat.avro._
 import global._
+import org.apache.avro.Schema
+import scala.collection.JavaConversions._
 
 object MultiGraterSpec extends SalatAvroSpec {
   import models._
@@ -11,10 +13,9 @@ object MultiGraterSpec extends SalatAvroSpec {
       val mg = multiGrater[Alice] + multiGrater[Basil]
       val schema = mg.asAvroSchema
       schema.getName must_== "union"
-      
-      println(schema)
-      println(schema.getName)
-      pending
+      val types: Iterable[Schema] = schema.getTypes
+      types must have(_.getName == "Alice")
+      types must have(_.getName == "Basil")
     }
 
     "should be able to be created via a combining regular graters" in {
