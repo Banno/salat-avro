@@ -30,6 +30,8 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
 
   def asObject(decoder: Decoder): X = asDatumReader.read(decoder)
 
+  def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean =
+    manifest.erasure == clazz
   def +(other: AvroGrater[_]) = new MultiAvroGrater(this, other)
 
   lazy val asAvroSchema: Schema = AvroSalatSchema.schemeFor(clazz, this)
