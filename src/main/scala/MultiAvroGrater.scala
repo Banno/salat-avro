@@ -22,11 +22,12 @@ import org.apache.avro.io.DatumWriter
 import org.apache.avro.io.Decoder
 import org.apache.avro.io.Encoder
 import scala.collection.JavaConversions._
+import scala.collection.mutable.LinkedHashSet
 
 class UnsupportedCaseClassMultiException(obj: Any)
 extends RuntimeException("Cannot serialize " + obj)
 
-class MultiAvroGrater(val graters: Set[SingleAvroGrater[_]])(implicit val ctx: Context)
+class MultiAvroGrater(val graters: LinkedHashSet[SingleAvroGrater[_]])(implicit val ctx: Context)
 extends AvroGrater[CaseClass] {
   
   def +(other: AvroGrater[_]) = other match {

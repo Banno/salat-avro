@@ -18,6 +18,7 @@ package com.banno.salat.avro
 import com.novus.salat._
 import org.apache.avro.Schema
 import scala.collection.JavaConversions._
+import scala.collection.mutable.LinkedHashSet
 
 class SingleAvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   extends Grater[X](clazz) with AvroGrater[X] {
@@ -27,7 +28,7 @@ class SingleAvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = manifest.erasure == clazz
 
   def +(other: AvroGrater[_]): MultiAvroGrater = other match {
-    case sg: SingleAvroGrater[_] => new MultiAvroGrater(Set(this, sg))
+    case sg: SingleAvroGrater[_] => new MultiAvroGrater(LinkedHashSet(this, sg))
     case mg: MultiAvroGrater => new MultiAvroGrater(mg.graters + this)
   }
 
