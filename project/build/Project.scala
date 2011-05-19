@@ -16,7 +16,7 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ApacheLicense
 
   Credentials(Path.userHome / ".ivy2" / ".banno_credentials", log)
   override def managedStyle = ManagedStyle.Maven
-  lazy val publishTo = "Banno Snapshots Repo" at "http://10.3.0.26:8081/nexus/content/repositories/releases"
+  lazy val publishTo = "Banno Repo" at (if (version.toString.endsWith("SNAPSHOT")) "http://10.3.0.26:8081/nexus/content/repositories/snapshots" else "http://10.3.0.26:8081/nexus/content/repositories/releases")
 
   def copyrightLine = "Copyright 2011 T8 Webware"
   override def compileAction = super.compileAction dependsOn formatLicenseHeaders
