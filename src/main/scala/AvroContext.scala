@@ -20,7 +20,7 @@ import com.novus.salat.{ Context, Grater, CaseClass }
 
 trait AvroContext extends Context {
   override protected def generate(clazz: String): Grater[_ <: CaseClass] = {
-    new AvroGrater[CaseClass](getCaseClass(clazz)(this).map(_.asInstanceOf[Class[CaseClass]]).get)(this)
+    new SingleAvroGrater[CaseClass](getCaseClass(clazz)(this).map(_.asInstanceOf[Class[CaseClass]]).get)(this)
   }
 
   override protected def generate_?(c: String): Option[Grater[_ <: CaseClass]] = {
@@ -34,7 +34,7 @@ trait AvroContext extends Context {
           None
         }
         case Some(clazz) => {
-          Some(new AvroGrater[CaseClass](clazz)(this))
+          Some(new SingleAvroGrater[CaseClass](clazz)(this))
         }
         case unknown => {
           None

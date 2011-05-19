@@ -19,8 +19,11 @@ import com.novus.salat._
 import org.apache.avro.Schema
 import org.apache.avro.io.{ Decoder, Encoder, DatumReader, DatumWriter }
 
-class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
-  extends Grater[X](clazz) {
+trait AvroGrater[X <: CaseClass] {
+  implicit val ctx: Context
+  def asAvroSchema: Schema
+  def +(other: AvroGrater[_]): MultiAvroGrater
+  def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean
 
   def serialize(x: X, encoder: Encoder): Encoder = {
     asDatumWriter.write(x, encoder)
@@ -29,14 +32,8 @@ class AvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   }
 
   def asObject(decoder: Decoder): X = asDatumReader.read(decoder)
-
-  lazy val asAvroSchema: Schema = AvroSalatSchema.schemeFor(clazz, this)
-  // TODO: not sure if the writer and readers should be exposed
-  lazy val asDatumWriter: DatumWriter[X] = new AvroGenericDatumWriter[X](this)
-  lazy val asDatumReader: AvroDatumReader[X] = new AvroGenericDatumReader[X](this)
-
-  // expose some nice methods for Datum Writers/Readers
-  private[avro] lazy val _indexedFields = indexedFields
-  private[avro] lazy val _constructor = constructor
-  protected[avro] override def safeDefault(field: Field) = super.safeDefault(field)
+  
+  lazy val asDatumWriter: DatumWriter[X] = new AvroGenericDatumWriter[X](asAvroSchema)
+  lazy val asDatumReader: AvroDatumReader[X] = new AvroGenericDatumReader[X](asAvroSchema)
 }
+  

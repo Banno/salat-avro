@@ -24,13 +24,13 @@ import scala.tools.scalap.scalax.rules.scalasig.{ SingleType, Type, TypeRefType 
 
 object AvroSalatSchema {
   
-  def schemeFor[X <: CaseClass](clazz: Class[X], grater: AvroGrater[X])(implicit ctx: Context): Schema = {
+  def schemeFor[X <: CaseClass](clazz: Class[X], grater: SingleAvroGrater[X])(implicit ctx: Context): Schema = {
     val schema = Schema.createRecord(clazz.getName, "", "", false)
     schema.setFields(schemaFields(grater))
     schema
   }
   
-  private def schemaFields(grater: AvroGrater[_])(implicit ctx: Context): Seq[SField] = {
+  private def schemaFields(grater: SingleAvroGrater[_])(implicit ctx: Context): Seq[SField] = {
     grater._indexedFields.map { field =>
       new SField(field.name, schemaTypeFor(field.typeRefType), null, null)
     }
@@ -51,7 +51,7 @@ object AvroSalatSchema {
       case (path, _, _) if isJodaDateTime(path) => Schema.create(Schema.Type.STRING)
       case ("scala.Option", _, _) => optional(schemaTypeFor(typeArgs(0)))
       case (_, IsEnum(prefix), _) => enumSchema(prefix)
-      case (_, _, Some(recordGrater)) => recordGrater.asInstanceOf[AvroGrater[_]].asAvroSchema
+      case (_, _, Some(recordGrater)) => recordGrater.asInstanceOf[SingleAvroGrater[_]].asSingleAvroSchema
       case (path, _, _) => throw new UnknownTypeForAvroSchema(path)
     }
   }
