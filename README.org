@@ -41,6 +41,27 @@
     - JodaTime date times
     - Option types of any other type salat-avro supports
     - Other case classes
+*** multi-grater
+    Salat-avro also supports the idea of a multi-grater. This is combining multiple graters into one which can serialize and deserialize any of the contained types. For example
+#+BEGIN_SRC scala
+  import com.banno.salat.avro._
+  import global._
+  
+  val oldAlice = Alice("abcd", Some(new DateTime()), 123, None, Bob("abc"))
+  val multiGrater = grater[Alice] + grater[Edward]
+
+  val baos = new ByteArrayOutputStream
+  val encoder = EncoderFactory.get().binaryEncoder(baos, null)
+
+  multiGrater.serialize(oldAlice, encoder)
+
+  val bytes = baos.toByteArray
+  val decoder = DecoderFactory.get().binaryDecoder(bytes, null)
+
+  val sameAlice = multiGrater.asObject(decoder)
+#+END_SRC
+    
+    In this setup, the type of `sameAlice` is a case class, and can't be of type `Alice` since `multiGrater.asObject` could return either an `Edward` or an `Alice`.
 ** Why?
    With many serialization schemes, you have an external schema that you use to generate your classes in your language du jour. This can be a hassle if you're only using Scala to serialize and deserialize. It introduces a clunky step using a un-natural interface. It also becomes a problem with evolving schemas. Avro allows us to supply a schema at runtime which it will store along side the serialized instance. Avro will use that to reconcile any differences that may have occured in the schema between when it was serialized and when it is being deserialized.
 
