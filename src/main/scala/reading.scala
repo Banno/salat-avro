@@ -17,7 +17,7 @@ package com.banno.salat.avro
 
 import com.novus.salat._
 import org.apache.avro.Schema
-import scala.collection.mutable.{ HashMap, ListBuffer }
+import scala.collection.mutable.{ LinkedHashMap, ListBuffer }
 import org.apache.avro.io.{ Decoder, DatumReader }
 import org.apache.avro.generic.{ GenericData, GenericDatumReader }
 import org.apache.avro.util.Utf8
@@ -35,20 +35,13 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
 
     colletingReader.read(null, decoder)
 
-    val fields = collectingGenericData.fields
-    val rootRecord =
-      if (fields.size == 1) {
-        fields.keys.head
-      } else {
-        fields.keys.find(record => schema == record.getSchema).get
-      }
     val recordFields = collectingGenericData.fields
-    val rootValues: ListBuffer[Object] = recordFields.get(rootRecord).get
+    val (rootRecord, rootValues) = collectingGenericData.rootRecordAndValues
 
     applyValues(rootRecord, rootValues, recordFields).asInstanceOf[X]
   }
 
-  def applyValues(genericRecord: GenericData.Record, values: ListBuffer[Object], index: HashMap[GenericData.Record, ListBuffer[Object]]): Object = {
+  def applyValues(genericRecord: GenericData.Record, values: ListBuffer[Object], index: LinkedHashMap[GenericData.Record, ListBuffer[Object]]): AnyRef = {
     // println("-------- apply values -------")
     // println("record = " + genericRecord)
     // println("values = " + values)
@@ -67,7 +60,8 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
   }
     
   protected class CollectingGenericData extends GenericData {
-    val fields = new HashMap[GenericData.Record, ListBuffer[Object]]
+    val fields = new LinkedHashMap[GenericData.Record, ListBuffer[Object]]
+    def rootRecordAndValues = fields.last
     override def setField(record: Any, name: String, pos: Int, obj: Object) {
       val genericRecord = record.asInstanceOf[GenericData.Record]
       // println("------- set field --------")
@@ -80,7 +74,7 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
         case utf8: Utf8 => utf8.toString
         case x => x
       }
-      val recordFields = fields.getOrElse(genericRecord, new ListBuffer[Object])
+      val recordFields = fields.remove(genericRecord).getOrElse(new ListBuffer[Object])
       recordFields.insert(pos, Option(scalaObj))
       fields.update(genericRecord, recordFields)
     }

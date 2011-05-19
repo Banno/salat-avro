@@ -41,10 +41,10 @@ object MultiGraterSpec extends SalatAvroSpec {
     }
     
     "be able to deserialize _any_ of graters that it contains" in {
-      val oldEd = ed
+      val oldGraph: Alice = graph
       val mg = grater[Alice] + grater[Edward]
-      val newEd = serializeAndDeserialize(oldEd, Some(mg))
-      newEd must_== oldEd
+      val newGraph = serializeAndDeserialize(oldGraph, Some(mg))
+      newGraph must_== oldGraph
     }
 
     "be able to deserialize something that was serialized by one of its single avro graters" in {
