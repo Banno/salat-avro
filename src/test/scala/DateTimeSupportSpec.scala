@@ -11,8 +11,9 @@ object DateTimeSupportSpec extends SalatAvroSpec {
     "generate an avro schema" in {
       val schema = grater[Neville].asAvroSchema
       println(schema)
-      schema must containField("ennui", Schema.Type.BOOLEAN)
-      schema must containField("asOf", Schema.Type.STRING)
+      val recordSchema = schema.getTypes().get(0)
+      recordSchema must containField("ennui", Schema.Type.BOOLEAN)
+      recordSchema must containField("asOf", Schema.Type.STRING)
     }
 
     "serialize and deserizlize with a org.scala_tools.time.Imports.DateTime" in {

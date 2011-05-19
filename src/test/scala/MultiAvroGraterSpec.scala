@@ -47,9 +47,18 @@ object MultiGraterSpec extends SalatAvroSpec {
       newGraph must_== oldGraph
     }
 
-    "be able to deserialize something that was serialized by one of its single avro graters" in {
-      pending
-      // maybe SingleAvroGrater should serialize into a union type with only 1 type
+    "be able to deserialize something that was serialized by one of its single avro graters (However, it must be added to the end as to preserve order)" in {
+      val oldEd = ed
+      val baos = byteArrayOuputStream()
+      val encoder = binaryEncoder(baos)
+      grater[Edward].serialize(oldEd, encoder)
+      val bytesUnderSingle = baos.toByteArray
+
+      val mg = grater[Edward] + grater[Alice]
+      val decoder = binaryDecoder(bytesUnderSingle)
+      val newEd = mg.asObject(decoder)
+
+      newEd must_== oldEd
     }
   }
 }

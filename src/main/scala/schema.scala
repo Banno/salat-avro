@@ -51,7 +51,7 @@ object AvroSalatSchema {
       case (path, _, _) if isJodaDateTime(path) => Schema.create(Schema.Type.STRING)
       case ("scala.Option", _, _) => optional(schemaTypeFor(typeArgs(0)))
       case (_, IsEnum(prefix), _) => enumSchema(prefix)
-      case (_, _, Some(recordGrater)) => recordGrater.asInstanceOf[SingleAvroGrater[_]].asAvroSchema
+      case (_, _, Some(recordGrater)) => recordGrater.asInstanceOf[SingleAvroGrater[_]].asSingleAvroSchema
       case (path, _, _) => throw new UnknownTypeForAvroSchema(path)
     }
   }

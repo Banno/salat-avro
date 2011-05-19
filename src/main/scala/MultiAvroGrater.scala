@@ -34,7 +34,7 @@ extends AvroGrater[CaseClass] {
     case sg: SingleAvroGrater[_] => new MultiAvroGrater(graters + sg)
   }
   
-  lazy val asAvroSchema: Schema = Schema.createUnion(graters.toList.map(_.asAvroSchema))
+  lazy val asAvroSchema: Schema = Schema.createUnion(graters.toList.map(_.asSingleAvroSchema))
   
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean =
     graters.exists(_.supports(x))

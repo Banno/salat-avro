@@ -14,31 +14,33 @@ object BasicCaseClassSpec extends SalatAvroSpec {
     "make an avro schema for a basic case class" in {
       val schema = grater[Edward].asAvroSchema
       println(schema)
-      schema.getName must_== "Edward"
-      schema.getNamespace must_== "com.banno.salat.avro.test.models"
-      schema must containField("a", Schema.Type.STRING)
-      schema must containField("b", Schema.Type.INT)
-      schema must containField("c", Schema.Type.DOUBLE)
-      schema must containField("aa", List(Schema.Type.STRING, Schema.Type.NULL))
-      schema must containField("bb", List(Schema.Type.INT, Schema.Type.NULL))
-      schema must containField("cc", List(Schema.Type.DOUBLE, Schema.Type.NULL))
-      schema must containField("aaa", List(Schema.Type.STRING, Schema.Type.NULL))
-      schema must containField("bbb", List(Schema.Type.INT, Schema.Type.NULL))
-      schema must containField("ccc", List(Schema.Type.DOUBLE, Schema.Type.NULL))
+      schema.getName must_== "union"
+      val recordSchema = schema.getTypes().get(0)
+      recordSchema.getName must_== "Edward"
+      recordSchema.getNamespace must_== "com.banno.salat.avro.test.models"
+      recordSchema must containField("a", Schema.Type.STRING)
+      recordSchema must containField("b", Schema.Type.INT)
+      recordSchema must containField("c", Schema.Type.DOUBLE)
+      recordSchema must containField("aa", List(Schema.Type.STRING, Schema.Type.NULL))
+      recordSchema must containField("bb", List(Schema.Type.INT, Schema.Type.NULL))
+      recordSchema must containField("cc", List(Schema.Type.DOUBLE, Schema.Type.NULL))
+      recordSchema must containField("aaa", List(Schema.Type.STRING, Schema.Type.NULL))
+      recordSchema must containField("bbb", List(Schema.Type.INT, Schema.Type.NULL))
+      recordSchema must containField("ccc", List(Schema.Type.DOUBLE, Schema.Type.NULL))
     }
 
     "make a datum writer for a basic case class" in {
       val json = serializeToJSON(ed)
       println(json)
-      json must /("a" -> ed.a)
-      json must /("b" -> ed.b)
-      json must /("c" -> ed.c)
-      json must /("aa") /("string" -> ed.aa.get)
-      json must /("bb") /("int" -> ed.bb.get)
-      json must /("cc") /("double" -> ed.cc.get)
-      json must /("aaa" -> null)
-      json must /("bbb" -> null)
-      json must /("ccc" -> null)
+      json must /("com.banno.salat.avro.test.models.Edward") /("a" -> ed.a)
+      json must /("com.banno.salat.avro.test.models.Edward") /("b" -> ed.b)
+      json must /("com.banno.salat.avro.test.models.Edward") /("c" -> ed.c)
+      json must /("com.banno.salat.avro.test.models.Edward") /("aa") /("string" -> ed.aa.get)
+      json must /("com.banno.salat.avro.test.models.Edward") /("bb") /("int" -> ed.bb.get)
+      json must /("com.banno.salat.avro.test.models.Edward") /("cc") /("double" -> ed.cc.get)
+      json must /("com.banno.salat.avro.test.models.Edward") /("aaa" -> null)
+      json must /("com.banno.salat.avro.test.models.Edward") /("bbb" -> null)
+      json must /("com.banno.salat.avro.test.models.Edward") /("ccc" -> null)
     }
 
     "make a datum reader for a basic case class" in {

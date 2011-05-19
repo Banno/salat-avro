@@ -11,7 +11,8 @@ object EnumSupportSpec extends SalatAvroSpec {
     "generate an avro schema" in {
       val schema = grater[Me].asAvroSchema
       println(schema)
-      schema must containField("state", Schema.Type.STRING)
+      val recordSchema = schema.getTypes().get(0)
+      recordSchema must containField("state", Schema.Type.STRING)
     }
 
     "serialize and deserilize" in {

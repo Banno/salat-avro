@@ -17,11 +17,13 @@ package com.banno.salat.avro
 
 import com.novus.salat._
 import org.apache.avro.Schema
+import scala.collection.JavaConversions._
 
 class SingleAvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   extends Grater[X](clazz) with AvroGrater[X] {
     
-  lazy val asAvroSchema: Schema = AvroSalatSchema.schemeFor(clazz, this)
+  lazy val asAvroSchema: Schema = Schema.createUnion(asSingleAvroSchema :: Nil)
+  lazy val asSingleAvroSchema: Schema = AvroSalatSchema.schemeFor(clazz, this)
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = manifest.erasure == clazz
 
   def +(other: AvroGrater[_]): MultiAvroGrater = other match {
