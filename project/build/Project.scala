@@ -4,8 +4,8 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ApacheLicense
   val novusRels = "repo.novus rels" at "http://repo.novus.com/releases/"
   val novusSnaps = "repo.novus snaps" at "http://repo.novus.com/snapshots/"
 
-  val salat = "com.novus" %% "salat-core" % "0.0.7"
-  val avro = "org.apache.avro" % "avro" % "1.5.0"
+  val salat = "com.novus" %% "salat-core" % "0.0.8-SNAPSHOT"
+  val avro = "org.apache.avro" % "avro" % "1.5.1"
 
   // necessary for scalaz snapshot that specs2 depends on
   val snapshots = "snapshots" at "http://scala-tools.org/repo-snapshots"

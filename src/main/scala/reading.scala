@@ -31,7 +31,7 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
 
   def read(decoder: Decoder): X = {
     val collectingGenericData = new CollectingGenericData
-    val colletingReader = new GenericDatumReader[Object](schema, schema, collectingGenericData)
+    val colletingReader = new CollectingGenericDatumReader(schema, collectingGenericData)
 
     colletingReader.read(null, decoder)
 
@@ -79,4 +79,6 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
       fields.update(genericRecord, recordFields)
     }
   }
+
+  protected class CollectingGenericDatumReader(schema: Schema, collector: CollectingGenericData) extends GenericDatumReader[Object](schema, schema, collector)
 }
