@@ -16,6 +16,14 @@ object ListSupportSpec extends SalatAvroSpec {
       recordSchema.getField("l").schema.getElementType.getType must_== Schema.Type.STRING
       pending
     }
+    
+    "serialize and deserialize" in {
+      val oldClara = clara
+      println(serializeToJSON(oldClara))
+      // val newClara = serializeAndDeserialize(oldClara)
+      // newClara must_== oldClara
+      pending
+    }
   }
   
 }

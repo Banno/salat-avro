@@ -21,13 +21,14 @@ import org.apache.avro.generic.{ GenericData, GenericDatumWriter }
 import org.apache.avro.util.Utf8
 import scala.collection.JavaConversions._
 
-class AvroGenericDatumWriter[X](schema: Schema)(implicit ctx: Context) extends GenericDatumWriter[X](schema, new AvroProductGenericData)
+class AvroGenericDatumWriter[X](schema: Schema)(implicit ctx: Context) extends GenericDatumWriter[X](schema, new AvroProductGenericData) {
+}
 
 class AvroProductGenericData(implicit ctx: Context) extends GenericData {
   override def getField(record: Any, name: String, pos: Int): Object = {
-    // println("getField in grater %s \n\twith record %s\n\twith name %s \n\tat pos %s".format(AvroGrater.this, record, name, pos))
     val caseClass = record.asInstanceOf[Product]
     val grater: SingleAvroGrater[_] = ctx.lookup(caseClass.getClass.getName).get.asInstanceOf[SingleAvroGrater[_]]
+    // println("getField in grater %s\n\twith record %s\n\twith name %s \n\tat pos %s".format(grater, record, name, pos))
 
     val (value, field) = caseClass.productIterator.zip(grater._indexedFields.iterator).toList.apply(pos)
     val outTransformer = Extractors.select(field.typeRefType).getOrElse(field.out)
@@ -38,6 +39,7 @@ class AvroProductGenericData(implicit ctx: Context) extends GenericData {
       case _ => None
     }
     // println("returnedValue = " + returnedValue)
+    // println("returnedValue.class = " + returnedValue.getClass)
     returnedValue
   }
 

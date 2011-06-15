@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package com.banno.salat.avro
-
+import com.novus.salat.IsSeq
 import com.novus.salat.IsOption
 import scala.tools.scalap.scalax.rules.scalasig.TypeRefType
 import com.novus.salat.transformers._
@@ -38,6 +38,11 @@ object Extractors {
       case _ => None
     }
 
+    case IsSeq(t@TypeRefType(_, _, _)) => t match {
+      case TypeRefType(_, symbol, _) =>
+        Some(new Transformer(symbol.path, t)(ctx) with SeqExtractor)
+    }
+
     case TypeRefType(_, symbol, _) => t match {
       
       case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
@@ -59,4 +64,10 @@ trait JodaTimeToString extends Transformer {
   override def transform(value: Any)(implicit ctx: Context) = value match {
     case dt: DateTime => dt.toString(format)
   }
+}
+
+trait SeqExtractor extends Transformer {
+  import scala.collection.JavaConverters._
+  override def transform(value: Any)(implicit ctx: Context) =
+    value.asInstanceOf[Seq[_]].asJava
 }
