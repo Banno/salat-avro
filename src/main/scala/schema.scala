@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package com.banno.salat.avro
+  import com.novus.salat.IsMap
 
 import com.novus.salat._
 import transformers._
@@ -51,8 +52,8 @@ object AvroSalatSchema {
       case (path, _, _) if isDouble(path) => Schema.create(Schema.Type.DOUBLE) //is it ok to override Double & BigDecimal like this?
       case (path, _, _) if isBigDecimal(path) => Schema.create(Schema.Type.DOUBLE)
       case (path, _, _) if isJodaDateTime(path) => Schema.create(Schema.Type.STRING)
-      case (path, _, _) if isSeq(path) => Schema.createArray(schemaTypeFor(typeArgs(0)))
       case ("scala.Option", _, _) => optional(schemaTypeFor(typeArgs(0)))
+      case (_, IsSeq(_), _) => Schema.createArray(schemaTypeFor(typeArgs(0)))
       case (_, IsEnum(prefix), _) => enumSchema(prefix)
       case (_, _, Some(recordGrater)) => recordGrater.asInstanceOf[SingleAvroGrater[_]].asSingleAvroSchema
       case (path, _, _) => throw new UnknownTypeForAvroSchema(path)
@@ -68,12 +69,6 @@ object AvroSalatSchema {
   def isDouble(path: String) = path match {
     case "java.lang.Double" => true
     case "scala.Double" => true
-    case _ => false
-  }
-
-  def isSeq(path: String) = path match {
-    case "scala.package.Seq" => true
-    case "scala.package.List" => true
     case _ => false
   }
 
