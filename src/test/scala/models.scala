@@ -11,7 +11,7 @@ import org.scala_tools.time.Imports._
 
 case class Alice(x: String, y: Option[String] = Some("default y"), z: Basil)
 case class Basil(p: Option[Int], q: Int = 1067)
-case class Clara(l: Seq[String] = Nil) // , m: List[Int]) // , n: List[Desmond]
+case class Clara(l: Seq[String] = Nil, m: List[Int] = Nil) // , n: List[Desmond]
 // case class Desmond(h: IMap[String, Alice], i: MMap[String, Int] = MMap.empty, j: Option[Basil])
 
 case class Edward(a:          String,           b:        Int,           c:        ScalaBigDecimal,

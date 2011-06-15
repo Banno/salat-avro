@@ -14,7 +14,8 @@ object ListSupportSpec extends SalatAvroSpec {
       println(recordSchema)
       recordSchema must containField("l", Schema.Type.ARRAY)
       recordSchema.getField("l").schema.getElementType.getType must_== Schema.Type.STRING
-      pending
+      recordSchema must containField("m", Schema.Type.ARRAY)
+      recordSchema.getField("m").schema.getElementType.getType must_== Schema.Type.INT
     }
     
     "serialize and deserialize" in {

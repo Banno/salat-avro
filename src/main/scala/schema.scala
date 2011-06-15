@@ -73,6 +73,7 @@ object AvroSalatSchema {
 
   def isSeq(path: String) = path match {
     case "scala.package.Seq" => true
+    case "scala.package.List" => true
     case _ => false
   }
 
