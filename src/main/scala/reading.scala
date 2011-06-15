@@ -69,6 +69,7 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
       // println("name = " + name)
       // println("pos = " + pos)
       // println("obj = " + obj)
+      // println("obj.class = " + obj.getClass)
       // println("fields = " + fields)
       val scalaObj = obj match {
         case utf8: Utf8 => utf8.toString

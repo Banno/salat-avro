@@ -16,11 +16,13 @@
 package com.banno.salat.avro
 
 import com.novus.salat.IsOption
+import com.novus.salat.IsSeq
+import org.apache.avro.generic.GenericData
+import org.apache.avro.util.Utf8
 import scala.tools.scalap.scalax.rules.scalasig.TypeRefType
 import com.novus.salat.transformers._
 import in._
 import com.novus.salat.Context
-
 import org.scala_tools.time.Imports._
 import org.joda.time.format.ISODateTimeFormat
 
@@ -36,11 +38,29 @@ object Injectors {
         case _ => None
       }
       
+      case IsSeq(t@TypeRefType(_, _, _)) => t match {
+        case TypeRefType(_, symbol, _) =>
+          Some(new Transformer(symbol.path, t)(ctx) with SeqInjector)
+      }
+      
       case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
         Some(new Transformer(symbol.path, pt)(ctx) with StringToJodaDateTime)
 
       case _ => None
     }
+  }
+}
+
+trait SeqInjector extends Transformer {
+  self: Transformer =>
+  import scala.collection.JavaConverters._
+
+  override def transform(value: Any)(implicit ctx: Context): Any = value match {
+    case array: GenericData.Array[_] => array.asScala.toList.collect {
+      case utf8: Utf8 => utf8.toString
+      case v => v
+    }
+    case _ => value
   }
 }
 

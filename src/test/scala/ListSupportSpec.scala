@@ -20,9 +20,8 @@ object ListSupportSpec extends SalatAvroSpec {
     "serialize and deserialize" in {
       val oldClara = clara
       println(serializeToJSON(oldClara))
-      // val newClara = serializeAndDeserialize(oldClara)
-      // newClara must_== oldClara
-      pending
+      val newClara = serializeAndDeserialize(oldClara)
+      newClara must_== oldClara
     }
   }
   
