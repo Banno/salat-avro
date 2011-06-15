@@ -56,7 +56,7 @@ trait SeqInjector extends Transformer {
   import scala.collection.JavaConverters._
 
   override def transform(value: Any)(implicit ctx: Context): Any = value match {
-    case array: GenericData.Array[_] => array.asScala.toList.collect {
+    case array: GenericData.Array[_] => array.asScala.toList.map {
       case utf8: Utf8 => utf8.toString
       case v => v
     }
