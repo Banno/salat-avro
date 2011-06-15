@@ -38,8 +38,10 @@ object AvroSalatSchema {
 
   private def schemaTypeFor(typeRefType: Type)(implicit ctx: Context): Schema = {
     val typeRef @ TypeRefType(_, symbol, typeArgs) = typeRefType
-    // println("typeName = %s".format(symbol.name))
-    // println("typeRefType.typeArgs = %s".format(typeArgs))
+    // println("typeRef = %s".format(typeRef))
+    // println("symbol = %s".format(symbol))
+    // println("symbol.path = %s".format(symbol.path))
+    // println("typeArgs = %s".format(typeArgs))
     // println("in context: " + ctx.lookup(symbol.path))
     (symbol.path, typeRef, ctx.lookup(symbol.path)) match {
       case ("scala.Predef.String", _, _) => Schema.create(Schema.Type.STRING)
@@ -49,6 +51,7 @@ object AvroSalatSchema {
       case (path, _, _) if isDouble(path) => Schema.create(Schema.Type.DOUBLE) //is it ok to override Double & BigDecimal like this?
       case (path, _, _) if isBigDecimal(path) => Schema.create(Schema.Type.DOUBLE)
       case (path, _, _) if isJodaDateTime(path) => Schema.create(Schema.Type.STRING)
+      case (path, _, _) if isSeq(path) => Schema.createArray(schemaTypeFor(typeArgs(0)))
       case ("scala.Option", _, _) => optional(schemaTypeFor(typeArgs(0)))
       case (_, IsEnum(prefix), _) => enumSchema(prefix)
       case (_, _, Some(recordGrater)) => recordGrater.asInstanceOf[SingleAvroGrater[_]].asSingleAvroSchema
@@ -65,6 +68,11 @@ object AvroSalatSchema {
   def isDouble(path: String) = path match {
     case "java.lang.Double" => true
     case "scala.Double" => true
+    case _ => false
+  }
+
+  def isSeq(path: String) = path match {
+    case "scala.package.Seq" => true
     case _ => false
   }
 
