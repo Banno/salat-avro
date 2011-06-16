@@ -17,6 +17,8 @@ package com.banno.salat.avro
 
 import com.novus.salat._
 import org.apache.avro.Schema
+import org.apache.avro.io.ResolvingDecoder
+import scala.collection.JavaConverters._
 import scala.collection.mutable.{ LinkedHashMap, ListBuffer }
 import org.apache.avro.io.{ Decoder, DatumReader }
 import org.apache.avro.generic.{ GenericData, GenericDatumReader }
@@ -35,49 +37,49 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
 
     colletingReader.read(null, decoder)
 
-    val recordFields = collectingGenericData.fields
-    val (rootRecord, rootValues) = collectingGenericData.rootRecordAndValues
+    val rootRecord = collectingGenericData.rootRecord.get
 
-    applyValues(rootRecord, rootValues, recordFields).asInstanceOf[X]
+    applyValues(rootRecord).asInstanceOf[X]
   }
 
-  def applyValues(genericRecord: GenericData.Record, values: ListBuffer[Object], index: LinkedHashMap[GenericData.Record, ListBuffer[Object]]): AnyRef = {
+  def applyValues(genericRecord: GenericData.Record): AnyRef = {
     // println("-------- apply values -------")
     // println("record = " + genericRecord)
+    val values = genericRecord.getSchema.getFields.asScala.map(_.name).map(genericRecord.get(_))
     // println("values = " + values)
+    // println("values classes = " + values.map(_.getClass))
 
     val grater: SingleAvroGrater[_] = ctx.lookup(genericRecord.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
 
     val arguments = grater._indexedFields.zip(values).map {
-      case (field, Some(record: GenericData.Record)) => Some(applyValues(record, index.get(record).get, index))
-      case (field, Some(value)) =>
+      case (field, record: GenericData.Record) => Some(applyValues(record))
+      case (field, value) =>
         val inTransformer = Injectors.select(field.typeRefType).getOrElse(field.in)
         inTransformer.transform_!(value)
-      case (field, _) => grater.safeDefault(field)
+//      case (field, _) => grater.safeDefault(field)
     }.map(_.get.asInstanceOf[AnyRef])
 
     grater._constructor.newInstance(arguments: _*).asInstanceOf[AnyRef]
   }
-    
+
   protected class CollectingGenericData extends GenericData {
-    val fields = new LinkedHashMap[GenericData.Record, ListBuffer[Object]]
-    def rootRecordAndValues = fields.last
+    var rootRecord: Option[GenericData.Record] = None
+    
     override def setField(record: Any, name: String, pos: Int, obj: Object) {
       val genericRecord = record.asInstanceOf[GenericData.Record]
+      rootRecord = rootRecord.orElse(Some(genericRecord))
       // println("------- set field --------")
-      // println("record = " + record)
+      // println("genericRecord = " + genericRecord)
+      // println("genericRecord.class = " + genericRecord.getClass)
       // println("name = " + name)
       // println("pos = " + pos)
       // println("obj = " + obj)
       // println("obj.class = " + obj.getClass)
-      // println("fields = " + fields)
       val scalaObj = obj match {
         case utf8: Utf8 => utf8.toString
         case x => x
       }
-      val recordFields = fields.remove(genericRecord).getOrElse(new ListBuffer[Object])
-      recordFields.insert(pos, Option(scalaObj))
-      fields.update(genericRecord, recordFields)
+      genericRecord.put(name, scalaObj)
     }
   }
 

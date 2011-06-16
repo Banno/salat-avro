@@ -58,6 +58,11 @@ trait SeqInjector extends Transformer {
   override def transform(value: Any)(implicit ctx: Context): Any = value match {
     case array: GenericData.Array[_] => array.asScala.toList.map {
       case utf8: Utf8 => utf8.toString
+      case record: GenericData.Record =>
+        val grater: SingleAvroGrater[_] =
+          ctx.lookup(record.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
+        val reader  = grater.asGenericDatumReader
+        reader.applyValues(record)
       case v => v
     }
     case _ => value

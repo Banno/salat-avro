@@ -34,6 +34,8 @@ trait AvroGrater[X <: CaseClass] {
   def asObject(decoder: Decoder): X = asDatumReader.read(decoder)
   
   lazy val asDatumWriter: DatumWriter[X] = new AvroGenericDatumWriter[X](asAvroSchema)
-  lazy val asDatumReader: AvroDatumReader[X] = new AvroGenericDatumReader[X](asAvroSchema)
+  lazy val asDatumReader: AvroDatumReader[X] = asGenericDatumReader
+  lazy val asGenericDatumReader: AvroGenericDatumReader[X] = new AvroGenericDatumReader[X](asAvroSchema)
+  
 }
   
