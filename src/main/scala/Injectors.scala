@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package com.banno.salat.avro
+import com.novus.salat.IsEnum
 
 import com.novus.salat.IsOption
 import com.novus.salat.IsSeq
@@ -31,11 +32,27 @@ object Injectors {
     pt match {
       
       case IsOption(t@TypeRefType(_, _, _)) => t match {
-        
+        case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
+          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with DoubleToSBigDecimal)
+
+        case TypeRefType(_, symbol, _) if isInt(symbol.path) =>
+          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with LongToInt)
+
+        case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
+          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with LongToBigInt)
+
+        case TypeRefType(_, symbol, _) if isChar(symbol.path) =>
+          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with StringToChar)
+  
         case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
-          Some(new Transformer(symbol.path, t)(ctx) with OptionInjector with StringToJodaDateTime)
+          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with StringToJodaDateTime)
+
+        case t@TypeRefType(_, _, _) if IsEnum.unapply(t).isDefined => {
+          Some(new Transformer(IsEnum.unapply(t).get.symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector  with EnumInflater)
+        }
         
-        case _ => None
+        case TypeRefType(_, symbol, _) =>
+          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector )
       }
       
       case IsSeq(t@TypeRefType(_, _, _)) => t match {
@@ -51,6 +68,15 @@ object Injectors {
   }
 }
 
+trait NullToNoneInjector extends Transformer {
+  self: Transformer =>
+
+  override def before(value: Any)(implicit ctx: Context): Option[Any] = value match {
+    case null => None
+    case v => Some(v)
+  }
+}
+  
 trait SeqInjector extends Transformer {
   self: Transformer =>
   import scala.collection.JavaConverters._
