@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package com.banno.salat.avro
+import com.novus.salat.IsMap
   import com.novus.salat.IsMap
 
 import com.novus.salat._
@@ -54,6 +55,7 @@ object AvroSalatSchema {
       case (path, _, _) if isJodaDateTime(path) => Schema.create(Schema.Type.STRING)
       case ("scala.Option", _, _) => optional(schemaTypeFor(typeArgs(0)))
       case (_, IsSeq(_), _) => Schema.createArray(schemaTypeFor(typeArgs(0)))
+      case (_, IsMap(k, v), _) => Schema.createMap(schemaTypeFor(v))
       case (_, IsEnum(prefix), _) => enumSchema(prefix)
       case (_, _, Some(recordGrater)) => recordGrater.asInstanceOf[SingleAvroGrater[_]].asSingleAvroSchema
       case (path, _, _) => throw new UnknownTypeForAvroSchema(path)
