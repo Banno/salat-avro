@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 package com.banno.salat.avro
-import com.novus.salat.IsSeq
-import com.novus.salat.IsOption
 import scala.tools.scalap.scalax.rules.scalasig.TypeRefType
-import com.novus.salat.transformers._
+import com.novus.salat._
+import transformers._
 import out._
 import com.novus.salat.Context
 
@@ -37,12 +36,40 @@ object Extractors {
 
       case _ => None
     }
+    
+    case IsMap(_, t @ TypeRefType(_, _, _)) => t match {
+      case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
+        Some(new Transformer(symbol.path, t)(ctx) with SBigDecimalToDouble with MapToHashMapExtractor)
+
+      case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
+        Some(new Transformer(symbol.path, t)(ctx) with BigIntToLong with MapToHashMapExtractor)
+
+      case TypeRefType(_, symbol, _) if isChar(symbol.path) =>
+        Some(new Transformer(symbol.path, t)(ctx) with CharToString with MapToHashMapExtractor)
+
+      case t @ TypeRefType(_, _, _) if IsEnum.unapply(t).isDefined =>
+        Some(new Transformer(IsEnum.unapply(t).get.symbol.path, t)(ctx) with EnumStringifier with MapToHashMapExtractor)
+
+      // case TypeRefType(_, symbol, _) if hint || ctx.lookup(symbol.path).isDefined =>
+      //   Some(new Transformer(symbol.path, t)(ctx) with InContextToDBObject with MapExtractor {
+      //     val grater = ctx.lookup(symbol.path)
+      //   })
+
+      // case t @ TypeRefType(_, symbol, _) if IsTraitLike.unapply(t).isDefined =>
+      //   Some(new Transformer(symbol.path, t)(ctx) with InContextToDBObject with MapExtractor {
+      //     val grater = ctx.lookup(symbol.path)
+      //   })
+
+      case TypeRefType(_, symbol, _) =>
+        Some(new Transformer(symbol.path, t)(ctx) with MapToHashMapExtractor)
+    }
 
     case IsSeq(t@TypeRefType(_, _, _)) => t match {
       case TypeRefType(_, symbol, _) =>
-        Some(new Transformer(symbol.path, t)(ctx) with SeqExtractor)
+        Some(new Transformer(symbol.path, t)(ctx) with SeqToListExtractor)
     }
 
+    
     case TypeRefType(_, symbol, _) => t match {
       
       case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
@@ -66,8 +93,21 @@ trait JodaTimeToString extends Transformer {
   }
 }
 
-trait SeqExtractor extends Transformer {
+trait SeqToListExtractor extends Transformer {
   import scala.collection.JavaConverters._
   override def transform(value: Any)(implicit ctx: Context) =
     value.asInstanceOf[Seq[_]].asJava
+}
+
+trait MapToHashMapExtractor extends Transformer {
+  import scala.collection.JavaConverters._
+  
+  override def transform(value: Any)(implicit ctx: Context): Any = value
+  override def after(value: Any)(implicit ctx: Context) = value match {
+    case map: scala.collection.Map[String, _] =>
+      Some(map.asJava)
+    case _ =>
+      None
+  }
+  
 }
