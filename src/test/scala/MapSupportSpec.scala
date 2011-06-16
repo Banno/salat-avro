@@ -15,5 +15,12 @@ object MapSupportSpec extends SalatAvroSpec {
       recordSchema must containField("h", Schema.Type.MAP)
       recordSchema.getField("h").schema.getValueType.getType must_== Schema.Type.INT
     }
+    
+    "serialize and deserialize" in {
+      val oldDesmond = desmond
+      println(serializeToJSON(oldDesmond))
+      val newDesmond = serializeAndDeserialize(oldDesmond)
+      newDesmond must_== oldDesmond
+    }
   }
 }

@@ -15,13 +15,14 @@
  */
 package com.banno.salat.avro
 import com.novus.salat.IsEnum
+import com.novus.salat.IsMap
 
-import com.novus.salat.IsOption
-import com.novus.salat.IsSeq
 import org.apache.avro.generic.GenericData
 import org.apache.avro.util.Utf8
 import scala.tools.scalap.scalax.rules.scalasig.TypeRefType
-import com.novus.salat.transformers._
+import com.novus.salat._
+import impls._
+import transformers._
 import in._
 import com.novus.salat.Context
 import org.scala_tools.time.Imports._
@@ -59,6 +60,38 @@ object Injectors {
         case TypeRefType(_, symbol, _) =>
           Some(new Transformer(symbol.path, t)(ctx) with SeqInjector)
       }
+
+
+      case IsMap(_, t@TypeRefType(_, _, _)) => t match {
+        case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
+          Some(new Transformer(symbol.path, t)(ctx) with DoubleToSBigDecimal with HashMapToMapInjector {
+            val parentType = pt
+          })
+
+        case TypeRefType(_, symbol, _) if isInt(symbol.path) =>
+          Some(new Transformer(symbol.path, t)(ctx) with LongToInt with HashMapToMapInjector {
+            val parentType = pt
+          })
+
+        case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
+          Some(new Transformer(symbol.path, t)(ctx) with LongToBigInt with HashMapToMapInjector {
+            val parentType = pt
+          })
+
+        case TypeRefType(_, symbol, _) if isChar(symbol.path) =>
+          Some(new Transformer(symbol.path, t)(ctx) with StringToChar with HashMapToMapInjector {
+            val parentType = pt
+          })
+
+        case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
+          Some(new Transformer(symbol.path, t)(ctx) with DateToJodaDateTime with HashMapToMapInjector {
+            val parentType = pt
+          })
+        
+        case TypeRefType(_, symbol, _) => Some(new Transformer(symbol.path, t)(ctx) with HashMapToMapInjector {
+          val parentType = pt
+        })
+      }
       
       case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
         Some(new Transformer(symbol.path, pt)(ctx) with StringToJodaDateTime)
@@ -93,6 +126,23 @@ trait SeqInjector extends Transformer {
     }
     case _ => value
   }
+}
+
+trait HashMapToMapInjector extends Transformer {
+  self: Transformer =>
+  import scala.collection.JavaConverters._
+
+  override def transform(value: Any)(implicit ctx: Context): Any = value
+  
+  override def after(value: Any)(implicit ctx: Context): Option[Any] = value match {
+    case jhm: java.util.HashMap[_,_] =>
+      val result = jhm.asScala.map {
+        case (k: Utf8, v) => k.toString -> super.transform(v)
+      }
+      Some(mapImpl(parentType, result))
+  }
+  
+  val parentType: TypeRefType
 }
 
 trait StringToJodaDateTime extends Transformer {
