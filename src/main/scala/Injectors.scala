@@ -137,6 +137,7 @@ trait HashMapToMapInjector extends Transformer {
   override def after(value: Any)(implicit ctx: Context): Option[Any] = value match {
     case jhm: java.util.HashMap[_,_] =>
       val result = jhm.asScala.map {
+        case (k: Utf8, v: Utf8) => k.toString -> v.toString
         case (k: Utf8, v) => k.toString -> super.transform(v)
       }
       Some(mapImpl(parentType, result))
