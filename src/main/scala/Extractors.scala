@@ -64,9 +64,9 @@ object Extractors {
         Some(new Transformer(symbol.path, t)(ctx) with MapToHashMapExtractor)
     }
 
-    case IsSeq(t@TypeRefType(_, _, _)) => t match {
+    case IsTraversable(t@TypeRefType(_, _, _)) => t match {
       case TypeRefType(_, symbol, _) =>
-        Some(new Transformer(symbol.path, t)(ctx) with SeqToListExtractor)
+        Some(new Transformer(symbol.path, t)(ctx) with TraversableExtractor)
     }
 
     
@@ -93,7 +93,7 @@ trait JodaTimeToString extends Transformer {
   }
 }
 
-trait SeqToListExtractor extends Transformer {
+trait TraversableExtractor extends Transformer {
   import scala.collection.JavaConverters._
   override def transform(value: Any)(implicit ctx: Context) =
     value.asInstanceOf[Seq[_]].asJava

@@ -54,7 +54,7 @@ object AvroSalatSchema {
       case (path, _, _) if isBigDecimal(path) => Schema.create(Schema.Type.DOUBLE)
       case (path, _, _) if isJodaDateTime(path) => Schema.create(Schema.Type.STRING)
       case ("scala.Option", _, _) => optional(schemaTypeFor(typeArgs(0)))
-      case (_, IsSeq(_), _) => Schema.createArray(schemaTypeFor(typeArgs(0)))
+      case (_, IsTraversable(_), _) => Schema.createArray(schemaTypeFor(typeArgs(0)))
       case (_, IsMap(k, v), _) => Schema.createMap(schemaTypeFor(v))
       case (_, IsEnum(prefix), _) => enumSchema(prefix)
       case (_, _, Some(recordGrater)) => recordGrater.asInstanceOf[SingleAvroGrater[_]].asSingleAvroSchema

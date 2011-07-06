@@ -56,9 +56,9 @@ object Injectors {
           Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector )
       }
       
-      case IsSeq(t@TypeRefType(_, _, _)) => t match {
+      case IsTraversable(t@TypeRefType(_, _, _)) => t match {
         case TypeRefType(_, symbol, _) =>
-          Some(new Transformer(symbol.path, t)(ctx) with SeqInjector)
+          Some(new Transformer(symbol.path, t)(ctx) with TraversableInjector)
       }
 
 
@@ -110,7 +110,7 @@ trait NullToNoneInjector extends Transformer {
   }
 }
   
-trait SeqInjector extends Transformer {
+trait TraversableInjector extends Transformer {
   self: Transformer =>
   import scala.collection.JavaConverters._
 
