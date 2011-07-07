@@ -7,6 +7,9 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ApacheLicense
   val salat = "com.novus" %% "salat-core" % "0.0.8-SNAPSHOT"
   val avro = "org.apache.avro" % "avro" % "1.5.1"
 
+  // ScalaSig in 2.9.0-1 depends on the scala-compiler - OUCH!
+  val scalaCompiler = "org.scala-lang" % "scala-compiler" % "2.9.0-1"
+
   // necessary for scalaz snapshot that specs2 depends on
   val snapshots = "snapshots" at "http://scala-tools.org/repo-snapshots"
 
