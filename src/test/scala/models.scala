@@ -1,5 +1,6 @@
 package com.banno.salat.avro.test.models
 
+import com.novus.salat.annotations._
 import scala.math.{BigDecimal => ScalaBigDecimal}
 import org.scala_tools.time.Imports._
 import scala.collection.immutable.{Map => IMap}
@@ -37,3 +38,10 @@ case class Dirk(awesomeness: Double)
 case class Location(latitude: Double, longitude: Double)
 case class User(username: String)
 case class UserAt(user: User, location: Location)
+
+@Salat
+trait SomeCommonTrait
+case class SomeSubclassExtendingSaidTrait(b: Int) extends SomeCommonTrait
+case class AnotherSubclassExtendingSaidTrait(d: Double) extends SomeCommonTrait
+
+case class SomeContainerClass(e: String, theListWhichNeedsToBeTested: List[SomeCommonTrait])

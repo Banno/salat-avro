@@ -15,9 +15,9 @@ object MultiGraterSpec extends SalatAvroSpec {
       schema.getName must_== "union"
       val types: Iterable[Schema] = schema.getTypes
       types must have(_.getName == "Alice")
-      types must have(_.getName == "Louis")
-      types must have(_.getName == "Alice")
+      types must have(_.getName == "Basil")
       types must have(_.getName == "Edward")
+      types must have(_.getName == "Louis")
     }
 
     "adding the same grater should not add it to the union twice" in {

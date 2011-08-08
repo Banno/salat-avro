@@ -19,9 +19,10 @@ import com.novus.salat._
 import org.apache.avro.Schema
 import org.apache.avro.io.{ Decoder, Encoder, DatumReader, DatumWriter }
 
-trait AvroGrater[X <: CaseClass] {
+trait AvroGrater[X <: AnyRef] {
   implicit val ctx: Context
   def asAvroSchema: Schema
+  private[avro] def asSingleAvroSchema: Schema
   def +(other: AvroGrater[_]): MultiAvroGrater
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean
 
