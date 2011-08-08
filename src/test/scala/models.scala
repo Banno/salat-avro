@@ -50,4 +50,5 @@ case class SomeContainerClass(e: String, theListWhichNeedsToBeTested: List[SomeC
 @Salat
 trait Tree
 case class Node(left: Tree, right: Tree) extends Tree
+case class ManyTrees(value: Int, nodes: Seq[Tree]) extends Tree
 case class End(value: Int) extends Tree

@@ -10,6 +10,7 @@ object RecursiveTypeSupportSpec extends SalatAvroSpec {
   "a grater for a recursive type" should {
     "be able to produce a schema" in {
       grater[Node]
+      grater[ManyTrees]
       grater[End]
       
       val schema = grater[Node].asAvroSchema
@@ -22,16 +23,19 @@ object RecursiveTypeSupportSpec extends SalatAvroSpec {
       val recursiveUnion1 = recordSchema.getField("left").schema
       recursiveUnion1.getName must_== "union"
       recursiveUnion1.getTypes.get(0).getName must_== "End"
-      recursiveUnion1.getTypes.get(1).getName must_== "Node"
+      recursiveUnion1.getTypes.get(1).getName must_== "ManyTrees"
+      recursiveUnion1.getTypes.get(2).getName must_== "Node"
       
       val recursiveUnion2 = recordSchema.getField("right").schema
       recursiveUnion2.getName must_== "union"
       recursiveUnion2.getTypes.get(0).getName must_== "End"
-      recursiveUnion2.getTypes.get(1).getName must_== "Node"
+      recursiveUnion2.getTypes.get(1).getName must_== "ManyTrees"
+      recursiveUnion2.getTypes.get(2).getName must_== "Node"
     }
 
     "be able to read and write" in {
       grater[Node]
+      grater[ManyTrees]
       grater[End]
 
       val oldRecurse = recurse()
