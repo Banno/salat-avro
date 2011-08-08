@@ -45,3 +45,9 @@ case class SomeSubclassExtendingSaidTrait(b: Int) extends SomeCommonTrait
 case class AnotherSubclassExtendingSaidTrait(d: Double) extends SomeCommonTrait
 
 case class SomeContainerClass(e: String, theListWhichNeedsToBeTested: List[SomeCommonTrait])
+
+
+@Salat
+trait Tree
+case class Node(left: Tree, right: Tree) extends Tree
+case class End(value: Int) extends Tree

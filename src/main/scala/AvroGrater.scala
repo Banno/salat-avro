@@ -18,11 +18,12 @@ package com.banno.salat.avro
 import com.novus.salat._
 import org.apache.avro.Schema
 import org.apache.avro.io.{ Decoder, Encoder, DatumReader, DatumWriter }
+import scala.collection.mutable.ListBuffer
 
 trait AvroGrater[X <: AnyRef] {
   implicit val ctx: Context
   def asAvroSchema: Schema
-  private[avro] def asSingleAvroSchema: Schema
+  private[avro] def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]): Schema
   def +(other: AvroGrater[_]): MultiAvroGrater
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean
 

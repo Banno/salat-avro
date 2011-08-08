@@ -21,6 +21,7 @@ import com.novus.salat.Grater
 import java.util.ArrayList
 import org.apache.avro.Schema
 import scala.collection.JavaConverters._
+import scala.collection.mutable.ListBuffer
 
 class ProxyAvroGrater[X <: AnyRef](clazz: Class[X])(implicit ctx: AvroContext) extends Grater[X](clazz)(ctx) with AvroGrater[X] {
 
@@ -29,9 +30,10 @@ class ProxyAvroGrater[X <: AnyRef](clazz: Class[X])(implicit ctx: AvroContext) e
     case (subclazz, grater) if clazz.isAssignableFrom(subclazz) && clazz != subclazz => grater.asInstanceOf[AvroGrater[_ <: AnyRef]]
   }.toList
   
-  def asAvroSchema: Schema = Schema.createUnion(knownSubclassGraters.map(_.asSingleAvroSchema).asJava)
+  def asAvroSchema: Schema = asSingleAvroSchema(new ListBuffer[Schema])
 
-  private[avro] def asSingleAvroSchema = asAvroSchema
+  private[avro] def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]) =
+    Schema.createUnion(knownSubclassGraters.map(_.asSingleAvroSchema(knownSchemas)).asJava)
   
   def +(other: AvroGrater[_]): MultiAvroGrater = null
   

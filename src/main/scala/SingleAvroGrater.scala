@@ -19,13 +19,14 @@ import com.novus.salat._
 import org.apache.avro.Schema
 import scala.collection.JavaConversions._
 import scala.collection.mutable.LinkedHashSet
+import scala.collection.mutable.ListBuffer
 import scala.tools.scalap.scalax.rules.scalasig.MethodSymbol
 
 class SingleAvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   extends ConcreteGrater[X](clazz) with AvroGrater[X] {
     
-  lazy val asAvroSchema: Schema = Schema.createUnion(asSingleAvroSchema :: Nil)
-  lazy val asSingleAvroSchema: Schema = AvroSalatSchema.schemeFor(clazz, this)
+  lazy val asAvroSchema: Schema = Schema.createUnion(asSingleAvroSchema(new ListBuffer[Schema]) :: Nil)
+  def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]): Schema = AvroSalatSchema.schemaFor(clazz, this, knownSchemas)
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = manifest.erasure == clazz
 
   def +(other: AvroGrater[_]): MultiAvroGrater = other match {
