@@ -17,13 +17,15 @@ package com.banno.salat.avro
 
 import java.lang.reflect.Modifier
 import com.novus.salat.{ Context, Grater, CaseClass }
-import scala.collection.mutable.LinkedHashMap
+import java.util.Comparator
+import java.util.concurrent.ConcurrentSkipListMap
+import scala.collection.mutable.SynchronizedQueue
+import scala.collection.JavaConversions.JConcurrentMapWrapper
 
 trait AvroContext extends Context {
 
   // since salat's graters is hidden from me, keeping my own collection
-  // FIXME: needs to be a concurrent linked hash map
-  private[avro] val avroGraters = new LinkedHashMap[Class[_ <: AnyRef], Grater[_ <: AnyRef]]
+  private[avro] val avroGraters = JConcurrentMapWrapper(new ConcurrentSkipListMap[Class[_ <: AnyRef], Grater[_ <: AnyRef]](ClassComparator))
   
   override protected def generate(clazz: String): Grater[_ <: CaseClass] = {
     new SingleAvroGrater[CaseClass](getCaseClass(clazz)(this).map(_.asInstanceOf[Class[CaseClass]]).get)(this)
@@ -56,4 +58,8 @@ trait AvroContext extends Context {
     } else None
   }
 
+}
+
+object ClassComparator extends Comparator[Class[_]] {
+  def compare(c1: Class[_], c2: Class[_]) = c1.getName.compare(c2.getName)
 }

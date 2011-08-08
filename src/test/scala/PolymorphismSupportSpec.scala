@@ -7,8 +7,8 @@ import org.apache.avro.Schema
 object PolymorphismSupportSpec extends SalatAvroSpec {
   import models._
 
-  "a grater" should {
-    "make a avro schema for something that refers to a trait" in {
+  "a grater that refers to a polymorphic type" should {
+    "make a avro schema" in {
       // must add the subclass grater first
       grater[SomeSubclassExtendingSaidTrait]
       grater[AnotherSubclassExtendingSaidTrait]
@@ -23,8 +23,18 @@ object PolymorphismSupportSpec extends SalatAvroSpec {
 
       val subclassSchemas = recordSchema.getField("theListWhichNeedsToBeTested").schema.getElementType
       subclassSchemas.getName must_== "union"
-      subclassSchemas.getTypes.get(0).getName must_== "SomeSubclassExtendingSaidTrait"
-      subclassSchemas.getTypes.get(1).getName must_== "AnotherSubclassExtendingSaidTrait"
+      subclassSchemas.getTypes.get(0).getName must_== "AnotherSubclassExtendingSaidTrait"
+      subclassSchemas.getTypes.get(1).getName must_== "SomeSubclassExtendingSaidTrait"
+    }
+
+    "serialize and deserialize an object" in {
+      // must add the subclass grater first
+      grater[SomeSubclassExtendingSaidTrait]
+      grater[AnotherSubclassExtendingSaidTrait]
+      
+      val oldPoly = poly()
+      val newPoly = serializeAndDeserialize(oldPoly)
+      newPoly must_== oldPoly
     }
   }
 }

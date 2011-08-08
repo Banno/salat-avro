@@ -10,4 +10,11 @@ package object test {
                       Basil(Some(80), 81))
   def clara() = Clara(l = Seq("hello", "there"), m = List(1,2,3), n = List(Desmond(Map("hello" -> 1))))
   def desmond() = Desmond(IMap("hello" -> 1), MMap("there" -> 2))
+
+  def poly() = SomeContainerClass("hello", SomeSubclassExtendingSaidTrait(2) ::
+                                           AnotherSubclassExtendingSaidTrait(2.3) ::
+                                           SomeSubclassExtendingSaidTrait(3) ::
+                                           SomeSubclassExtendingSaidTrait(4) ::
+                                           AnotherSubclassExtendingSaidTrait(4.3) ::
+                                           Nil)
 }
