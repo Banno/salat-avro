@@ -30,8 +30,14 @@ object RecursiveTypeSupportSpec extends SalatAvroSpec {
       recursiveUnion2.getTypes.get(1).getName must_== "Node"
     }
 
-    // "be able to read and write" in {
-      
-    // }
+    "be able to read and write" in {
+      grater[Node]
+      grater[End]
+
+      val oldRecurse = recurse()
+      val newRecurse = serializeAndDeserialize(oldRecurse)
+      println(newRecurse)
+      newRecurse must_== oldRecurse
+    }
   }
 }

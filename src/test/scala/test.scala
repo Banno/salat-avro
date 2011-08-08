@@ -17,4 +17,6 @@ package object test {
                                            SomeSubclassExtendingSaidTrait(4) ::
                                            AnotherSubclassExtendingSaidTrait(4.3) ::
                                            Nil)
+
+  def recurse() = Node(Node(End(2), End(1)), End(3))
 }
