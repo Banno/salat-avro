@@ -48,6 +48,9 @@ object Injectors {
         case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
           Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with StringToJodaDateTime)
 
+        case TypeRefType(_, symbol, _) if IsTraversable.unapply(t).isDefined =>
+          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with TraversableInjector)
+          
         case t@TypeRefType(_, _, _) if IsEnum.unapply(t).isDefined => {
           Some(new Transformer(IsEnum.unapply(t).get.symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector  with EnumInflater)
         }

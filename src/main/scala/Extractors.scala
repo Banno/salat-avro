@@ -34,6 +34,9 @@ object Extractors {
       case TypeRefType(_, symbol, _) if hint || ctx.lookup(symbol.path).isDefined =>
         Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor)
 
+      case TypeRefType(_, symbol, _) if IsTraversable.unapply(t).isDefined =>
+        Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor with TraversableExtractor)
+      
       case _ => None
     }
     
