@@ -45,7 +45,7 @@ object Extractors {
         Some(new Transformer(symbol.path, t)(ctx) with SBigDecimalToDouble with MapToHashMapExtractor)
 
       case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
-        Some(new Transformer(symbol.path, t)(ctx) with BigIntToLong with MapToHashMapExtractor)
+        Some(new Transformer(symbol.path, t)(ctx) with BigIntToByteArray with MapToHashMapExtractor)
 
       case TypeRefType(_, symbol, _) if isChar(symbol.path) =>
         Some(new Transformer(symbol.path, t)(ctx) with CharToString with MapToHashMapExtractor)

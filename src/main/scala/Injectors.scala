@@ -40,7 +40,7 @@ object Injectors {
           Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with LongToInt)
 
         case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
-          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with LongToBigInt)
+          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with ByteArrayToBigInt)
 
         case TypeRefType(_, symbol, _) if isChar(symbol.path) =>
           Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with StringToChar)
@@ -77,7 +77,7 @@ object Injectors {
           })
 
         case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
-          Some(new Transformer(symbol.path, t)(ctx) with LongToBigInt with HashMapToMapInjector {
+          Some(new Transformer(symbol.path, t)(ctx) with ByteArrayToBigInt with HashMapToMapInjector {
             val parentType = pt
           })
 
