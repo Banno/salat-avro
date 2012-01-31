@@ -21,6 +21,8 @@ case class Edward(a:          String,           b:        Int,           c:     
                   aa:  Option[String] = None,   bb: Option[Int] = None,  cc: Option[ScalaBigDecimal] = None,
                   aaa:  Option[String] = None,  bbb: Option[Int] = None, ccc: Option[ScalaBigDecimal] = None)
 
+case class Fred(a: Alice, c: Option[Clara])
+
 object Frakked extends Enumeration {
   val JustALittle = Value("just a little")
   val QuiteABit = Value("quite a bit")
@@ -30,7 +32,7 @@ object Frakked extends Enumeration {
 
 case class Me(name: String, state: Frakked.Value = Frakked.BeyondRepair)
 
-case class Neville(ennui: Boolean = true, asOf: DateTime = new DateTime)  
+case class Neville(ennui: Boolean = true, asOf: DateTime = new DateTime)
 
 case class Louis(id: Long)
 case class Dirk(awesomeness: Double)

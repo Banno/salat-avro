@@ -45,14 +45,18 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
   def applyValues(genericRecord: GenericData.Record): AnyRef = {
     // println("-------- apply values -------")
     // println("record = " + genericRecord)
+    // println("record.schema.fullName = " + genericRecord.getSchema.getFullName)
     val values = genericRecord.getSchema.getFields.asScala.map(_.name).map(genericRecord.get(_))
     // println("values = " + values)
-    // println("values classes = " + values.map(_.getClass))
+    // println("values classes = " + values.map(v => if (v != null) v.getClass else "null"))
 
     val grater: SingleAvroGrater[_] = ctx.lookup(genericRecord.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
 
     val arguments = grater._indexedFields.zip(values).map {
-      case (field, record: GenericData.Record) => Some(applyValues(record))
+      case (field, record: GenericData.Record) =>
+        val inTransformer = Injectors.select(field.typeRefType).getOrElse(field.in)
+        val applied = applyValues(record)
+        inTransformer.transform_!(applied).orElse(Some(applied))
       case (field, value) =>
         val inTransformer = Injectors.select(field.typeRefType).getOrElse(field.in)
         inTransformer.transform_!(value)
@@ -67,7 +71,7 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
 
   protected class CollectingGenericData extends GenericData {
     var rootRecord: GenericData.Record = _
-    
+
     override def setField(record: Any, name: String, pos: Int, obj: Object) {
       val genericRecord = record.asInstanceOf[GenericData.Record]
       // The last record to have a field set is the root record
