@@ -43,6 +43,8 @@ case class Location(latitude: Double, longitude: Double)
 case class User(username: String)
 case class UserAt(user: User, location: Location)
 
+case class HasASet(s: Set[Int])
+
 @Salat
 trait SomeCommonTrait
 case class SomeSubclassExtendingSaidTrait(b: Int) extends SomeCommonTrait
