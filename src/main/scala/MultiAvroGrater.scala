@@ -23,6 +23,7 @@ import org.apache.avro.io.Decoder
 import org.apache.avro.io.Encoder
 import scala.collection.JavaConversions._
 import scala.collection.mutable.LinkedHashSet
+import scala.collection.mutable.ListBuffer
 
 class UnsupportedCaseClassMultiException(obj: Any)
 extends RuntimeException("Cannot serialize " + obj)
@@ -35,7 +36,10 @@ extends AvroGrater[CaseClass] {
     case sg: SingleAvroGrater[_] => new MultiAvroGrater(graters + sg)
   }
   
-  lazy val asAvroSchema: Schema = Schema.createUnion(graters.toList.map(_.asSingleAvroSchema))
+  lazy val asAvroSchema: Schema = asSingleAvroSchema(new ListBuffer[Schema])
+  
+  private[avro] def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]) =
+    Schema.createUnion(graters.toList.map(_.asSingleAvroSchema(knownSchemas)))
   
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean =
     graters.exists(_.supports(x))

@@ -27,22 +27,25 @@ object Extractors {
   def select(t: TypeRefType, hint: Boolean = false)(implicit ctx: Context): Option[Transformer] = t match {
 
     case IsOption(t@TypeRefType(_, _, _)) => t match {
-      
+
       case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
         Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor with JodaTimeToString)
-      
+
       case TypeRefType(_, symbol, _) if hint || ctx.lookup(symbol.path).isDefined =>
         Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor)
 
+      case TypeRefType(_, symbol, _) if IsTraversable.unapply(t).isDefined =>
+        Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor with TraversableExtractor)
+
       case _ => None
     }
-    
+
     case IsMap(_, t @ TypeRefType(_, _, _)) => t match {
       case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
         Some(new Transformer(symbol.path, t)(ctx) with SBigDecimalToDouble with MapToHashMapExtractor)
 
       case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
-        Some(new Transformer(symbol.path, t)(ctx) with BigIntToLong with MapToHashMapExtractor)
+        Some(new Transformer(symbol.path, t)(ctx) with BigIntToByteArray with MapToHashMapExtractor)
 
       case TypeRefType(_, symbol, _) if isChar(symbol.path) =>
         Some(new Transformer(symbol.path, t)(ctx) with CharToString with MapToHashMapExtractor)
@@ -64,20 +67,20 @@ object Extractors {
         Some(new Transformer(symbol.path, t)(ctx) with MapToHashMapExtractor)
     }
 
-    case IsSeq(t@TypeRefType(_, _, _)) => t match {
+    case IsTraversable(t@TypeRefType(_, _, _)) => t match {
       case TypeRefType(_, symbol, _) =>
-        Some(new Transformer(symbol.path, t)(ctx) with SeqToListExtractor)
+        Some(new Transformer(symbol.path, t)(ctx) with TraversableExtractor)
     }
 
-    
+
     case TypeRefType(_, symbol, _) => t match {
-      
+
       case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
         Some(new Transformer(symbol.path, t)(ctx) with JodaTimeToString)
 
       case TypeRefType(_, symbol, _) if hint || ctx.lookup(symbol.path).isDefined =>
         Some(new Transformer(symbol.path, t)(ctx) {})
-      
+
       case _ => None
     }
 
@@ -93,15 +96,15 @@ trait JodaTimeToString extends Transformer {
   }
 }
 
-trait SeqToListExtractor extends Transformer {
+trait TraversableExtractor extends Transformer {
   import scala.collection.JavaConverters._
   override def transform(value: Any)(implicit ctx: Context) =
-    value.asInstanceOf[Seq[_]].asJava
+    value.asInstanceOf[Traversable[_]].toList.asJava
 }
 
 trait MapToHashMapExtractor extends Transformer {
   import scala.collection.JavaConverters._
-  
+
   override def transform(value: Any)(implicit ctx: Context): Any = value
   override def after(value: Any)(implicit ctx: Context) = value match {
     case map: scala.collection.Map[String, _] =>
@@ -109,5 +112,5 @@ trait MapToHashMapExtractor extends Transformer {
     case _ =>
       None
   }
-  
+
 }

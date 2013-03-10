@@ -18,24 +18,27 @@ package com.banno.salat.avro
 import com.novus.salat._
 import org.apache.avro.Schema
 import org.apache.avro.io.{ Decoder, Encoder, DatumReader, DatumWriter }
+import scala.collection.mutable.ListBuffer
 
-trait AvroGrater[X <: CaseClass] {
+trait AvroGrater[X <: AnyRef] {
   implicit val ctx: Context
   def asAvroSchema: Schema
+  private[avro] def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]): Schema
   def +(other: AvroGrater[_]): MultiAvroGrater
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean
 
-  def serialize(x: X, encoder: Encoder): Encoder = {
+  def serialize(x: X, encoder: Encoder): Encoder = try {
     asDatumWriter.write(x, encoder)
     encoder.flush
     encoder
+  } catch {
+    case e: Throwable => throw new AvroSerializationException(this, x, e)
   }
 
   def asObject(decoder: Decoder): X = asDatumReader.read(decoder)
-  
+
   lazy val asDatumWriter: DatumWriter[X] = new AvroGenericDatumWriter[X](asAvroSchema)
   lazy val asDatumReader: AvroDatumReader[X] = asGenericDatumReader
   lazy val asGenericDatumReader: AvroGenericDatumReader[X] = new AvroGenericDatumReader[X](asAvroSchema)
-  
+
 }
-  

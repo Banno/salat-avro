@@ -17,10 +17,23 @@ package com.banno.salat.avro
 
 import java.lang.reflect.Modifier
 import com.novus.salat.{ Context, Grater, CaseClass }
+import java.util.Comparator
+import java.util.concurrent.ConcurrentSkipListMap
+import scala.collection.mutable.SynchronizedQueue
+import scala.collection.JavaConversions.JConcurrentMapWrapper
 
 trait AvroContext extends Context {
+
+  // since salat's graters is hidden from me, keeping my own collection
+  private[avro] val avroGraters = JConcurrentMapWrapper(new ConcurrentSkipListMap[Class[_ <: AnyRef], Grater[_ <: AnyRef]](ClassComparator))
+  
   override protected def generate(clazz: String): Grater[_ <: CaseClass] = {
     new SingleAvroGrater[CaseClass](getCaseClass(clazz)(this).map(_.asInstanceOf[Class[CaseClass]]).get)(this)
+  }
+
+  override def accept(grater: Grater[_ <: AnyRef]) = {
+    super.accept(grater)
+    avroGraters += (grater.clazz -> grater)
   }
 
   override protected def generate_?(c: String): Option[Grater[_ <: CaseClass]] = {
@@ -28,9 +41,11 @@ trait AvroContext extends Context {
       val cc = getCaseClass(c)(this)
       cc match {
         case Some(clazz) if (clazz.isInterface) => {
+          Some((new ProxyAvroGrater(clazz)(this)).asInstanceOf[AvroGrater[_ <: AnyRef]])
           None
         }
         case Some(clazz) if Modifier.isAbstract(clazz.getModifiers()) => {
+          println("Got into isAbstract")
           None
         }
         case Some(clazz) => {
@@ -43,4 +58,8 @@ trait AvroContext extends Context {
     } else None
   }
 
+}
+
+object ClassComparator extends Comparator[Class[_]] {
+  def compare(c1: Class[_], c2: Class[_]) = c1.getName.compare(c2.getName)
 }

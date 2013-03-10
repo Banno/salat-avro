@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 package com.banno.salat.avro
-import com.novus.salat.IsMap
-  import com.novus.salat.IsMap
-
 import com.novus.salat._
+import scala.collection.mutable.ListBuffer
 import transformers._
 import scala.collection.JavaConversions._
 import org.apache.avro.Schema
@@ -26,39 +24,46 @@ import scala.tools.scalap.scalax.rules.scalasig.{ SingleType, Type, TypeRefType 
 
 object AvroSalatSchema {
   
-  def schemeFor[X <: CaseClass](clazz: Class[X], grater: SingleAvroGrater[X])(implicit ctx: Context): Schema = {
-    val schema = Schema.createRecord(clazz.getName, "", "", false)
-    schema.setFields(schemaFields(grater))
-    schema
+  def schemaFor[X <: CaseClass](clazz: Class[X], grater: SingleAvroGrater[X], knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Schema = {
+    val schemaName = clazz.getName
+    knownSchemas.find(_.getFullName == schemaName) getOrElse {
+      val schema = Schema.createRecord(schemaName, "", "", false)
+      knownSchemas.add(schema)
+      schema.setFields(schemaFields(grater, knownSchemas))
+      schema
+    }
   }
   
-  private def schemaFields(grater: SingleAvroGrater[_])(implicit ctx: Context): Seq[SField] = {
+  private def schemaFields(grater: SingleAvroGrater[_], knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Seq[SField] = {
     grater._indexedFields.map { field =>
-      new SField(field.name, schemaTypeFor(field.typeRefType), null, null)
+      new SField(field.name, schemaTypeFor(field.typeRefType, knownSchemas), null, null)
     }
   }
 
-  private def schemaTypeFor(typeRefType: Type)(implicit ctx: Context): Schema = {
+  private def schemaTypeFor(typeRefType: Type, knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Schema = {
     val typeRef @ TypeRefType(_, symbol, typeArgs) = typeRefType
-    // println("typeRef = %s".format(typeRef))
-    // println("symbol = %s".format(symbol))
-    // println("symbol.path = %s".format(symbol.path))
-    // println("typeArgs = %s".format(typeArgs))
-    // println("in context: " + ctx.lookup(symbol.path))
-    (symbol.path, typeRef, ctx.lookup(symbol.path)) match {
-      case ("scala.Predef.String", _, _) => Schema.create(Schema.Type.STRING)
-      case ("scala.Boolean", _, _) => Schema.create(Schema.Type.BOOLEAN)
-      case (path, _, _) if isInt(path) => Schema.create(Schema.Type.INT)
-      case (path, _, _) if isLong(path) => Schema.create(Schema.Type.LONG)
-      case (path, _, _) if isDouble(path) => Schema.create(Schema.Type.DOUBLE) //is it ok to override Double & BigDecimal like this?
-      case (path, _, _) if isBigDecimal(path) => Schema.create(Schema.Type.DOUBLE)
-      case (path, _, _) if isJodaDateTime(path) => Schema.create(Schema.Type.STRING)
-      case ("scala.Option", _, _) => optional(schemaTypeFor(typeArgs(0)))
-      case (_, IsSeq(_), _) => Schema.createArray(schemaTypeFor(typeArgs(0)))
-      case (_, IsMap(k, v), _) => Schema.createMap(schemaTypeFor(v))
-      case (_, IsEnum(prefix), _) => enumSchema(prefix)
-      case (_, _, Some(recordGrater)) => recordGrater.asInstanceOf[SingleAvroGrater[_]].asSingleAvroSchema
-      case (path, _, _) => throw new UnknownTypeForAvroSchema(path)
+
+    knownSchemas.find(_.getFullName == symbol.path) getOrElse {
+      // println("typeRef = %s".format(typeRef))
+      // println("symbol = %s".format(symbol))
+      // println("symbol.path = %s".format(symbol.path))
+      // println("typeArgs = %s".format(typeArgs))
+      // println("in context: " + ctx.lookup(symbol.path))
+      (symbol.path, typeRef, ctx.lookup(symbol.path)) match {
+        case ("scala.Predef.String", _, _) => Schema.create(Schema.Type.STRING)
+        case ("scala.Boolean", _, _) => Schema.create(Schema.Type.BOOLEAN)
+        case (path, _, _) if isInt(path) => Schema.create(Schema.Type.INT)
+        case (path, _, _) if isLong(path) => Schema.create(Schema.Type.LONG)
+        case (path, _, _) if isDouble(path) => Schema.create(Schema.Type.DOUBLE) //is it ok to override Double & BigDecimal like this?
+        case (path, _, _) if isBigDecimal(path) => Schema.create(Schema.Type.DOUBLE)
+        case (path, _, _) if isJodaDateTime(path) => Schema.create(Schema.Type.STRING)
+        case ("scala.Option", _, _) => optional(schemaTypeFor(typeArgs(0), knownSchemas))
+        case (_, IsTraversable(_), _) => Schema.createArray(schemaTypeFor(typeArgs(0), knownSchemas))
+        case (_, IsMap(k, v), _) => Schema.createMap(schemaTypeFor(v, knownSchemas))
+        case (_, IsEnum(prefix), _) => enumSchema(prefix)
+        case (_, _, Some(recordGrater: AvroGrater[_])) => recordGrater.asSingleAvroSchema(knownSchemas)
+        case (path, _, _) => throw new UnknownTypeForAvroSchema(path)
+      }
     }
   }
 

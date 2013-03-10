@@ -49,6 +49,13 @@ object BasicCaseClassSpec extends SalatAvroSpec {
       println(newEd)
       newEd must_== oldEd
     }
+
+    "be able to serialize a basic case with an optional list" in {
+      val oldDep = Department(Some(List("me", "you")))
+      val newDep = serializeAndDeserialize(oldDep)
+      println(newDep)
+      newDep must_== oldDep 
+    }
     
   }
 
