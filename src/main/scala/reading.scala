@@ -46,7 +46,11 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
     // println("-------- apply values -------")
     // println("record = " + genericRecord)
     // println("record.schema.fullName = " + genericRecord.getSchema.getFullName)
-    val values = genericRecord.getSchema.getFields.asScala.map(_.name).map(genericRecord.get(_))
+    val values = genericRecord.getSchema.getFields.asScala.map(_.name).map(genericRecord.get(_)) 
+      .map { //Strings are stored as Utf8 in .avro datafiles, need to be converted back to Java Strings when encountered
+      case utf8: org.apache.avro.util.Utf8 => utf8.toString()
+      case v => v
+    } 
     // println("values = " + values)
     // println("values classes = " + values.map(v => if (v != null) v.getClass else "null"))
 
