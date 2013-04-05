@@ -81,7 +81,7 @@ Serialize to an in-memory stream with 'serialize', deserialize from in in-memory
   }
 
 //Reading from File
-  def getSchemaFromFile(infile: File): Schema = {
+  def asSchemaFromFile(infile: File): Schema = {
     val bufferedInfile = scala.io.Source.fromFile(infile, "iso-8859-1")
     val parsable = bufferedInfile.getLine(0).dropWhile(_ != '{')
     val schema = Schema.parse(parsable)
@@ -91,7 +91,7 @@ Serialize to an in-memory stream with 'serialize', deserialize from in in-memory
   def asObjectsFromFile(infile: File): Iterator[X] = {
     val schema = getSchemaFromFile(infile)
     val asFileDatumReader: AvroDatumReader[X] = asGenericDatumReader
-    val asFileGenericDatumReader: AvroGenericDatumReader[X] = new AvroGenericDatumReader[X](schema)
+    val asFileGenericDatumReader: AvroGenericDatumReader[X] = new AvroGenericDatumReader[X](getSchemaFromFile(infile))
     val asDataFileReader: DataFileReader[X] = new DataFileReader[X](infile, asDatumReader)
     val objIterator = asDataFileReader.asScala
                                       .iterator
