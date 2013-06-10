@@ -1,0 +1,33 @@
+[0m[[0minfo[0m] [0mLoading global plugins from /home/julianpeeters/.sbt/plugins[0m
+[0m[[0minfo[0m] [0mLoading project definition from /home/julianpeeters/salat-avro/project[0m
+[0m[[0minfo[0m] [0mSet current project to salat-avro (in build file:/home/julianpeeters/salat-avro/)[0m
+[0m[[33mwarn[0m] [0mCredentials file /home/julianpeeters/.ivy2/.banno_credentials does not exist[0m
+[0m[[0minfo[0m] [0mRunning Main [0m
+{"type":"record","name":"MyRecord","namespace":"models","doc":"","fields":[{"name":"x","type":"string"},{"name":"y","type":"int"},{"name":"z","type":"boolean"}]}
+[0m[[31merror[0m] [0m(run-main) java.lang.IllegalArgumentException: argument type mismatch[0m
+java.lang.IllegalArgumentException: argument type mismatch
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+	at Main$delayedInit$body.apply(debug.scala:84)
+	at scala.Function0$class.apply$mcV$sp(Function0.scala:34)
+	at scala.runtime.AbstractFunction0.apply$mcV$sp(AbstractFunction0.scala:12)
+	at scala.App$$anonfun$main$1.apply(App.scala:60)
+	at scala.App$$anonfun$main$1.apply(App.scala:60)
+	at scala.collection.LinearSeqOptimized$class.foreach(LinearSeqOptimized.scala:59)
+	at scala.collection.immutable.List.foreach(List.scala:45)
+	at scala.collection.generic.TraversableForwarder$class.foreach(TraversableForwarder.scala:30)
+	at scala.App$class.main(App.scala:60)
+	at Main$.main(debug.scala:32)
+	at Main.main(debug.scala)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+[0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
+java.lang.RuntimeException: Nonzero exit code: 1
+	at scala.sys.package$.error(package.scala:27)
+[0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
+[0m[[31merror[0m] [0m(compile:[31mrun[0m) Nonzero exit code: 1[0m
+[0m[[31merror[0m] [0mTotal time: 1 s, completed Jun 9, 2013 5:08:07 PM[0m

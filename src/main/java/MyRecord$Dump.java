@@ -1,4 +1,4 @@
-package asm.models;
+package models;
 import java.util.*;
 import org.objectweb.asm.*;
 //import org.objectweb.asm.attrs.*;
@@ -11,7 +11,7 @@ FieldVisitor fv;
 MethodVisitor mv;
 AnnotationVisitor av0;
 
-cw.visit(V1_5, ACC_PUBLIC + ACC_FINAL + ACC_SUPER, "models/MyRecord$", null, "scala/runtime/AbstractFunction1", new String[] { "scala/ScalaObject", "scala/Serializable" });
+cw.visit(V1_5, ACC_PUBLIC + ACC_FINAL + ACC_SUPER, "models/MyRecord$", null, "scala/runtime/AbstractFunction3", new String[] { "scala/ScalaObject", "scala/Serializable" });
 
 // ATTRIBUTE Scala
 {
@@ -47,23 +47,34 @@ mv.visitJumpInsn(GOTO, l1);
 mv.visitLabel(l0);
 mv.visitTypeInsn(NEW, "scala/Some");
 mv.visitInsn(DUP);
+mv.visitTypeInsn(NEW, "scala/Tuple3");
+mv.visitInsn(DUP);
 mv.visitVarInsn(ALOAD, 1);
 mv.visitMethodInsn(INVOKEVIRTUAL, "models/MyRecord", "x", "()Ljava/lang/String;");
+mv.visitVarInsn(ALOAD, 1);
+mv.visitMethodInsn(INVOKEVIRTUAL, "models/MyRecord", "y", "()I");
+mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToInteger", "(I)Ljava/lang/Integer;");
+mv.visitVarInsn(ALOAD, 1);
+mv.visitMethodInsn(INVOKEVIRTUAL, "models/MyRecord", "z", "()Z");
+mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToBoolean", "(Z)Ljava/lang/Boolean;");
+mv.visitMethodInsn(INVOKESPECIAL, "scala/Tuple3", "<init>", "(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V");
 mv.visitMethodInsn(INVOKESPECIAL, "scala/Some", "<init>", "(Ljava/lang/Object;)V");
 mv.visitLabel(l1);
 mv.visitInsn(ARETURN);
-mv.visitMaxs(3, 2);
+mv.visitMaxs(7, 2);
 mv.visitEnd();
 }
 {
-mv = cw.visitMethod(ACC_PUBLIC, "apply", "(Ljava/lang/String;)Lmodels/MyRecord;", null, null);
+mv = cw.visitMethod(ACC_PUBLIC, "apply", "(Ljava/lang/String;IZ)Lmodels/MyRecord;", null, null);
 mv.visitCode();
 mv.visitTypeInsn(NEW, "models/MyRecord");
 mv.visitInsn(DUP);
 mv.visitVarInsn(ALOAD, 1);
-mv.visitMethodInsn(INVOKESPECIAL, "models/MyRecord", "<init>", "(Ljava/lang/String;)V");
+mv.visitVarInsn(ILOAD, 2);
+mv.visitVarInsn(ILOAD, 3);
+mv.visitMethodInsn(INVOKESPECIAL, "models/MyRecord", "<init>", "(Ljava/lang/String;IZ)V");
 mv.visitInsn(ARETURN);
-mv.visitMaxs(3, 2);
+mv.visitMaxs(5, 4);
 mv.visitEnd();
 }
 {
@@ -75,21 +86,26 @@ mv.visitMaxs(1, 1);
 mv.visitEnd();
 }
 {
-mv = cw.visitMethod(ACC_PUBLIC + ACC_BRIDGE, "apply", "(Ljava/lang/Object;)Ljava/lang/Object;", null, null);
+mv = cw.visitMethod(ACC_PUBLIC + ACC_BRIDGE, "apply", "(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", null, null);
 mv.visitCode();
 mv.visitVarInsn(ALOAD, 0);
 mv.visitVarInsn(ALOAD, 1);
 mv.visitTypeInsn(CHECKCAST, "java/lang/String");
-mv.visitMethodInsn(INVOKEVIRTUAL, "models/MyRecord$", "apply", "(Ljava/lang/String;)Lmodels/MyRecord;");
+mv.visitVarInsn(ALOAD, 2);
+mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToInt", "(Ljava/lang/Object;)I");
+mv.visitVarInsn(ALOAD, 3);
+mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToBoolean", "(Ljava/lang/Object;)Z");
+mv.visitMethodInsn(INVOKEVIRTUAL, "models/MyRecord$", "apply", "(Ljava/lang/String;IZ)Lmodels/MyRecord;");
 mv.visitInsn(ARETURN);
-mv.visitMaxs(2, 2);
+mv.visitMaxs(4, 4);
 mv.visitEnd();
 }
 {
-mv = cw.visitMethod(ACC_PRIVATE, "<init>", "()V", null, null);
+//mv = cw.visitMethod(ACC_PRIVATE, "<init>", "()V", null, null);
+mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
 mv.visitCode();
 mv.visitVarInsn(ALOAD, 0);
-mv.visitMethodInsn(INVOKESPECIAL, "scala/runtime/AbstractFunction1", "<init>", "()V");
+mv.visitMethodInsn(INVOKESPECIAL, "scala/runtime/AbstractFunction3", "<init>", "()V");
 mv.visitVarInsn(ALOAD, 0);
 mv.visitFieldInsn(PUTSTATIC, "models/MyRecord$", "MODULE$", "Lmodels/MyRecord$;");
 mv.visitInsn(RETURN);

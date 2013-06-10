@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-//import models._
-import asm.models._
-import com.novus.salat._
-//import com.banno.salat.avro._
-///import global._
+
+import models._
+import com.banno.salat.avro._
+import com.banno.salat.avro.global._
 import java.io.File
-import org.objectweb.asm._
+//import com.novus.salat.annotations.util._
+//import reflect.ScalaSignature
+//import reflect.generic.ByteCodecs
+//import scala.tools.scalap.scalax.rules.scalasig._
+//import org.objectweb.asm._
 import org.apache.avro._
 import org.apache.avro.io._
 import org.apache.avro.file._
 import org.apache.avro.generic._
+
+import scala.util.parsing.json._
 
 object Main extends App {
 
@@ -51,30 +56,95 @@ In order to stream records to an avro file that can be read by an avro datafiler
 */
 
 //Deserialize from File: Read DataFile, dynamically create the model class and deserialize back to object 
-  val infile = new File("/home/julianpeeters/salat-avro-example/data/input.avro")
+  val infile = new File("input.avro")
 
-  val model$ = DynamicClassLoader.loadClass("models.MyRecord$", MyRecord$Dump.dump())//Load the "anonymous" class
-  val model  = DynamicClassLoader.loadClass("models.MyRecord", MyRecordDump.dump())  //Then load the "real" class
+  def asSchemaFromFile(infile: File): Schema = {
+    val bufferedInfile = scala.io.Source.fromFile(infile, "iso-8859-1")
+    val parsable = bufferedInfile.getLine(0).dropWhile(_ != '{')
+    val schema = new Schema.Parser().parse(parsable)
+    schema
+  }
+  val schema = asSchemaFromFile(infile)
+    println(schema)
 
-  type m = model.type  
-  //type m = model.type =:= CaseClass
-val n = model.asInstanceOf[m]
-println(model)
-println(n)
-//case class myRecord(model$: Class[_], model: Class[_])
-  //val t = Type.getType(model)
- // val m: model.type = model
-  //println(m)
- // val sameRecordIterator = grater[m].asObjectsFromFile(infile)
- // val sameRecordIterator = grater[MyRecord].asObjectsFromFile(infile)
-  val sameRecordIterator = grater[java.lang.Class[m]].asObjectsFromFile(infile)
-  val sameRecordIterator = grater[java.lang.Class[m]].asObjectsFromFile(infile)
+  val jsonSchema = JSON.parseFull(schema.toString)
+    println(jsonSchema)
+
+
+  class jsonTypeConverter[T]{def unapply(a:Any): Option[T] = Some(a.asInstanceOf[T])}
+
+  object M extends jsonTypeConverter[Map[String, Any]]
+  object L extends jsonTypeConverter[List[Any]]
+  object S extends jsonTypeConverter[String]
+  object I extends jsonTypeConverter[Int]
+  object D extends jsonTypeConverter[Double]
+  object B extends jsonTypeConverter[Boolean]
+
+  val jsonTopLevel = jsonSchema.asInstanceOf[Option[Map[String, Any]]]
+  val namespace = jsonTopLevel.get("namespace")
+  val caseclass = jsonTopLevel.get("name")  
+
+  val fields = for {
+    Some(M(map)) <- List(jsonSchema)//specify List here so return type is a list
+    L(fields) = map("fields")
+    M(field) <- fields
+    S(fieldName) = field("name")
+    S(fieldType) = field("type")
+  } yield (fieldName, fieldType)
+
+  
+
+  println(namespace)
+  println(caseclass)
+  println(fields) 
+
+ /*
+ val result = json match {
+      case Some(e) => e//Map("name" -> "gonzo")
+      case None => println("Failed to parse the schema")
+    }
+*/
+ // println(json)
+ 
+
+/*
+  val modelClass$ = DynamicClassLoader.loadClass("models.MyRecord$", MyRecord$Dump.dump())//Load the "anonymous" class
+  val modelClass  = DynamicClassLoader.loadClass("models.MyRecord", MyRecordDump.dump())  //Then load the "real" class
+
+  val instance$  = modelClass$.getConstructor().newInstance()//Changed Module$Dump <init> from PRIVATE to PUBLIC
+  val methodParams: List[Class[_]] = List(classOf[String], classOf[Int], classOf[Boolean])
+  val insantiationParams: List[Object] = List("", 1.asInstanceOf[Object], java.lang.Boolean.TRUE)
+
+  
+  //get a "type model" to use as the type for our dynamically generated case class
+  val myRecord = modelClass$.getMethod("apply", methodParams: _*).invoke(instance$,  insantiationParams: _*)
+ 
+  type MyRecord = myRecord.type with com.novus.salat.CaseClass//Compiler must trust us that asm gives a case class!
+
+  
+
+
+
+  val sameRecordIterator = grater[MyRecord].asObjectsFromFile(infile)
+ 
+
+
+ 
+
+//println(asSchemaFromFile(streamInfile))
+
+
+
+  //val sameRecordIterator = grater[MyRecord].asObjectsFromFile(infile)
+
+
+  //val sameRecordIterator = com.banno.salat.avro.grater[MyRecord].asObjectsFromFile(streamInfile)
+   // println(sameRecordIterator)
+    sameRecordIterator foreach println
+
 //Verify Records are Equal
  // println("All Records From Avro Data File Same As The Originals?: " + (sameRecordIterator sameElements myRecordIterator2))
 
-//println("All Records From Avro Data File Same As The Originals?: " + sameRecordIterator)
-
-
-
+*/
 
 }
