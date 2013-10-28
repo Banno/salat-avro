@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package models
-case class rec
-//case class MyRecord(x:List[String], y: List[Any], z: List[List[List[String]]])
-case class MyRecord(x: rec, y: Int, z: Boolean)
-//case class MyRecord(x:String, y: Int, z: Boolean)
+//case class rec
+//case class MyRecord(x:rec)
+case class MyRecord(x: String, y: Int, z: Boolean)
+
