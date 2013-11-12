@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 package com.banno.salat.avro
-import com.novus.salat.IsEnum
-import com.novus.salat.IsMap
+
 
 import org.apache.avro.generic.GenericData
 import org.apache.avro.util.Utf8
@@ -33,14 +32,14 @@ object Injectors {
     pt match {
 
       case IsOption(t@TypeRefType(_, _, _)) => t match {
-        case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
-          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with DoubleToSBigDecimal)
+       // case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
+         // Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with DoubleToSBigDecimal)
 
         case TypeRefType(_, symbol, _) if isInt(symbol.path) =>
           Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with LongToInt)
 
-        case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
-          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with ByteArrayToBigInt)
+       // case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
+       //   Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with ByteArrayToBigInt)
 
         case TypeRefType(_, symbol, _) if isChar(symbol.path) =>
           Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with StringToChar)
@@ -70,20 +69,20 @@ object Injectors {
 
 
       case IsMap(_, t@TypeRefType(_, _, _)) => t match {
-        case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
-          Some(new Transformer(symbol.path, t)(ctx) with DoubleToSBigDecimal with HashMapToMapInjector {
-            val parentType = pt
-          })
+       // case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
+       //   Some(new Transformer(symbol.path, t)(ctx) with DoubleToSBigDecimal with HashMapToMapInjector {
+        //    val parentType = pt
+        //  })
 
         case TypeRefType(_, symbol, _) if isInt(symbol.path) =>
           Some(new Transformer(symbol.path, t)(ctx) with LongToInt with HashMapToMapInjector {
             val parentType = pt
           })
 
-        case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
-          Some(new Transformer(symbol.path, t)(ctx) with ByteArrayToBigInt with HashMapToMapInjector {
-            val parentType = pt
-          })
+       // case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
+         // Some(new Transformer(symbol.path, t)(ctx) with ByteArrayToBigInt with HashMapToMapInjector {
+        //    val parentType = pt
+        //  })
 
         case TypeRefType(_, symbol, _) if isChar(symbol.path) =>
           Some(new Transformer(symbol.path, t)(ctx) with StringToChar with HashMapToMapInjector {
@@ -127,7 +126,8 @@ trait TraversableInjector extends Transformer {
         case utf8: Utf8 => utf8.toString
         case record: GenericData.Record =>
           val grater: SingleAvroGrater[_] =
-            ctx.lookup(record.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
+//            ctx.lookup(record.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
+            ctx.lookup(record.getSchema.getFullName).asInstanceOf[SingleAvroGrater[_]]
         val reader  = grater.asGenericDatumReader
         reader.applyValues(record)
         case v => v

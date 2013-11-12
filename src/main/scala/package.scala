@@ -17,16 +17,22 @@ package com.banno.salat
 
 import com.novus.salat._
 
+import global._
+
+case class MyRecord(x: Int)
+
 package object avro {
   def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.lookup_![X](m).asInstanceOf[AvroGrater[X]]
-  
+  // def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = { println(ctx.lookup[X]); ctx.lookup[X].asInstanceOf[CaseClass].asInstanceOf[AvroGrater[X]]}
+ 
   protected[avro] def getCaseClass(c: String)(implicit ctx: Context): Option[Class[CaseClass]] =
     getClassNamed(c).map(_.asInstanceOf[Class[CaseClass]])
 
   protected[avro] def getClassNamed(c: String)(implicit ctx: Context): Option[Class[_]] = {
     try {
       var clazz: Class[_] = null
-      val iter = ctx.classLoaders.iterator
+     // val iter = ctx.classLoaders.iterator
+      val iter = Vector(this.getClass.getClassLoader).iterator
       while (clazz == null && iter.hasNext) {
         try {
           clazz = Class.forName(c, true, iter.next)

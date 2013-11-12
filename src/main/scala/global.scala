@@ -19,4 +19,5 @@ import com.novus.salat.Context
 
 package object global {
   implicit val ctx = new AvroContext { val name = Some("global") }
+//  implicit val ctx = new AvroContext { val name = "global" }
 }

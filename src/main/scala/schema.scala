@@ -61,7 +61,8 @@ object AvroSalatSchema {
         case (_, IsTraversable(_), _) => Schema.createArray(schemaTypeFor(typeArgs(0), knownSchemas))
         case (_, IsMap(k, v), _) => Schema.createMap(schemaTypeFor(v, knownSchemas))
         case (_, IsEnum(prefix), _) => enumSchema(prefix)
-        case (_, _, Some(recordGrater: AvroGrater[_])) => recordGrater.asSingleAvroSchema(knownSchemas)
+//        case (_, _, Some(recordGrater: AvroGrater[_])) => recordGrater.asSingleAvroSchema(knownSchemas)
+        case (_, _, recordGrater: AvroGrater[_]) => recordGrater.asSingleAvroSchema(knownSchemas)
         case (path, _, _) => throw new UnknownTypeForAvroSchema(path)
       }
     }

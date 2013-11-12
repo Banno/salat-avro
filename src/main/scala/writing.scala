@@ -27,7 +27,8 @@ class AvroGenericDatumWriter[X](schema: Schema)(implicit ctx: Context) extends G
 class AvroProductGenericData(implicit ctx: Context) extends GenericData {
   override def getField(record: Any, name: String, pos: Int): Object = {
     val caseClass = record.asInstanceOf[Product]
-    val grater: SingleAvroGrater[_] = ctx.lookup(caseClass.getClass.getName).get.asInstanceOf[SingleAvroGrater[_]]
+//    val grater: SingleAvroGrater[_] = ctx.lookup(caseClass.getClass.getName).get.asInstanceOf[SingleAvroGrater[_]]
+    val grater: SingleAvroGrater[_] = ctx.lookup(caseClass.getClass.getName).asInstanceOf[SingleAvroGrater[_]]
     // println("getField in grater %s\n\twith record %s\n\twith name %s \n\tat pos %s".format(grater, record, name, pos))
 
     val (value, field) = caseClass.productIterator.zip(grater._indexedFields.iterator).toList.apply(pos)

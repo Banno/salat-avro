@@ -16,6 +16,8 @@ organization := "com.banno.salat.avro"
 scalaVersion := "2.9.1"
 //scalaVersion := "2.10.0"
 
+resolvers += Resolver.file("Local Ivy Repository", file("/home/julianpeeters/.ivy2/local/"))(Resolver.ivyStylePatterns)
+
 resolvers ++= Seq(
   "repo.scalatools rels" at "https://oss.sonatype.org/content/groups/scala-tools/",
   "repo.scalatools snaps" at "https://oss.sonatype.org/content/repositories/snapshots/",
@@ -33,7 +35,12 @@ publishTo := Some("Banno Repo" at (if (version.toString.endsWith("SNAPSHOT")) "h
 libraryDependencies ++= Seq(
   "org.specs2" %% "specs2" % "1.12" % "test",
  // "org.specs2" %% "specs2" % "1.13" % "test",
-  "com.novus" % "salat-core_2.9.0-1" % "0.0.8-SNAPSHOT",
+//  "com.novus" % "salat-core_2.9.0-1" % "0.0.8-SNAPSHOT",
+//  "com.novus" % "salat-core_2.9.1" % "0.0.8",
+ // "com.novus" % "salat-core_2.9.1" % "1.9.2",//was using this one before mysalat
   // "com.novus" %% "salat" % "1.9.2",
+  "com.julianpeeters" % "my-salat_2.9.1" % "0.0.1.3-novus-SNAPSHOT",
+"org.json4s" %% "json4s-native" % "3.2.5",
+"org.scalaj" %% "scalaj-time" % "0.7",
   "org.apache.avro" % "avro" % "1.7.4"
 )

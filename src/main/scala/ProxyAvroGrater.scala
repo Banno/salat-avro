@@ -22,6 +22,7 @@ import java.util.ArrayList
 import org.apache.avro.Schema
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
+import org.json4s.JsonAST.JObject
 
 class ProxyAvroGrater[X <: AnyRef](clazz: Class[X])(implicit ctx: AvroContext) extends Grater[X](clazz)(ctx) with AvroGrater[X] {
 
@@ -35,16 +36,27 @@ class ProxyAvroGrater[X <: AnyRef](clazz: Class[X])(implicit ctx: AvroContext) e
   private[avro] def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]) =
     Schema.createUnion(knownSubclassGraters.map(_.asSingleAvroSchema(knownSchemas)).asJava)
   
-  def +(other: AvroGrater[_]): MultiAvroGrater = null
+ // def +(other: AvroGrater[_]): MultiAvroGrater = null
   
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = false
   
   def asDBObject(o: X): DBObject =
-    ctx.lookup_!(o.getClass.getName).asInstanceOf[Grater[X]].asDBObject(o)
+//    ctx.lookup_!(o.getClass.getName).asInstanceOf[Grater[X]].asDBObject(o)
+    ctx.lookup(o.getClass.getName).asInstanceOf[Grater[X]].asDBObject(o)
 
   def asObject[A <% MongoDBObject](dbo: A): X =
-    ctx.lookup_!(dbo).asInstanceOf[Grater[X]].asObject(dbo)
+//    ctx.lookup_!(dbo).asInstanceOf[Grater[X]].asObject(dbo)
+    ctx.lookup(dbo).asInstanceOf[Grater[X]].asObject(dbo)
 
   def iterateOut[T](o: X)(f: ((String, Any)) => T): Iterator[T] =
-    ctx.lookup_!(o.getClass.getName).asInstanceOf[Grater[X]].iterateOut(o)(f)
+//    ctx.lookup_!(o.getClass.getName).asInstanceOf[Grater[X]].iterateOut(o)(f)
+    ctx.lookup(o.getClass.getName).asInstanceOf[Grater[X]].iterateOut(o)(f)
+
+  //def fromJSON(j: JObject) = ctx.lookup(j).asInstanceOf[Grater[X]].fromJSON(j)
+
+  //def toJSON(o: X) = ctx.lookup(o.getClass.getName).asInstanceOf[Grater[X]].toJSON(o)
+
+  //def toMap(o: X) = ctx.lookup(o.getClass.getName).asInstanceOf[Grater[X]].toMap(o)
+
+  //def fromMap(m: Map[String, Any]) = ctx.lookup(m).asInstanceOf[Grater[X]].fromMap(m)
 }

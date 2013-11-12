@@ -16,11 +16,13 @@
 package com.banno.salat.avro
 
 import com.novus.salat._
+import com.novus.salat.util._
 import org.apache.avro.Schema
 import scala.collection.JavaConversions._
 import scala.collection.mutable.LinkedHashSet
 import scala.collection.mutable.ListBuffer
-import scala.tools.scalap.scalax.rules.scalasig.MethodSymbol
+import scala.tools.scalap.scalax.rules.scalasig.{ MethodSymbol, TypeRefType, ScalaSigParser }
+import java.lang.reflect.{ Constructor }
 
 class SingleAvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   extends ConcreteGrater[X](clazz) with AvroGrater[X] {
@@ -29,13 +31,24 @@ class SingleAvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]): Schema = AvroSalatSchema.schemaFor(clazz, this, knownSchemas)
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = manifest.erasure == clazz
 
-  def +(other: AvroGrater[_]): MultiAvroGrater = other match {
-    case sg: SingleAvroGrater[_] => new MultiAvroGrater(LinkedHashSet(this, sg))
-    case mg: MultiAvroGrater => new MultiAvroGrater(mg.graters + this)
-  }
+ // def +(other: AvroGrater[_]): MultiAvroGrater = other match {
+  //  case sg: SingleAvroGrater[_] => new MultiAvroGrater(LinkedHashSet(this, sg))
+  //  case mg: MultiAvroGrater => new MultiAvroGrater(mg.graters + this)
+  //}
 
+
+/*
+protected lazy val _sym = parseScalaSig match {
+    case Some(x) =>
+      x.topLevelClasses.headOption.getOrElse(
+        x.topLevelObjects.headOption.getOrElse(
+          throw new Exception("parsed pickled Scala signature, but no expected type found: %s".format(clazz))))
+    case _ => throw new Exception("failed to parse pickled Scala signature from %s".format(clazz))
+  }
+*/
+  override protected lazy val sym = ScalaSigParser.parse(clazz).get.topLevelClasses.head
   // expose some nice methods for Datum Writers/Readers
-  
+  // val classAnalyzer = ClassAnalyzer(clazz)
   // TODO: for some reason, Grater.indexedFields is no protected to just salat (just copied it for now)
   private[avro] lazy val _indexedFields = {
     // don't use allTheChildren here!  this is the indexed fields for clazz and clazz alone
@@ -47,11 +60,13 @@ class SingleAvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
       case (ms, idx) => {
         //        log.info("indexedFields: clazz=%s, ms=%s, idx=%s", clazz, ms, idx)
         Field(idx, keyOverridesFromAbove.get(ms).getOrElse(ms.name), typeRefType(ms), clazz.getMethod(ms.name))
+       // Field(idx, classAnalyzer.keyOverridesFromAbove.get(ms).getOrElse(ms.name), ClassAnalyzer.typeRefType(ms), clazz.getMethod(ms.name))
       }
 
     }
   }
-    
+  override protected[avro] lazy val constructor: Constructor[X] = BestAvailableConstructor(clazz)
   private[avro] lazy val _constructor = constructor
   protected[avro] override def safeDefault(field: Field) = super.safeDefault(field)
+   //override def safeDefault(field: Field) = super.safeDefault(field)
 }

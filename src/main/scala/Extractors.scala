@@ -31,26 +31,26 @@ object Extractors {
       case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
         Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor with JodaTimeToString)
 
-      case TypeRefType(_, symbol, _) if hint || ctx.lookup(symbol.path).isDefined =>
+      case TypeRefType(_, symbol, _) if hint || Option(ctx.lookup(symbol.path)).isDefined =>
         Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor)
 
-      case TypeRefType(_, symbol, _) if IsTraversable.unapply(t).isDefined =>
+      case TypeRefType(_, symbol, _) if Option(IsTraversable.unapply(t)).isDefined =>
         Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor with TraversableExtractor)
 
       case _ => None
     }
 
     case IsMap(_, t @ TypeRefType(_, _, _)) => t match {
-      case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
-        Some(new Transformer(symbol.path, t)(ctx) with SBigDecimalToDouble with MapToHashMapExtractor)
+      //case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
+      //  Some(new Transformer(symbol.path, t)(ctx) with SBigDecimalToDouble with MapToHashMapExtractor)
 
-      case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
-        Some(new Transformer(symbol.path, t)(ctx) with BigIntToByteArray with MapToHashMapExtractor)
+     // case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
+     //   Some(new Transformer(symbol.path, t)(ctx) with BigIntToByteArray with MapToHashMapExtractor)
 
       case TypeRefType(_, symbol, _) if isChar(symbol.path) =>
         Some(new Transformer(symbol.path, t)(ctx) with CharToString with MapToHashMapExtractor)
 
-      case t @ TypeRefType(_, _, _) if IsEnum.unapply(t).isDefined =>
+      case t @ TypeRefType(_, _, _) if Option(IsEnum.unapply(t)).isDefined =>
         Some(new Transformer(IsEnum.unapply(t).get.symbol.path, t)(ctx) with EnumStringifier with MapToHashMapExtractor)
 
       // case TypeRefType(_, symbol, _) if hint || ctx.lookup(symbol.path).isDefined =>
@@ -78,7 +78,7 @@ object Extractors {
       case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
         Some(new Transformer(symbol.path, t)(ctx) with JodaTimeToString)
 
-      case TypeRefType(_, symbol, _) if hint || ctx.lookup(symbol.path).isDefined =>
+      case TypeRefType(_, symbol, _) if hint || Option(ctx.lookup(symbol.path)).isDefined =>
         Some(new Transformer(symbol.path, t)(ctx) {})
 
       case _ => None

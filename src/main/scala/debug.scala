@@ -61,7 +61,7 @@ In order to stream records to an avro file that can be read by an avro datafiler
   val infile = new File("input.avro")
 
 
-
+println(grater[MyRecord])
   val sameRecordIterator = grater[MyRecord].asObjectsFromFile(infile)
  
 
