@@ -22,8 +22,8 @@ import global._
 case class MyRecord(x: Int)
 
 package object avro {
-  def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.lookup_![X](m).asInstanceOf[AvroGrater[X]]
-  // def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = { println(ctx.lookup[X]); ctx.lookup[X].asInstanceOf[CaseClass].asInstanceOf[AvroGrater[X]]}
+ // def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.lookup_![X](m).asInstanceOf[AvroGrater[X]]
+   def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.lookup[X](m)
  
   protected[avro] def getCaseClass(c: String)(implicit ctx: Context): Option[Class[CaseClass]] =
     getClassNamed(c).map(_.asInstanceOf[Class[CaseClass]])

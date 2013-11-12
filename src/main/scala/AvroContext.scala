@@ -27,8 +27,8 @@ trait AvroContext extends Context {
   // since salat's graters is hidden from me, keeping my own collection
   private[avro] val avroGraters = JConcurrentMapWrapper(new ConcurrentSkipListMap[Class[_ <: AnyRef], Grater[_ <: AnyRef]](ClassComparator))
   
-  override protected def generate(clazz: String): Grater[_ <: CaseClass] = {
- //  protected def generate(clazz: String): Grater[_ <: CaseClass] = {
+//  override protected def generate(clazz: String): Grater[_ <: CaseClass] = {
+   protected def generate(clazz: String): Grater[_ <: CaseClass] = {
     new SingleAvroGrater[CaseClass](getCaseClass(clazz)(this).map(_.asInstanceOf[Class[CaseClass]]).get)(this)
   }
 
@@ -37,8 +37,8 @@ trait AvroContext extends Context {
     avroGraters += (grater.clazz -> grater)
   }
 
-  override protected def generate_?(c: String): Option[Grater[_ <: CaseClass]] = {
-   //protected def generate_?(c: String): Option[Grater[_ <: CaseClass]] = {
+//  override protected def generate_?(c: String): Option[Grater[_ <: CaseClass]] = {
+   protected def generate_?(c: String): Option[Grater[_ <: CaseClass]] = {
     if (suitable_?(c)) {
       val cc = getCaseClass(c)(this)
       cc match {

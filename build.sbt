@@ -39,7 +39,7 @@ libraryDependencies ++= Seq(
 //  "com.novus" % "salat-core_2.9.1" % "0.0.8",
  // "com.novus" % "salat-core_2.9.1" % "1.9.2",//was using this one before mysalat
   // "com.novus" %% "salat" % "1.9.2",
-  "com.julianpeeters" % "my-salat_2.9.1" % "0.0.1.3-novus-SNAPSHOT",
+  "com.julianpeeters" % "my-salat_2.9.1" % "0.0.1.4-SNAPSHOT",
 "org.json4s" %% "json4s-native" % "3.2.5",
 "org.scalaj" %% "scalaj-time" % "0.7",
   "org.apache.avro" % "avro" % "1.7.4"
