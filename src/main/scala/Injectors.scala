@@ -28,10 +28,12 @@ import org.scala_tools.time.Imports._
 import org.joda.time.format.ISODateTimeFormat
 
 object Injectors {
+println("an avro Injectors was made")
   def select(pt: TypeRefType, hint: Boolean = false)(implicit ctx: Context): Option[Transformer] = {
+println("avro Injectors select")
     pt match {
 
-      case IsOption(t@TypeRefType(_, _, _)) => t match {
+      case IsOption(t@TypeRefType(_, _, _)) => println("avro matched an IsOption");t match {
        // case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
          // Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with DoubleToSBigDecimal)
 
@@ -60,7 +62,7 @@ object Injectors {
           Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector )
       }
 
-      case IsTraversable(t@TypeRefType(_, _, _)) => t match {
+      case IsTraversable(t@TypeRefType(_, _, _)) => println("avro matched an IsTraversable"); t match {
         case TypeRefType(_, symbol, _) =>
           Some(new Transformer(symbol.path, t)(ctx) with TraversableInjector {
             val parentType = pt
@@ -68,7 +70,7 @@ object Injectors {
       }
 
 
-      case IsMap(_, t@TypeRefType(_, _, _)) => t match {
+      case IsMap(_, t@TypeRefType(_, _, _)) => println("avro matched an IsMap"); t match {
        // case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
        //   Some(new Transformer(symbol.path, t)(ctx) with DoubleToSBigDecimal with HashMapToMapInjector {
         //    val parentType = pt
@@ -99,10 +101,10 @@ object Injectors {
         })
       }
 
-      case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
-        Some(new Transformer(symbol.path, pt)(ctx) with StringToJodaDateTime)
+      case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) => { println("avro matched a TypeRefType, gonna make a Transformer");
+        Some(new Transformer(symbol.path, pt)(ctx) with StringToJodaDateTime) }
 
-      case _ => None
+      case _ => println("avro found none in avro select: None");None
     }
   }
 }
@@ -120,6 +122,7 @@ trait TraversableInjector extends Transformer {
   self: Transformer =>
   import scala.collection.JavaConverters._
 
+
   override def transform(value: Any)(implicit ctx: Context): Any = value match {
     case array: GenericData.Array[_] =>
       val traversable = array.asScala.toTraversable.map {
@@ -135,7 +138,7 @@ trait TraversableInjector extends Transformer {
       traversableImpl(parentType, traversable)
     case _ => value
   }
-
+println("avro TraversableInjector transform")
   def parentType: TypeRefType
 }
 
@@ -143,7 +146,10 @@ trait HashMapToMapInjector extends Transformer {
   self: Transformer =>
   import scala.collection.JavaConverters._
 
-  override def transform(value: Any)(implicit ctx: Context): Any = value
+//println("avro transform")
+
+
+  override def transform(value: Any)(implicit ctx: Context): Any = {println("avro HashMap transform"); value}
 
   override def after(value: Any)(implicit ctx: Context): Option[Any] = value match {
     case jhm: java.util.HashMap[_,_] =>
@@ -153,14 +159,13 @@ trait HashMapToMapInjector extends Transformer {
       }
       Some(mapImpl(parentType, result))
   }
-
+println("avro HashMapInjector after")
   val parentType: TypeRefType
 }
 
 trait StringToJodaDateTime extends Transformer {
   self: Transformer =>
   val format =  ISODateTimeFormat.dateTime()
-
   override def transform(value: Any)(implicit ctx: Context): Any = value match {
     case str: String => format.parseDateTime(str)
   }

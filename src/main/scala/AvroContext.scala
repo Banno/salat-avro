@@ -15,8 +15,11 @@
  */
 package com.banno.salat.avro
 
+import com.novus.salat.util._
 import java.lang.reflect.Modifier
-import com.novus.salat.{ Context, Grater, CaseClass }
+//import com.novus.salat.{ Context, Grater, ProxyGrater, ConcreteGrater, IsCaseClass, CaseClass }
+import com.novus.salat.{ Context, Grater, ProxyGrater, ConcreteGrater, CaseClass }
+
 import java.util.Comparator
 import java.util.concurrent.ConcurrentSkipListMap
 import scala.collection.mutable.SynchronizedQueue
@@ -27,16 +30,88 @@ trait AvroContext extends Context {
   // since salat's graters is hidden from me, keeping my own collection
   private[avro] val avroGraters = JConcurrentMapWrapper(new ConcurrentSkipListMap[Class[_ <: AnyRef], Grater[_ <: AnyRef]](ClassComparator))
   
-//  override protected def generate(clazz: String): Grater[_ <: CaseClass] = {
-   protected def generate(clazz: String): Grater[_ <: CaseClass] = {
-    new SingleAvroGrater[CaseClass](getCaseClass(clazz)(this).map(_.asInstanceOf[Class[CaseClass]]).get)(this)
+  override protected def generate(clazz: String): Grater[_ <: CaseClass] = {
+  // protected def generate(clazz: String): Grater[_ <: CaseClass] = {
+println("avro generate")
+    val caseClass = getCaseClass(clazz)(this).map(_.asInstanceOf[Class[CaseClass]]).get
+println(caseClass)
+    new SingleAvroGrater[CaseClass](caseClass)(this) {}//.asInstanceOf[Grater[CaseClass]]
+
   }
 
   override def accept(grater: Grater[_ <: AnyRef]) = {
     super.accept(grater)
     avroGraters += (grater.clazz -> grater)
   }
+/*
+//  override def lookup_?[X <: AnyRef](c: String): Option[Grater[_ <: AnyRef]] = Option[Grater[_ <: AnyRef]](avroGraters.get(c)) orElse {
+  override def lookup_?[X <: AnyRef](c: String): Option[Grater[_ <: AnyRef]] =  {
+   // if (suitable_?(c)) {
+//      resolveClass(c, Vector(this.getClass.getClassLoader)) match {
+   //   resolveClass(c, classLoaders) match {
 
+       // case IsCaseClass(clazz) => println("IsCaseClass = true"); 
+println("making a SingleAvroGrater for: " + c + " " + getCaseClass(c)(this))
+  val caseClass = getCaseClass(c)(this)
+    println("case class: " + caseClass)
+
+
+
+  val avroGrater = new SingleAvroGrater[CaseClass](caseClass.get)(this)
+    println("avroGrater: " + avroGrater)
+
+Option[Grater[_ <: AnyRef]](avroGrater)
+
+
+
+//.map(_.asInstanceOf[Class[CaseClass]]).get)(this) {})
+       // case Some(clazz) if Modifier.isAbstract(clazz.getModifiers) => Some((
+       //   new ProxyGrater(clazz.asInstanceOf[Class[X]])(this) {}).
+       //   asInstanceOf[Grater[_ <: AnyRef]])
+      //  case Some(clazz) if clazz.isInterface => Some((
+      //    new ProxyGrater(clazz.asInstanceOf[Class[X]])(this) {}).asInstanceOf[Grater[_ <: AnyRef]])
+     //   case _ => None
+     // }
+  // }
+  //  else None).asInstanceOf[ Option[Grater[_ <: AnyRef]]]
+  }
+*/
+
+
+ // def resolveClass_!(c: String, classLoaders: Seq[ClassLoader]): Class[_] = resolveClass(c, classLoaders).getOrElse {
+ //   throw new Error("resolveClass: path='%s' does not resolve in any of %d available classloaders".format(c, classLoaders.size))
+  //}
+
+ // protected[salat] def toUsableClassName(clazz: String) = if (clazz.endsWith("$")) clazz.substring(0, clazz.size - 1) else clazz
+/*
+   def resolveClass[X <: AnyRef](c: String, classLoaders: Seq[ClassLoader]): Option[Class[X]] = {
+    // log.info("resolveClass(): looking for %s in %d classloaders", c, classLoaders.size)
+    try {
+      var clazz: Class[_] = null
+      // var count = 0
+      val iter = classLoaders.iterator
+      while (clazz == null && iter.hasNext) {
+        try {
+
+println(c)
+          clazz = Class.forName(c, true, iter.next())
+        }
+        catch {
+          case e: ClassNotFoundException => // keep going, maybe it's in the next one
+        }
+
+        // log.info("resolveClass: %s %s in classloader '%s' %d of %d", c, (if (clazz != null) "FOUND" else "NOT FOUND"), ctx.name.getOrElse("N/A"), count, ctx.classloaders.size)
+        // count += 1
+      }
+
+      if (clazz != null) Some(clazz.asInstanceOf[Class[X]]) else None
+    }
+    catch {
+      case _ => None
+    }
+  }
+*/
+/*
 //  override protected def generate_?(c: String): Option[Grater[_ <: CaseClass]] = {
    protected def generate_?(c: String): Option[Grater[_ <: CaseClass]] = {
     if (suitable_?(c)) {
@@ -59,7 +134,7 @@ trait AvroContext extends Context {
       }
     } else None
   }
-
+*/
 }
 
 object ClassComparator extends Comparator[Class[_]] {

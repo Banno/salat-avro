@@ -22,8 +22,8 @@ import global._
 case class MyRecord(x: Int)
 
 package object avro {
- // def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.lookup_![X](m).asInstanceOf[AvroGrater[X]]
-   def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.lookup[X](m)
+  def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.lookup_![X](m).asInstanceOf[AvroGrater[X]]
+   //def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.lookup[X](m).asInstanceOf[AvroGrater[X]]
  
   protected[avro] def getCaseClass(c: String)(implicit ctx: Context): Option[Class[CaseClass]] =
     getClassNamed(c).map(_.asInstanceOf[Class[CaseClass]])
@@ -31,16 +31,18 @@ package object avro {
   protected[avro] def getClassNamed(c: String)(implicit ctx: Context): Option[Class[_]] = {
     try {
       var clazz: Class[_] = null
-     // val iter = ctx.classLoaders.iterator
-      val iter = Vector(this.getClass.getClassLoader).iterator
-      while (clazz == null && iter.hasNext) {
+      val iter = ctx.classLoaders.iterator
+//while (iter.hasNext) {
+     // val iter = Vector(this.getClass.getClassLoader).iterator
+      //while (clazz == null && iter.hasNext) {
         try {
           clazz = Class.forName(c, true, iter.next)
         }
         catch {
           case e: ClassNotFoundException =>
         }
-      }
+      //}
+//}
       if (clazz != null) Some(clazz) else None
     }
     catch {

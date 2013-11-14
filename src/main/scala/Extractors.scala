@@ -24,9 +24,11 @@ import org.scala_tools.time.Imports._
 import org.joda.time.format.ISODateTimeFormat
 
 object Extractors {
-  def select(t: TypeRefType, hint: Boolean = false)(implicit ctx: Context): Option[Transformer] = t match {
 
-    case IsOption(t@TypeRefType(_, _, _)) => t match {
+println("made an avro Extractors")
+  def select(t: TypeRefType, hint: Boolean = false)(implicit ctx: Context): Option[Transformer] = {println("avro Extractors select"); t match {
+
+    case IsOption(t@TypeRefType(_, _, _)) => {println("avro: It's an Option "); t match {
 
       case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
         Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor with JodaTimeToString)
@@ -39,8 +41,8 @@ object Extractors {
 
       case _ => None
     }
-
-    case IsMap(_, t @ TypeRefType(_, _, _)) => t match {
+}
+    case IsMap(_, t @ TypeRefType(_, _, _)) =>{ println("avro: It's a Map");t match {
       //case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
       //  Some(new Transformer(symbol.path, t)(ctx) with SBigDecimalToDouble with MapToHashMapExtractor)
 
@@ -66,14 +68,15 @@ object Extractors {
       case TypeRefType(_, symbol, _) =>
         Some(new Transformer(symbol.path, t)(ctx) with MapToHashMapExtractor)
     }
+}
 
-    case IsTraversable(t@TypeRefType(_, _, _)) => t match {
+    case IsTraversable(t@TypeRefType(_, _, _)) => {println("avro matched: It's a IsTraversable");t match {
       case TypeRefType(_, symbol, _) =>
         Some(new Transformer(symbol.path, t)(ctx) with TraversableExtractor)
     }
+}
 
-
-    case TypeRefType(_, symbol, _) => t match {
+    case TypeRefType(_, symbol, _) =>{ println("avro matched a TypeRefType");t match {
 
       case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
         Some(new Transformer(symbol.path, t)(ctx) with JodaTimeToString)
@@ -82,11 +85,11 @@ object Extractors {
         Some(new Transformer(symbol.path, t)(ctx) {})
 
       case _ => None
-    }
+    }}
 
     case _ => None
   }
-}
+}}
 
 trait JodaTimeToString extends Transformer {
   self: Transformer =>

@@ -51,11 +51,11 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
       case utf8: org.apache.avro.util.Utf8 => utf8.toString()
       case v => v
     } 
-    // println("values = " + values)
-    // println("values classes = " + values.map(v => if (v != null) v.getClass else "null"))
+     println("values = " + values)
+     println("values classes = " + values.map(v => if (v != null) v.getClass else "null"))
 
-   // val grater: SingleAvroGrater[_] = ctx.lookup(genericRecord.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
-    val grater: SingleAvroGrater[_] = ctx.lookup(genericRecord.getSchema.getFullName).asInstanceOf[SingleAvroGrater[_]]
+    val grater: SingleAvroGrater[_] = ctx.lookup(genericRecord.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
+    //val grater: SingleAvroGrater[_] = ctx.lookup(genericRecord.getSchema.getFullName).asInstanceOf[SingleAvroGrater[_]]
 
     val arguments = grater._indexedFields.zip(values).map {
       case (field, record: GenericData.Record) =>
