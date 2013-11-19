@@ -29,53 +29,25 @@ def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X]
  
 
 
-  protected[avro] def getClassNamed_!(c: String)(implicit ctx: Context): Class[_] = { println("avro package getClassNamed_!"); getClassNamed(c)(ctx).getOrElse {
+  protected[avro] def getClassNamed_!(c: String)(implicit ctx: AvroContext): Class[_] = { println("avro package getClassNamed_!"); getClassNamed(c)(ctx).getOrElse {
     throw new Error("getClassNamed: path='%s' does not resolve in any of %d classloaders registered with context='%s'".
-      format(c, ctx.classLoaders.size, ctx.name))
+      format(c, ctx.clsLoaders.size, ctx.name))
   }}
 
-  protected[avro] def getClassNamed(c: String)(implicit ctx: Context): Option[Class[_]] = {println("avro package getClassNamed")
-    resolveClass(c, ctx.classLoaders)
+  protected[avro] def getClassNamed(c: String)(implicit ctx: AvroContext): Option[Class[_]] = {println("avro package getClassNamed")
+    resolveClass(c, ctx.clsLoaders)
   }
 
-   protected[avro] def getCaseClass(c: String)(implicit ctx: Context): Option[Class[CaseClass]] = {
+   protected[avro] def getCaseClass(c: String)(implicit ctx: AvroContext): Option[Class[CaseClass]] = {
 println("avro package getClassNamed")
     getClassNamed(c).filter(_.getInterfaces.contains(classOf[Product])).
       map(_.asInstanceOf[Class[CaseClass]])}
 
 
+  protected[avro] def isCaseClass(clazz: Class[_]) = clazz.getInterfaces.contains(classOf[Product])
 
-
-/*
-
-  protected[avro] def getCaseClass(c: String)(implicit ctx: Context): Option[Class[CaseClass]] = {
-println("getCaseClass");
-    getClassNamed(c).map(_.asInstanceOf[Class[CaseClass]])}
-
-  protected[avro] def getClassNamed(c: String)(implicit ctx: Context): Option[Class[_]] = {
-println("getClassNamed")
-    try {
-      var clazz: Class[_] = null
-      val iter = ctx.classLoaders.iterator
-//while (iter.hasNext) {
-     // val iter = Vector(this.getClass.getClassLoader).iterator
-      //while (clazz == null && iter.hasNext) {
-        try {
-          clazz = Class.forName(c, true, iter.next)
-println("avro get Class Named clazz:  " + clazz)
-        }
-        catch {
-          case e: ClassNotFoundException =>
-        }
-      //}
-//}
-      if (clazz != null) Some(clazz) else None
-    }
-    catch {
-      case _ => println("avro package none"); None
-    }
-  }
-*/
+  protected[avro] def isCaseObject(clazz: Class[_]): Boolean = clazz.getInterfaces.contains(classOf[Product]) &&
+    clazz.getInterfaces.contains(classOf[ScalaObject]) && clazz.getName.endsWith("$")
 
 
 

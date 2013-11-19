@@ -40,6 +40,8 @@ private[avro] val avroGraters: ConcurrentMap[String, Grater[_ <: AnyRef]] = JCon
 println("avro's graters: ")
 avroGraters.foreach(println)
 
+ var clsLoaders: Vector[ClassLoader] = Vector(this.getClass.getClassLoader)
+
     protected def generate(clazz: String): Grater[_ <: CaseClass] = {
  //  protected def generate(clazz: String): Grater[_ <: CaseClass] = {
 println("avro generate")
@@ -57,7 +59,7 @@ println(caseClass)
 //override def lookup[X <: AnyRef](c: String): Grater[_ <: AnyRef] = {println("lookup(String) avro calling lookup_?(c)");lookup_?(c).getOrElse(throw GraterGlitch(c)(this))}
  def lookp(c: String): Option[Grater[_ <: AnyRef]] = {println("avrocontext lookup(String) " + c); avroGraters.get(c)}//lookup_?(c).get}
 // def lookp(c: String): Option[Grater[_ <: AnyRef]] = {println("avrocontext lookup(String) " + c); avroGraters.get(c)}//lookup_?(c).get}
- def lookup_!(c: String): Grater[_ <: AnyRef] = {println("avrocontext lookup(String) " + c); avroGraters.get(c).get}//Option(lookup_?("None").get)}
+ override def lookup_!(c: String): Grater[_ <: AnyRef] = {println("avrocontext lookup(String) " + c); avroGraters.get(c).get}//Option(lookup_?("None").get)}
 
 
 //  override def lookup_?[X <: AnyRef](c: String): Option[Grater[_ <: AnyRef]] = Option[Grater[_ <: AnyRef]](avroGraters.get(c)) orElse {
@@ -65,7 +67,7 @@ println(caseClass)
 avroGraters.foreach(println)
       if (suitable_?(c)) {println("avro context, it was suitable " + c)
     //  resolveClass(c, Vector(this.getClass.getClassLoader)) match {
-        resolveClass(c, classLoaders) match {
+        resolveClass(c, clsLoaders) match {
   //    resClass(c, classLoaders).map(n:Class => Some(new SingleAvroGrater[CaseClass](n.get)(this)))//.map(clazz: Class[_ <: CaseClass] => new SingleAvroGrater[CaseClass](clazz)(this))
   //  println( "resolve: "  + resolveClass(c, classLoaders) )
  
@@ -80,7 +82,15 @@ avroGraters.foreach(println)
 //if (caseClass.isDefined){
 
   // val avroGrater = new SingleAvroGrater[CaseClass](caseClass)(this)
-  case IsCaseClass(clazz)  => {println("avrocontext matched iscaseclass " + clazz); Some(new SingleAvroGrater[CaseClass](clazz)(this))}
+//  case Some(clazz) if isCaseClass(clazz)  => {println("avrocontext matched iscaseclass " + clazz); Some(new SingleAvroGrater[CaseClass](clazz)(this))}
+        case Some(clazz) if needsProxyGrater(clazz) => {
+          log.trace("lookup_?: creating proxy grater for clazz='%s'", clazz.getName)
+          Some((new ProxyAvroGrater(clazz.asInstanceOf[Class[X]])(this) {}).asInstanceOf[Grater[_ <: AnyRef]])
+       }
+
+      case Some(clazz) if isCaseClass(clazz) => {
+          Some((new SingleAvroGrater[CaseClass](clazz.asInstanceOf[Class[CaseClass]])(this) {}).asInstanceOf[Grater[_ <: AnyRef]])
+        }
 //   val avroGrater = Some(new SingleAvroGrater[CaseClass](resolveClass(c, classLoaders).get )(this))
 //         case Some(clazz) if true => Some(new SingleAvroGrater[CaseClass](resClass(c, classLoaders).get )(this))
        //  case Some(clazz) if true => Some(new SingleAvroGrater[CaseClass](clazz.get)(this))

@@ -23,6 +23,7 @@ import org.apache.avro.Schema
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 import org.json4s.JsonAST.JObject
+//import net.liftweb.json._
 
 class ProxyAvroGrater[X <: AnyRef](clazz: Class[X])(implicit ctx: AvroContext) extends Grater[X](clazz)(ctx) with AvroGrater[X] {
 
@@ -52,11 +53,11 @@ class ProxyAvroGrater[X <: AnyRef](clazz: Class[X])(implicit ctx: AvroContext) e
 //    ctx.lookup_!(o.getClass.getName).asInstanceOf[Grater[X]].iterateOut(o)(f)
     ctx.lookup(o.getClass.getName).asInstanceOf[Grater[X]].iterateOut(o)(f)
 
-  //def fromJSON(j: JObject) = ctx.lookup(j).asInstanceOf[Grater[X]].fromJSON(j)
+  def fromJSON(j: JObject) = ctx.lookup(j).asInstanceOf[Grater[X]].fromJSON(j)
 
-  //def toJSON(o: X) = ctx.lookup(o.getClass.getName).asInstanceOf[Grater[X]].toJSON(o)
+  def toJSON(o: X) = ctx.lookup(o.getClass.getName).asInstanceOf[Grater[X]].toJSON(o)
 
-  //def toMap(o: X) = ctx.lookup(o.getClass.getName).asInstanceOf[Grater[X]].toMap(o)
+  def toMap(o: X) = ctx.lookup(o.getClass.getName).asInstanceOf[Grater[X]].toMap(o)
 
-  //def fromMap(m: Map[String, Any]) = ctx.lookup(m).asInstanceOf[Grater[X]].fromMap(m)
+  def fromMap(m: Map[String, Any]) = ctx.lookup(m).asInstanceOf[Grater[X]].fromMap(m)
 }

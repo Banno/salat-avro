@@ -50,9 +50,9 @@ protected lazy val _sym = parseScalaSig match {
     case _ => throw new Exception("failed to parse pickled Scala signature from %s".format(clazz))
   }
 */
-  override protected lazy val sym = ScalaSigParser.parse(clazz).get.topLevelClasses.head
+   protected lazy val sym = ScalaSigParser.parse(clazz).get.topLevelClasses.head
   // expose some nice methods for Datum Writers/Readers
-  // val classAnalyzer = ClassAnalyzer(clazz)
+   val classAnalyzer = ClassAnalyzer(clazz)
   // TODO: for some reason, Grater.indexedFields is no protected to just salat (just copied it for now)
   private[avro] lazy val _indexedFields  = {
     // don't use allTheChildren here!  this is the indexed fields for clazz and clazz alone
@@ -65,8 +65,8 @@ println("avro _indexedFields " + sym )
       case (ms, idx) => { println(ms + " " + idx);
         //        log.info("indexedFields: clazz=%s, ms=%s, idx=%s", clazz, ms, idx)
         
-        Field(idx, keyOverridesFromAbove.get(ms).getOrElse(ms.name), typeRefType(ms), clazz.getMethod(ms.name))
-       // Field(idx, classAnalyzer.keyOverridesFromAbove.get(ms).getOrElse(ms.name), ClassAnalyzer.typeRefType(ms), clazz.getMethod(ms.name))
+       // Field(idx, keyOverridesFromAbove.get(ms).getOrElse(ms.name), typeRefType(ms), clazz.getMethod(ms.name))
+        Field(idx, classAnalyzer.keyOverridesFromAbove.get(ms).getOrElse(ms.name), ClassAnalyzer.typeRefType(ms), clazz.getMethod(ms.name))
       }
 
     }
@@ -74,8 +74,8 @@ println("avro _indexedFields " + sym )
 
 //println(_indexedFields)
 
-  override protected[avro] lazy val constructor: Constructor[X] = {println("avro singleavrograter overrides constr");  BestAvailableConstructor(clazz)}
+    lazy val constructor: Constructor[X] = {println("avro singleavrograter overrides constr");  BestAvailableConstructor(clazz)}
   private[avro] lazy val _constructor = constructor
-  protected[avro] override def safeDefault(field: Field) = super.safeDefault(field)
+   override def safeDefault(field: Field) = super.safeDefault(field)
    //override def safeDefault(field: Field) = super.safeDefault(field)
 }

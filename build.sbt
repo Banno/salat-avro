@@ -37,10 +37,11 @@ libraryDependencies ++= Seq(
  // "org.specs2" %% "specs2" % "1.13" % "test",
 //  "com.novus" % "salat-core_2.9.0-1" % "0.0.8-SNAPSHOT",
 //  "com.novus" % "salat-core_2.9.1" % "0.0.8",
- // "com.novus" % "salat-core_2.9.1" % "1.9.2",//was using this one before mysalat
+  "com.novus" % "salat-core_2.9.1" % "1.9.2",//was using this one before mysalat
   // "com.novus" %% "salat" % "1.9.2",
-  "com.julianpeeters" % "my-salat_2.9.1" % "0.0.1.4-SNAPSHOT",
+ // "com.julianpeeters" % "my-salat_2.9.1" % "0.0.1.4-SNAPSHOT",
  // "com.julianpeeters" % "my-salat_2.9.1" % "0.0.1.3-SNAPSHOT",
+//"net.liftweb" % "lift-json_2.9.1" % "2.4",//depends on lift in order to make my proxyavrograter work... 
 "org.json4s" %% "json4s-native" % "3.2.5",
 "org.scalaj" %% "scalaj-time" % "0.7",
   "org.apache.avro" % "avro" % "1.7.4"
