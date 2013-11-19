@@ -23,8 +23,8 @@ import Schema.{ Field => SField }
 import scala.tools.scalap.scalax.rules.scalasig.{ SingleType, Type, TypeRefType }
 
 object AvroSalatSchema {
-  
-  def schemaFor[X <: CaseClass](clazz: Class[X], grater: SingleAvroGrater[X], knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Schema = {
+  println("avro schema AvroSalatSchema")
+  def schemaFor[X <: CaseClass](clazz: Class[X], grater: SingleAvroGrater[X], knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Schema = {println("avro schema schemaFor")
     val schemaName = clazz.getName
     knownSchemas.find(_.getFullName == schemaName) getOrElse {
       val schema = Schema.createRecord(schemaName, "", "", false)
@@ -34,23 +34,28 @@ object AvroSalatSchema {
     }
   }
   
-  private def schemaFields(grater: SingleAvroGrater[_], knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Seq[SField] = {
+  private def schemaFields(grater: SingleAvroGrater[_], knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Seq[SField] = { println("avro schema schemaFields")
     grater._indexedFields.map { field =>
       new SField(field.name, schemaTypeFor(field.typeRefType, knownSchemas), null, null)
     }
   }
 
-  private def schemaTypeFor(typeRefType: Type, knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Schema = {
+  private def schemaTypeFor(typeRefType: Type, knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Schema = { println("avro schema schemaTypeFor")
     val typeRef @ TypeRefType(_, symbol, typeArgs) = typeRefType
 
-    knownSchemas.find(_.getFullName == symbol.path) getOrElse {
-      // println("typeRef = %s".format(typeRef))
-      // println("symbol = %s".format(symbol))
-      // println("symbol.path = %s".format(symbol.path))
-      // println("typeArgs = %s".format(typeArgs))
-      // println("in context: " + ctx.lookup(symbol.path))
-      (symbol.path, typeRef, ctx.lookup(symbol.path)) match {
-        case ("scala.Predef.String", _, _) => Schema.create(Schema.Type.STRING)
+    knownSchemas.find(_.getFullName == symbol.path) getOrElse { println("avro schema gonna match path " + symbol.path)
+       println("typeRef = %s".format(typeRef))
+       println("symbol = %s".format(symbol))
+       println("symbol.path = %s".format(symbol.path))
+       println("typeArgs = %s".format(typeArgs))
+//       println("in context: " + ctx.asInstanceOf[AvroContext].lookp(symbol.path))
+     //  println("in context: " + ctx.lookup((symbol.path).get))
+   //    println("in context: " + "None")
+
+     // (symbol.path, typeRef, ctx.lookup(symbol.path)) match {
+    //  (symbol.path, typeRef, ctx.lookup_!((symbol.path))) match {
+      (symbol.path, typeRef, ctx.asInstanceOf[AvroContext].lookp((symbol.path))) match {
+        case ("scala.Predef.String", _, _) => println("avro shcmea matched a string "); Schema.create(Schema.Type.STRING)
         case ("scala.Boolean", _, _) => Schema.create(Schema.Type.BOOLEAN)
         case (path, _, _) if isInt(path) => Schema.create(Schema.Type.INT)
         case (path, _, _) if isLong(path) => Schema.create(Schema.Type.LONG)

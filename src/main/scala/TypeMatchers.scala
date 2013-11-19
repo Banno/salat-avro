@@ -51,7 +51,7 @@ protected[avro] object Types {
 
 
 protected[avro] object TypeMatchers {
-
+println("made and avro TypeMatchers")
   def matchesOneType(t: Type, name: String): Option[Type] = t match {
     case TypeRefType(_, symbol, List(arg)) if symbol.path == name => Some(arg)
     case _ => None

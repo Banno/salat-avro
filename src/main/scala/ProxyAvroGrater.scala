@@ -28,7 +28,7 @@ class ProxyAvroGrater[X <: AnyRef](clazz: Class[X])(implicit ctx: AvroContext) e
 
 
   def knownSubclassGraters: List[AvroGrater[_ <: AnyRef]] = ctx.avroGraters.collect {
-    case (subclazz, grater) if clazz.isAssignableFrom(subclazz) && clazz != subclazz => grater.asInstanceOf[AvroGrater[_ <: AnyRef]]
+    case (subclazz, grater) if clazz.isAssignableFrom(Class.forName(subclazz)) && clazz != subclazz => grater.asInstanceOf[AvroGrater[_ <: AnyRef]]
   }.toList
   
   def asAvroSchema: Schema = asSingleAvroSchema(new ListBuffer[Schema])

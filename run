@@ -1,0 +1,676 @@
+Loading /usr/share/sbt/bin/sbt-launch-lib.bash
+[0m[[0minfo[0m] [0mLoading global plugins from /home/julian/.sbt/plugins[0m
+[0m[[0minfo[0m] [0mLoading project definition from /home/julian/Dropbox/salat-avro/project[0m
+[0m[[0minfo[0m] [0mSet current project to salat-avro (in build file:/home/julian/Dropbox/salat-avro/)[0m
+[0m[[33mwarn[0m] [0mCredentials file /home/julian/.ivy2/.banno_credentials does not exist[0m
+[0m[[0minfo[0m] [0mRunning debug.Main [0m
+avro made a package object avro
+avro's graters: 
+package object avro grater 
+salat lookup[] models.MyRecord
+lookup(String) models.MyRecord None
+salat suitable_?
+avro context, it was suitable models.MyRecord
+avro resolve models.MyRecord
+avro package resolve trying
+avro models.MyRecord
+avro clazz 0 null
+avro clazz 0 class models.MyRecord
+class ain't null: class models.MyRecord
+avro IsCaseClass
+avro IsCaseClass unapply
+avrocontext matched iscaseclass class models.MyRecord
+avro accept
+salat Context accept
+made a Concrete Grater
+made a SingleAvroGrater
+SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39)
+package object avro grater 
+salat lookup[] models.MyRecord
+lookup(String) models.MyRecord Some(SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
+(models.MyRecord,SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
+salat suitable_?
+avro context, it was suitable models.MyRecord
+avro resolve models.MyRecord
+avro package resolve trying
+avro models.MyRecord
+avro clazz 0 null
+avro clazz 0 class models.MyRecord
+class ain't null: class models.MyRecord
+avro IsCaseClass unapply
+avrocontext matched iscaseclass class models.MyRecord
+avro accept
+salat Context accept
+made a Concrete Grater
+made a SingleAvroGrater
+made a singleAvroSchema
+avro schema AvroSalatSchema
+avro schema schemaFor
+avro schema schemaFields
+avro _indexedFields ClassSymbol(MyRecord, owner=models, flags=40, info=5 ,None)
+MethodSymbol(x, owner=0, flags=29400200, info=28 ,None) 0
+salat object Field
+Field apply
+salat Injectors in
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors package object out
+salat Extractors  out select TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+salat Extractors found a TypeRefType TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List()) scala.Predef.String
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@43c59008
+Field _out: com.novus.salat.transformers.out.package$$anon$1@5f731ffa
+abstract Field
+MethodSymbol(y, owner=0, flags=29400200, info=40 ,None) 1
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(ThisType(scala),scala.Int,List())
+salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Int,List()) scala.Int
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@721627ee
+Field _out: com.novus.salat.transformers.out.package$$anon$1@c97b4c6
+abstract Field
+MethodSymbol(z, owner=0, flags=29400200, info=48 ,None) 2
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(ThisType(scala),scala.Boolean,List())
+salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Boolean,List()) scala.Boolean
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@3bdd399f
+Field _out: com.novus.salat.transformers.out.package$$anon$1@38f2146d
+abstract Field
+avro schema schemaTypeFor
+avro schema gonna match path scala.Predef.String
+typeRef = TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+symbol = scala.Predef.String
+symbol.path = scala.Predef.String
+typeArgs = List()
+avrocontext lookup(String) scala.Predef.String
+in context: None
+in context: None
+avro shcmea matched a string 
+avro schema schemaTypeFor
+avro schema gonna match path scala.Int
+typeRef = TypeRefType(ThisType(scala),scala.Int,List())
+symbol = scala.Int
+symbol.path = scala.Int
+typeArgs = List()
+avrocontext lookup(String) scala.Int
+in context: None
+in context: None
+salat Transformer `package` was made
+avro schema schemaTypeFor
+avro schema gonna match path scala.Boolean
+typeRef = TypeRefType(ThisType(scala),scala.Boolean,List())
+symbol = scala.Boolean
+symbol.path = scala.Boolean
+typeArgs = List()
+avrocontext lookup(String) scala.Boolean
+in context: None
+in context: None
+avro made an AvroGenericDatumReader
+avro made an AvroGenericDatumReader
+-------- apply values -------
+lookup(String) models.MyRecord Some(SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
+(models.MyRecord,SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
+salat suitable_?
+avro context, it was suitable models.MyRecord
+avro resolve models.MyRecord
+avro package resolve trying
+avro models.MyRecord
+avro clazz 0 null
+avro clazz 0 class models.MyRecord
+class ain't null: class models.MyRecord
+avro IsCaseClass unapply
+avrocontext matched iscaseclass class models.MyRecord
+avro accept
+salat Context accept
+made a Concrete Grater
+made a SingleAvroGrater
+avro _indexedFields ClassSymbol(MyRecord, owner=models, flags=40, info=5 ,None)
+MethodSymbol(x, owner=0, flags=29400200, info=28 ,None) 0
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+salat Extractors found a TypeRefType TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List()) scala.Predef.String
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@37f3552b
+Field _out: com.novus.salat.transformers.out.package$$anon$1@485c96bf
+abstract Field
+MethodSymbol(y, owner=0, flags=29400200, info=40 ,None) 1
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(ThisType(scala),scala.Int,List())
+salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Int,List()) scala.Int
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@36acfab6
+Field _out: com.novus.salat.transformers.out.package$$anon$1@167fdec5
+abstract Field
+MethodSymbol(z, owner=0, flags=29400200, info=48 ,None) 2
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(ThisType(scala),scala.Boolean,List())
+salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Boolean,List()) scala.Boolean
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@24fa630d
+Field _out: com.novus.salat.transformers.out.package$$anon$1@327cfd72
+abstract Field
+
+
+  Field
+  idx: 0
+  name: 'x'
+  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+    prefix: SingleType(ThisType(scala),scala.Predef)
+    symbol: scala.Predef.String
+    typeArgs: List()
+
+   Tortoise
+an avro Injectors was made
+avro Injectors select
+made and avro TypeMatchers
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: Tortoise
+
+
+  Field
+  idx: 1
+  name: 'y'
+  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
+    prefix: ThisType(scala)
+    symbol: scala.Int
+    typeArgs: List()
+
+   2
+avro Injectors select
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: 2
+
+
+  Field
+  idx: 2
+  name: 'z'
+  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
+    prefix: ThisType(scala)
+    symbol: scala.Boolean
+    typeArgs: List()
+
+   true
+avro Injectors select
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: true
+avro singleavrograter overrides constr
+MyRecord(Tortoise,2,true)
+-------- apply values -------
+lookup(String) models.MyRecord Some(SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
+(models.MyRecord,SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
+salat suitable_?
+avro context, it was suitable models.MyRecord
+avro resolve models.MyRecord
+avro package resolve trying
+avro models.MyRecord
+avro clazz 0 null
+avro clazz 0 class models.MyRecord
+class ain't null: class models.MyRecord
+avro IsCaseClass unapply
+avrocontext matched iscaseclass class models.MyRecord
+avro accept
+salat Context accept
+made a Concrete Grater
+made a SingleAvroGrater
+avro _indexedFields ClassSymbol(MyRecord, owner=models, flags=40, info=5 ,None)
+MethodSymbol(x, owner=0, flags=29400200, info=28 ,None) 0
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+salat Extractors found a TypeRefType TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List()) scala.Predef.String
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@77db3f0d
+Field _out: com.novus.salat.transformers.out.package$$anon$1@5b08abf4
+abstract Field
+MethodSymbol(y, owner=0, flags=29400200, info=40 ,None) 1
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(ThisType(scala),scala.Int,List())
+salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Int,List()) scala.Int
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@16514edd
+Field _out: com.novus.salat.transformers.out.package$$anon$1@34109a9d
+abstract Field
+MethodSymbol(z, owner=0, flags=29400200, info=48 ,None) 2
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(ThisType(scala),scala.Boolean,List())
+salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Boolean,List()) scala.Boolean
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@2e16d41f
+Field _out: com.novus.salat.transformers.out.package$$anon$1@5cc056dc
+abstract Field
+
+
+  Field
+  idx: 0
+  name: 'x'
+  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+    prefix: SingleType(ThisType(scala),scala.Predef)
+    symbol: scala.Predef.String
+    typeArgs: List()
+
+   Achilles
+avro Injectors select
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: Achilles
+
+
+  Field
+  idx: 1
+  name: 'y'
+  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
+    prefix: ThisType(scala)
+    symbol: scala.Int
+    typeArgs: List()
+
+   4
+avro Injectors select
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: 4
+
+
+  Field
+  idx: 2
+  name: 'z'
+  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
+    prefix: ThisType(scala)
+    symbol: scala.Boolean
+    typeArgs: List()
+
+   true
+avro Injectors select
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: true
+avro singleavrograter overrides constr
+MyRecord(Achilles,4,true)
+-------- apply values -------
+lookup(String) models.MyRecord Some(SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
+(models.MyRecord,SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
+salat suitable_?
+avro context, it was suitable models.MyRecord
+avro resolve models.MyRecord
+avro package resolve trying
+avro models.MyRecord
+avro clazz 0 null
+avro clazz 0 class models.MyRecord
+class ain't null: class models.MyRecord
+avro IsCaseClass unapply
+avrocontext matched iscaseclass class models.MyRecord
+avro accept
+salat Context accept
+made a Concrete Grater
+made a SingleAvroGrater
+avro _indexedFields ClassSymbol(MyRecord, owner=models, flags=40, info=5 ,None)
+MethodSymbol(x, owner=0, flags=29400200, info=28 ,None) 0
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+salat Extractors found a TypeRefType TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List()) scala.Predef.String
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@36bec9dd
+Field _out: com.novus.salat.transformers.out.package$$anon$1@27b6e83f
+abstract Field
+MethodSymbol(y, owner=0, flags=29400200, info=40 ,None) 1
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(ThisType(scala),scala.Int,List())
+salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Int,List()) scala.Int
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@59499477
+Field _out: com.novus.salat.transformers.out.package$$anon$1@6db23e6c
+abstract Field
+MethodSymbol(z, owner=0, flags=29400200, info=48 ,None) 2
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(ThisType(scala),scala.Boolean,List())
+salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Boolean,List()) scala.Boolean
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@51205cb7
+Field _out: com.novus.salat.transformers.out.package$$anon$1@23a71bfd
+abstract Field
+
+
+  Field
+  idx: 0
+  name: 'x'
+  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+    prefix: SingleType(ThisType(scala),scala.Predef)
+    symbol: scala.Predef.String
+    typeArgs: List()
+
+   Escher
+avro Injectors select
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: Escher
+
+
+  Field
+  idx: 1
+  name: 'y'
+  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
+    prefix: ThisType(scala)
+    symbol: scala.Int
+    typeArgs: List()
+
+   6
+avro Injectors select
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: 6
+
+
+  Field
+  idx: 2
+  name: 'z'
+  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
+    prefix: ThisType(scala)
+    symbol: scala.Boolean
+    typeArgs: List()
+
+   true
+avro Injectors select
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: true
+avro singleavrograter overrides constr
+MyRecord(Escher,6,true)
+-------- apply values -------
+lookup(String) models.MyRecord Some(SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
+(models.MyRecord,SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
+salat suitable_?
+avro context, it was suitable models.MyRecord
+avro resolve models.MyRecord
+avro package resolve trying
+avro models.MyRecord
+avro clazz 0 null
+avro clazz 0 class models.MyRecord
+class ain't null: class models.MyRecord
+avro IsCaseClass unapply
+avrocontext matched iscaseclass class models.MyRecord
+avro accept
+salat Context accept
+made a Concrete Grater
+made a SingleAvroGrater
+avro _indexedFields ClassSymbol(MyRecord, owner=models, flags=40, info=5 ,None)
+MethodSymbol(x, owner=0, flags=29400200, info=28 ,None) 0
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+salat Extractors found a TypeRefType TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List()) scala.Predef.String
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@26d73a7a
+Field _out: com.novus.salat.transformers.out.package$$anon$1@7c403381
+abstract Field
+MethodSymbol(y, owner=0, flags=29400200, info=40 ,None) 1
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(ThisType(scala),scala.Int,List())
+salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Int,List()) scala.Int
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@5af599e1
+Field _out: com.novus.salat.transformers.out.package$$anon$1@3249b16e
+abstract Field
+MethodSymbol(z, owner=0, flags=29400200, info=48 ,None) 2
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(ThisType(scala),scala.Boolean,List())
+salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Boolean,List()) scala.Boolean
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@41fc68d
+Field _out: com.novus.salat.transformers.out.package$$anon$1@42245518
+abstract Field
+
+
+  Field
+  idx: 0
+  name: 'x'
+  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+    prefix: SingleType(ThisType(scala),scala.Predef)
+    symbol: scala.Predef.String
+    typeArgs: List()
+
+   hi
+avro Injectors select
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: hi
+
+
+  Field
+  idx: 1
+  name: 'y'
+  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
+    prefix: ThisType(scala)
+    symbol: scala.Int
+    typeArgs: List()
+
+   2
+avro Injectors select
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: 2
+
+
+  Field
+  idx: 2
+  name: 'z'
+  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
+    prefix: ThisType(scala)
+    symbol: scala.Boolean
+    typeArgs: List()
+
+   true
+avro Injectors select
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: true
+avro singleavrograter overrides constr
+MyRecord(hi,2,true)
+-------- apply values -------
+lookup(String) models.MyRecord Some(SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
+(models.MyRecord,SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
+salat suitable_?
+avro context, it was suitable models.MyRecord
+avro resolve models.MyRecord
+avro package resolve trying
+avro models.MyRecord
+avro clazz 0 null
+avro clazz 0 class models.MyRecord
+class ain't null: class models.MyRecord
+avro IsCaseClass unapply
+avrocontext matched iscaseclass class models.MyRecord
+avro accept
+salat Context accept
+made a Concrete Grater
+made a SingleAvroGrater
+avro _indexedFields ClassSymbol(MyRecord, owner=models, flags=40, info=5 ,None)
+MethodSymbol(x, owner=0, flags=29400200, info=28 ,None) 0
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+salat Extractors found a TypeRefType TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List()) scala.Predef.String
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@2a3ec96e
+Field _out: com.novus.salat.transformers.out.package$$anon$1@1a6a6d
+abstract Field
+MethodSymbol(y, owner=0, flags=29400200, info=40 ,None) 1
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(ThisType(scala),scala.Int,List())
+salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Int,List()) scala.Int
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@46411a28
+Field _out: com.novus.salat.transformers.out.package$$anon$1@5c1c5c20
+abstract Field
+MethodSymbol(z, owner=0, flags=29400200, info=48 ,None) 2
+Field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat Injector matched a typereftype, now making a new Transformer
+made a salat Transformer
+salat Extractors  out select TypeRefType(ThisType(scala),scala.Boolean,List())
+salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Boolean,List()) scala.Boolean
+salat Extractor matched a TypeRefType
+made a salat Transformer
+Field _in: com.novus.salat.transformers.in.package$$anon$1@49e4681e
+Field _out: com.novus.salat.transformers.out.package$$anon$1@326faf78
+abstract Field
+
+
+  Field
+  idx: 0
+  name: 'x'
+  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+    prefix: SingleType(ThisType(scala),scala.Predef)
+    symbol: scala.Predef.String
+    typeArgs: List()
+
+   Hi
+avro Injectors select
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: Hi
+
+
+  Field
+  idx: 1
+  name: 'y'
+  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
+    prefix: ThisType(scala)
+    symbol: scala.Int
+    typeArgs: List()
+
+   2
+avro Injectors select
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: 2
+
+
+  Field
+  idx: 2
+  name: 'z'
+  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
+    prefix: ThisType(scala)
+    symbol: scala.Boolean
+    typeArgs: List()
+
+   true
+avro Injectors select
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after: true
+avro singleavrograter overrides constr
+MyRecord(Hi,2,true)
+[0m[[32msuccess[0m] [0mTotal time: 3 s, completed Nov 18, 2013 6:36:37 PM[0m

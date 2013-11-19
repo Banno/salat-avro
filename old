@@ -1,0 +1,461 @@
+Loading /usr/share/sbt/bin/sbt-launch-lib.bash
+[0m[[0minfo[0m] [0mLoading global plugins from /home/julian/.sbt/plugins[0m
+[0m[[0minfo[0m] [0mLoading project definition from /home/julian/Dropbox/salat-avro/project[0m
+[0m[[0minfo[0m] [0mSet current project to salat-avro (in build file:/home/julian/Dropbox/salat-avro/)[0m
+[0m[[33mwarn[0m] [0mCredentials file /home/julian/.ivy2/.banno_credentials does not exist[0m
+[0m[[0minfo[0m] [0mRunning debug.Main [0m
+avro made a package object avro
+salat's graters:
+made a classComparator
+avro's graters: 
+package object avro grater 
+salat lookup_![X](m)models.MyRecord
+avro generate
+avro package getClassNamed
+avro package getClassNamed
+avro resolve models.MyRecord
+avro package resolve trying
+models.MyRecord avro 
+avro clazz 0 class models.MyRecord
+class ain't null: class models.MyRecord
+class models.MyRecord
+avro accept
+made a ConcreteGrater
+made a SingleAvroGrater
+salat Context lookup_!(String) models.MyRecord, generate it: $anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec)
+salat lookup(String) models.MyRecord
+salat Context lookup(String): salat calling graters.get(clazz) Some($anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec)) from 
+(models.MyRecord,$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec))
+$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec)
+package object avro grater 
+salat lookup_![X](m)models.MyRecord
+avro generate
+avro package getClassNamed
+avro package getClassNamed
+avro resolve models.MyRecord
+avro package resolve trying
+models.MyRecord avro 
+avro clazz 0 class models.MyRecord
+class ain't null: class models.MyRecord
+class models.MyRecord
+avro accept
+made a ConcreteGrater
+made a SingleAvroGrater
+salat Context lookup_!(String) models.MyRecord, generate it: $anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec)
+salat lookup(String) models.MyRecord
+salat Context lookup(String): salat calling graters.get(clazz) Some($anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec)) from 
+(models.MyRecord,$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec))
+made a singleAvroSchema
+avro schema AvroSalatSchema
+avro schema schemaFor
+avro schema schemaFields
+avro _indexedFields ClassSymbol(MyRecord, owner=models, flags=40, info=5 ,None)
+MethodSymbol(x, owner=0, flags=29400200, info=28 ,None) 0
+object Field
+keyOverridesFromAbove
+salat Grater calling typeRefType
+salat object field apply
+salat Injectors package object in
+salat Injectors in select
+salat: It's TypeRefType
+salat found a TypeRefType, now making a new Transformer(symbol.path, pt)(ctx)
+made a salat Transformer: scala.Predef.String TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+salat Extractors package object out
+salat Extractors out select TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+made an IsOption
+salat TypeMatcher IsOption Unapplying
+made a salat typematcher
+called salat TypeMatchers matches one type
+matchesOneType found None
+salat Extractors found a typeRefType TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+salat Extractors making a new Transformer
+made a salat Transformer: scala.Predef.String TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+salat abstract Field
+MethodSymbol(y, owner=0, flags=29400200, info=40 ,None) 1
+salat Grater calling typeRefType
+salat object field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat found a TypeRefType, now making a new Transformer(symbol.path, pt)(ctx)
+made a salat Transformer: scala.Int TypeRefType(ThisType(scala),scala.Int,List())
+salat Extractors out select TypeRefType(ThisType(scala),scala.Int,List())
+salat TypeMatcher IsOption Unapplying
+called salat TypeMatchers matches one type
+matchesOneType found None
+salat Extractors found a typeRefType TypeRefType(ThisType(scala),scala.Int,List())
+salat Extractors making a new Transformer
+made a salat Transformer: scala.Int TypeRefType(ThisType(scala),scala.Int,List())
+salat abstract Field
+MethodSymbol(z, owner=0, flags=29400200, info=48 ,None) 2
+salat Grater calling typeRefType
+salat object field apply
+salat Injectors in select
+salat: It's TypeRefType
+salat found a TypeRefType, now making a new Transformer(symbol.path, pt)(ctx)
+made a salat Transformer: scala.Boolean TypeRefType(ThisType(scala),scala.Boolean,List())
+salat Extractors out select TypeRefType(ThisType(scala),scala.Boolean,List())
+salat TypeMatcher IsOption Unapplying
+called salat TypeMatchers matches one type
+matchesOneType found None
+salat Extractors found a typeRefType TypeRefType(ThisType(scala),scala.Boolean,List())
+salat Extractors making a new Transformer
+made a salat Transformer: scala.Boolean TypeRefType(ThisType(scala),scala.Boolean,List())
+salat abstract Field
+avro schema schemaTypeFor
+avro schema gonna match path scala.Predef.String
+typeRef = TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+symbol = scala.Predef.String
+symbol.path = scala.Predef.String
+typeArgs = List()
+salat lookup(String) scala.Predef.String
+salat Context lookup(String): salat calling graters.get(clazz) None from 
+(models.MyRecord,$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec))
+in context: None
+salat lookup(String) scala.Predef.String
+salat Context lookup(String): salat calling graters.get(clazz) None from 
+(models.MyRecord,$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec))
+avro shcmea matched a string 
+avro schema schemaTypeFor
+avro schema gonna match path scala.Int
+typeRef = TypeRefType(ThisType(scala),scala.Int,List())
+symbol = scala.Int
+symbol.path = scala.Int
+typeArgs = List()
+salat lookup(String) scala.Int
+salat Context lookup(String): salat calling graters.get(clazz) None from 
+(models.MyRecord,$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec))
+in context: None
+salat lookup(String) scala.Int
+salat Context lookup(String): salat calling graters.get(clazz) None from 
+(models.MyRecord,$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec))
+salat Transformer `package` was made
+salat Transformer `package` isInt
+avro schema schemaTypeFor
+avro schema gonna match path scala.Boolean
+typeRef = TypeRefType(ThisType(scala),scala.Boolean,List())
+symbol = scala.Boolean
+symbol.path = scala.Boolean
+typeArgs = List()
+salat lookup(String) scala.Boolean
+salat Context lookup(String): salat calling graters.get(clazz) None from 
+(models.MyRecord,$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec))
+in context: None
+salat lookup(String) scala.Boolean
+salat Context lookup(String): salat calling graters.get(clazz) None from 
+(models.MyRecord,$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec))
+avro made an AvroGenericDatumReader
+avro made an AvroGenericDatumReader
+-------- apply values -------
+salat lookup(String) models.MyRecord
+salat Context lookup(String): salat calling graters.get(clazz) Some($anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec)) from 
+(models.MyRecord,$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec))
+salat abstract Field toString
+
+
+  Field
+  idx: 0
+  name: 'x'
+  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+    prefix: SingleType(ThisType(scala),scala.Predef)
+    symbol: scala.Predef.String
+    typeArgs: List()
+
+   Tortoise
+an avro Injectors was made
+avro Injectors select
+made and avro TypeMatchers
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+salat abstract Field toString
+
+
+  Field
+  idx: 1
+  name: 'y'
+  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
+    prefix: ThisType(scala)
+    symbol: scala.Int
+    typeArgs: List()
+
+   2
+avro Injectors select
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+salat abstract Field toString
+
+
+  Field
+  idx: 2
+  name: 'z'
+  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
+    prefix: ThisType(scala)
+    symbol: scala.Boolean
+    typeArgs: List()
+
+   true
+avro Injectors select
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+avro singleavrograter overrides constr
+MyRecord(Tortoise,2,true)
+-------- apply values -------
+salat lookup(String) models.MyRecord
+salat Context lookup(String): salat calling graters.get(clazz) Some($anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec)) from 
+(models.MyRecord,$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec))
+salat abstract Field toString
+
+
+  Field
+  idx: 0
+  name: 'x'
+  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+    prefix: SingleType(ThisType(scala),scala.Predef)
+    symbol: scala.Predef.String
+    typeArgs: List()
+
+   Achilles
+avro Injectors select
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+salat abstract Field toString
+
+
+  Field
+  idx: 1
+  name: 'y'
+  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
+    prefix: ThisType(scala)
+    symbol: scala.Int
+    typeArgs: List()
+
+   4
+avro Injectors select
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+salat abstract Field toString
+
+
+  Field
+  idx: 2
+  name: 'z'
+  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
+    prefix: ThisType(scala)
+    symbol: scala.Boolean
+    typeArgs: List()
+
+   true
+avro Injectors select
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+MyRecord(Achilles,4,true)
+-------- apply values -------
+salat lookup(String) models.MyRecord
+salat Context lookup(String): salat calling graters.get(clazz) Some($anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec)) from 
+(models.MyRecord,$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec))
+salat abstract Field toString
+
+
+  Field
+  idx: 0
+  name: 'x'
+  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+    prefix: SingleType(ThisType(scala),scala.Predef)
+    symbol: scala.Predef.String
+    typeArgs: List()
+
+   Escher
+avro Injectors select
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+salat abstract Field toString
+
+
+  Field
+  idx: 1
+  name: 'y'
+  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
+    prefix: ThisType(scala)
+    symbol: scala.Int
+    typeArgs: List()
+
+   6
+avro Injectors select
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+salat abstract Field toString
+
+
+  Field
+  idx: 2
+  name: 'z'
+  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
+    prefix: ThisType(scala)
+    symbol: scala.Boolean
+    typeArgs: List()
+
+   true
+avro Injectors select
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+MyRecord(Escher,6,true)
+-------- apply values -------
+salat lookup(String) models.MyRecord
+salat Context lookup(String): salat calling graters.get(clazz) Some($anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec)) from 
+(models.MyRecord,$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec))
+salat abstract Field toString
+
+
+  Field
+  idx: 0
+  name: 'x'
+  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+    prefix: SingleType(ThisType(scala),scala.Predef)
+    symbol: scala.Predef.String
+    typeArgs: List()
+
+   hi
+avro Injectors select
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+salat abstract Field toString
+
+
+  Field
+  idx: 1
+  name: 'y'
+  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
+    prefix: ThisType(scala)
+    symbol: scala.Int
+    typeArgs: List()
+
+   2
+avro Injectors select
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+salat abstract Field toString
+
+
+  Field
+  idx: 2
+  name: 'z'
+  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
+    prefix: ThisType(scala)
+    symbol: scala.Boolean
+    typeArgs: List()
+
+   true
+avro Injectors select
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+MyRecord(hi,2,true)
+-------- apply values -------
+salat lookup(String) models.MyRecord
+salat Context lookup(String): salat calling graters.get(clazz) Some($anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec)) from 
+(models.MyRecord,$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@4630f4ec))
+salat abstract Field toString
+
+
+  Field
+  idx: 0
+  name: 'x'
+  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
+    prefix: SingleType(ThisType(scala),scala.Predef)
+    symbol: scala.Predef.String
+    typeArgs: List()
+
+   Hi
+avro Injectors select
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+salat abstract Field toString
+
+
+  Field
+  idx: 1
+  name: 'y'
+  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
+    prefix: ThisType(scala)
+    symbol: scala.Int
+    typeArgs: List()
+
+   2
+avro Injectors select
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+salat abstract Field toString
+
+
+  Field
+  idx: 2
+  name: 'z'
+  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
+    prefix: ThisType(scala)
+    symbol: scala.Boolean
+    typeArgs: List()
+
+   true
+avro Injectors select
+salat Transformer `package` isJodaDateTime
+avro found none in avro select: None
+salat Transformer transform_!
+salat Transformer before
+salat Transformer transform
+salat Transformer after
+MyRecord(Hi,2,true)
+[0m[[32msuccess[0m] [0mTotal time: 3 s, completed Nov 17, 2013 6:01:15 PM[0m

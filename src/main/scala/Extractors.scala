@@ -28,10 +28,10 @@ object Extractors {
 println("made an avro Extractors")
   def select(t: TypeRefType, hint: Boolean = false)(implicit ctx: Context): Option[Transformer] = {println("avro Extractors select"); t match {
 
-    case IsOption(t@TypeRefType(_, _, _)) => {println("avro: It's an Option "); t match {
+    case IsOption(t@TypeRefType(_, _, _)) => {println("avro: It's an Option " + t); t match {
 
-      case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
-        Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor with JodaTimeToString)
+    //  case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
+    //    Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor with JodaTimeToString)
 
       case TypeRefType(_, symbol, _) if hint || Option(ctx.lookup(symbol.path)).isDefined =>
         Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor)
@@ -108,10 +108,10 @@ trait TraversableExtractor extends Transformer {
 trait MapToHashMapExtractor extends Transformer {
   import scala.collection.JavaConverters._
 
-  override def transform(value: Any)(implicit ctx: Context): Any = value
+  override def transform(value: Any)(implicit ctx: Context): Any = {println("avro extractors transform"); value}
   override def after(value: Any)(implicit ctx: Context) = value match {
     case map: scala.collection.Map[String, _] =>
-      Some(map.asJava)
+      println("avro extractors transform"); Some(map.asJava)
     case _ =>
       None
   }

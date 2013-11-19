@@ -15,23 +15,33 @@
  */
 package com.banno.salat.avro
 
-import com.novus.salat.util._
+import util._
+import com.novus.salat._
 import java.lang.reflect.Modifier
 //import com.novus.salat.{ Context, Grater, ProxyGrater, ConcreteGrater, IsCaseClass, CaseClass }
-import com.novus.salat.{ Context, Grater, ProxyGrater, ConcreteGrater, CaseClass }
+//import com.novus.salat.{ Context, Grater, ProxyGrater, ConcreteGrater, CaseClass }
 
 import java.util.Comparator
 import java.util.concurrent.ConcurrentSkipListMap
 import scala.collection.mutable.SynchronizedQueue
 import scala.collection.JavaConversions.JConcurrentMapWrapper
+import scala.collection.mutable.{ ConcurrentMap }
+import java.util.concurrent.{ CopyOnWriteArrayList, ConcurrentHashMap }
 
 trait AvroContext extends Context {
 
   // since salat's graters is hidden from me, keeping my own collection
-  private[avro] val avroGraters = JConcurrentMapWrapper(new ConcurrentSkipListMap[Class[_ <: AnyRef], Grater[_ <: AnyRef]](ClassComparator))
-  
-  override protected def generate(clazz: String): Grater[_ <: CaseClass] = {
-  // protected def generate(clazz: String): Grater[_ <: CaseClass] = {
+ // private[avro] val avroGraters = JConcurrentMapWrapper(new ConcurrentSkipListMap[Class[_ <: AnyRef], Grater[_ <: AnyRef]](ClassComparator))
+
+private[avro] val avroGraters: ConcurrentMap[String, Grater[_ <: AnyRef]] = JConcurrentMapWrapper(new ConcurrentHashMap[String, Grater[_ <: AnyRef]]())
+
+ //private[avro] val avroGraters = JConcurrentMapWrapper(new ConcurrentSkipListMap[String, Grater[_ <: AnyRef]](ClassComparator))  
+
+println("avro's graters: ")
+avroGraters.foreach(println)
+
+    protected def generate(clazz: String): Grater[_ <: CaseClass] = {
+ //  protected def generate(clazz: String): Grater[_ <: CaseClass] = {
 println("avro generate")
     val caseClass = getCaseClass(clazz)(this).map(_.asInstanceOf[Class[CaseClass]]).get
 println(caseClass)
@@ -39,29 +49,50 @@ println(caseClass)
 
   }
 
-  override def accept(grater: Grater[_ <: AnyRef]) = {
+  override def accept(grater: Grater[_ <: AnyRef]) = {println("avro accept")
     super.accept(grater)
-    avroGraters += (grater.clazz -> grater)
+    avroGraters += (grater.clazz.getName.toString -> grater)
   }
-/*
+
+//override def lookup[X <: AnyRef](c: String): Grater[_ <: AnyRef] = {println("lookup(String) avro calling lookup_?(c)");lookup_?(c).getOrElse(throw GraterGlitch(c)(this))}
+ def lookp(c: String): Option[Grater[_ <: AnyRef]] = {println("avrocontext lookup(String) " + c); avroGraters.get(c)}//lookup_?(c).get}
+// def lookp(c: String): Option[Grater[_ <: AnyRef]] = {println("avrocontext lookup(String) " + c); avroGraters.get(c)}//lookup_?(c).get}
+ def lookup_!(c: String): Grater[_ <: AnyRef] = {println("avrocontext lookup(String) " + c); avroGraters.get(c).get}//Option(lookup_?("None").get)}
+
+
 //  override def lookup_?[X <: AnyRef](c: String): Option[Grater[_ <: AnyRef]] = Option[Grater[_ <: AnyRef]](avroGraters.get(c)) orElse {
-  override def lookup_?[X <: AnyRef](c: String): Option[Grater[_ <: AnyRef]] =  {
-   // if (suitable_?(c)) {
-//      resolveClass(c, Vector(this.getClass.getClassLoader)) match {
-   //   resolveClass(c, classLoaders) match {
-
+   override def lookup_?[X <: AnyRef](c: String): Option[Grater[_ <: AnyRef]] =  {//Option[Grater[_ <: AnyRef]](avroGraters.get(c))/* orElse { 
+avroGraters.foreach(println)
+      if (suitable_?(c)) {println("avro context, it was suitable " + c)
+    //  resolveClass(c, Vector(this.getClass.getClassLoader)) match {
+        resolveClass(c, classLoaders) match {
+  //    resClass(c, classLoaders).map(n:Class => Some(new SingleAvroGrater[CaseClass](n.get)(this)))//.map(clazz: Class[_ <: CaseClass] => new SingleAvroGrater[CaseClass](clazz)(this))
+  //  println( "resolve: "  + resolveClass(c, classLoaders) )
+ 
        // case IsCaseClass(clazz) => println("IsCaseClass = true"); 
-println("making a SingleAvroGrater for: " + c + " " + getCaseClass(c)(this))
-  val caseClass = getCaseClass(c)(this)
-    println("case class: " + caseClass)
+//println("avro lookup_? making a SingleAvroGrater for: " + c + " " + getCaseClass(c)(this))
+ // val caseClass = getCaseClass(c)(this).map(_.asInstanceOf[Class[CaseClass]]).get
+  //val caseClass = IsCaseClass//(grater.clazz)//(this)
+  //  println("case class: " + caseClass)
 
 
+//var avroGrater: Grater[CaseClass] = null
+//if (caseClass.isDefined){
 
-  val avroGrater = new SingleAvroGrater[CaseClass](caseClass.get)(this)
-    println("avroGrater: " + avroGrater)
+  // val avroGrater = new SingleAvroGrater[CaseClass](caseClass)(this)
+  case IsCaseClass(clazz)  => {println("avrocontext matched iscaseclass " + clazz); Some(new SingleAvroGrater[CaseClass](clazz)(this))}
+//   val avroGrater = Some(new SingleAvroGrater[CaseClass](resolveClass(c, classLoaders).get )(this))
+//         case Some(clazz) if true => Some(new SingleAvroGrater[CaseClass](resClass(c, classLoaders).get )(this))
+       //  case Some(clazz) if true => Some(new SingleAvroGrater[CaseClass](clazz.get)(this))
+ //  println("avroGrater: " + avroGrater)
+         case _ => None
+     }  
+//Option[Grater[_ <: AnyRef]](avroGrater)
+     }
+  else {println("wasn't suitable"); None}
+//}
 
-Option[Grater[_ <: AnyRef]](avroGrater)
-
+//  }
 
 
 //.map(_.asInstanceOf[Class[CaseClass]]).get)(this) {})
@@ -75,7 +106,7 @@ Option[Grater[_ <: AnyRef]](avroGrater)
   // }
   //  else None).asInstanceOf[ Option[Grater[_ <: AnyRef]]]
   }
-*/
+
 
 
  // def resolveClass_!(c: String, classLoaders: Seq[ClassLoader]): Class[_] = resolveClass(c, classLoaders).getOrElse {
@@ -138,5 +169,6 @@ println(c)
 }
 
 object ClassComparator extends Comparator[Class[_]] {
+println("made a classComparator")
   def compare(c1: Class[_], c2: Class[_]) = c1.getName.compare(c2.getName)
 }
