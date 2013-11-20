@@ -33,16 +33,6 @@ trait AvroContext extends Context {
   // since salat's graters is hidden from me, keeping my own collection
 private[avro] val avroGraters: ConcurrentMap[String, Grater[_ <: AnyRef]] = JConcurrentMapWrapper(new ConcurrentHashMap[String, Grater[_ <: AnyRef]]())
 
-println("avro's graters: ")
-avroGraters.foreach(println)
-
-
-
-    protected def generate(clazz: String): Grater[_ <: CaseClass] = {
-    val caseClass = getCaseClass(clazz)(this).map(_.asInstanceOf[Class[CaseClass]]).get
-    new SingleAvroGrater[CaseClass](caseClass)(this) {}//.asInstanceOf[Grater[CaseClass]]
-  }
-
   override def accept(grater: Grater[_ <: AnyRef]) = {println("avro accept")
     super.accept(grater)
     avroGraters += (grater.clazz.getName.toString -> grater)
