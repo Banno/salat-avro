@@ -36,7 +36,7 @@ private[avro] val avroGraters: ConcurrentMap[String, Grater[_ <: AnyRef]] = JCon
 println("avro's graters: ")
 avroGraters.foreach(println)
 
- var clsLoaders: Vector[ClassLoader] = Vector(this.getClass.getClassLoader)
+
 
     protected def generate(clazz: String): Grater[_ <: CaseClass] = {
     val caseClass = getCaseClass(clazz)(this).map(_.asInstanceOf[Class[CaseClass]]).get
@@ -47,6 +47,8 @@ avroGraters.foreach(println)
     super.accept(grater)
     avroGraters += (grater.clazz.getName.toString -> grater)
   }
+
+  var clsLoaders: Vector[ClassLoader] = Vector(this.getClass.getClassLoader)
 
   def lookp(c: String): Option[Grater[_ <: AnyRef]] = {println("avrocontext lookup(String) " + c); avroGraters.get(c) }
 
