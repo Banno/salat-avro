@@ -51,6 +51,7 @@ protected lazy val _sym = parseScalaSig match {
   }
 */
    protected lazy val sym = ScalaSigParser.parse(clazz).get.topLevelClasses.head
+    lazy val constructor: Constructor[X] = {println("avro singleavrograter overrides constr");  BestAvailableConstructor(clazz)}
   // expose some nice methods for Datum Writers/Readers
    val classAnalyzer = ClassAnalyzer(clazz)
   // TODO: for some reason, Grater.indexedFields is no protected to just salat (just copied it for now)
@@ -74,7 +75,7 @@ println("avro _indexedFields " + sym )
 
 //println(_indexedFields)
 
-    lazy val constructor: Constructor[X] = {println("avro singleavrograter overrides constr");  BestAvailableConstructor(clazz)}
+
   private[avro] lazy val _constructor = constructor
    override def safeDefault(field: Field) = super.safeDefault(field)
    //override def safeDefault(field: Field) = super.safeDefault(field)
