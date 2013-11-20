@@ -35,10 +35,10 @@ println("made a SingleAvroGrater")
   def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]): Schema = {println("made a singleAvroSchema"); AvroSalatSchema.schemaFor(clazz, this, knownSchemas)}
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = manifest.erasure == clazz
 
- // def +(other: AvroGrater[_]): MultiAvroGrater = other match {
-  //  case sg: SingleAvroGrater[_] => new MultiAvroGrater(LinkedHashSet(this, sg))
-  //  case mg: MultiAvroGrater => new MultiAvroGrater(mg.graters + this)
-  //}
+  def +(other: AvroGrater[_]): MultiAvroGrater = other match {
+    case sg: SingleAvroGrater[_] => new MultiAvroGrater(LinkedHashSet(this, sg))
+    case mg: MultiAvroGrater => new MultiAvroGrater(mg.graters + this)
+  }
 
 
 /*
