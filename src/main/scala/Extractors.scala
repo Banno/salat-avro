@@ -20,6 +20,7 @@ import transformers._
 import out._
 import com.novus.salat.Context
 
+
 import org.scala_tools.time.Imports._
 import org.joda.time.format.ISODateTimeFormat
 
@@ -43,7 +44,7 @@ println("made an avro Extractors")
     }
 }
     case IsMap(_, t @ TypeRefType(_, _, _)) =>{ println("avro: It's a Map");t match {
-      //case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
+     // case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
       //  Some(new Transformer(symbol.path, t)(ctx) with SBigDecimalToDouble with MapToHashMapExtractor)
 
      // case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
