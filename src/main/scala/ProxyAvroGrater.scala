@@ -23,7 +23,6 @@ import org.apache.avro.Schema
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 import org.json4s.JsonAST.JObject
-//import net.liftweb.json._
 
 class ProxyAvroGrater[X <: AnyRef](clazz: Class[X])(implicit ctx: AvroContext) extends Grater[X](clazz)(ctx) with AvroGrater[X] {
 
@@ -34,17 +33,10 @@ println("a proxyavrograter was made")
   
   def asAvroSchema: Schema = {println("proxyavrograter asAvroSchema ");asSingleAvroSchema(new ListBuffer[Schema])}
 
-  private[avro] def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]) = {println("avro proxyavrograter asSingleAvroGrater was called ")
-//knownSchemas.foreach()
-//println("proxyavro knownschemas: " + knownSchemas )
-println("proxyavro knownSubclassGraters: " + knownSubclassGraters )
-println("proxyavro knownSubclassGraters Mapped: " )//+ knownSubclassGraters.map(  _.asSingleAvroSchema(new ListBuffer[Schema])  ))
-   // Schema.createUnion(  knownSubclassGraters.map(  _.asSingleAvroSchema(knownSchemas)  ).asJava  )}
-
-val rootSchema = knownSubclassGraters.last
-val rootAppended = (knownSubclassGraters.dropRight(1).reverse):+rootSchema
-println("root " + rootSchema)
-println("root appended " + rootAppended)
+  private[avro] def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]) = {
+    //the RecursiveTypeSpec requires that the knownSubclassGraters' contained schemas be in certain order: 
+    val rootSchema = knownSubclassGraters.last
+    val rootAppended = (knownSubclassGraters.dropRight(1).reverse):+rootSchema
     Schema.createUnion(  rootAppended.reverse.map(  _.asSingleAvroSchema(knownSchemas)  ).asJava  )}
   
   def +(other: AvroGrater[_]): MultiAvroGrater = null
