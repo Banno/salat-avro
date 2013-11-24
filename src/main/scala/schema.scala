@@ -15,6 +15,7 @@
  */
 package com.banno.salat.avro
 import com.novus.salat._
+import com.novus._
 import scala.collection.mutable.ListBuffer
 import transformers._
 import scala.collection.JavaConversions._
@@ -34,8 +35,8 @@ object AvroSalatSchema {
     }
   }
   
-  private def schemaFields(grater: SingleAvroGrater[_], knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Seq[SField] = { println("avro schema schemaFields")
-    grater._indexedFields.map { field =>
+  private def schemaFields(grater: SingleAvroGrater[_], knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Seq[SField] = { println("avro schema schemaFields from grater " + grater)
+    grater._indexedFields.map { field => 
       new SField(field.name, schemaTypeFor(field.typeRefType, knownSchemas), null, null)
     }
   }
@@ -48,13 +49,14 @@ object AvroSalatSchema {
        println("symbol = %s".format(symbol))
        println("symbol.path = %s".format(symbol.path))
        println("typeArgs = %s".format(typeArgs))
-//       println("in context: " + ctx.asInstanceOf[AvroContext].lookp(symbol.path))
+       println("in context: " + ctx.asInstanceOf[AvroContext].lookp(symbol.path))
      //  println("in context: " + ctx.lookup((symbol.path).get))
    //    println("in context: " + "None")
 
      // (symbol.path, typeRef, ctx.lookup(symbol.path)) match {
     //  (symbol.path, typeRef, ctx.lookup_!((symbol.path))) match {
       (symbol.path, typeRef, ctx.asInstanceOf[AvroContext].lookp((symbol.path))) match {
+
         case ("scala.Predef.String", _, _) => println("avro shcmea matched a string "); Schema.create(Schema.Type.STRING)
         case ("scala.Boolean", _, _) => Schema.create(Schema.Type.BOOLEAN)
         case (path, _, _) if isInt(path) => Schema.create(Schema.Type.INT)
@@ -63,12 +65,20 @@ object AvroSalatSchema {
         case (path, _, _) if isBigDecimal(path) => Schema.create(Schema.Type.DOUBLE)
         case (path, _, _) if isJodaDateTime(path) => Schema.create(Schema.Type.STRING)
         case ("scala.Option", _, _) => optional(schemaTypeFor(typeArgs(0), knownSchemas))
-        case (_, IsTraversable(_), _) => Schema.createArray(schemaTypeFor(typeArgs(0), knownSchemas))
-        case (_, IsMap(k, v), _) => Schema.createMap(schemaTypeFor(v, knownSchemas))
-        case (_, IsEnum(prefix), _) => enumSchema(prefix)
-//        case (_, _, Some(recordGrater: AvroGrater[_])) => recordGrater.asSingleAvroSchema(knownSchemas)
-        case (_, _, recordGrater: AvroGrater[_]) => recordGrater.asSingleAvroSchema(knownSchemas)
-        case (path, _, _) => throw new UnknownTypeForAvroSchema(path)
+        case (_, IsTraversable(_), _) => {println("schema found a traversible");Schema.createArray(schemaTypeFor(typeArgs(0), knownSchemas))}
+        case (_, IsMap(k, v), _) => {println("schema found a traversible"); Schema.createMap(schemaTypeFor(v, knownSchemas))}
+       // case (_, IsEnum(prefix), _) => {println("found an enum"); enumSchema(prefix)}
+       // case (_, IsEnum(prefix), _) => {println("found an enum"); enumSchema(prefix)}
+
+              //    case t @ TypeRefType(prefix @ SingleType(_, esym), sym, _) if sym.path == "scala.Enumeration.Value" => {
+          //new Transformer(prefix.symbol.path, t)(ctx) with OptionInjector with EnumInflater
+        //}
+        //case (prefix @ SingleType(_, esym), sym, _) =>  {println("found an enum"); enumSchema()}
+       // case (s, sym, _) => {println("found an enum"); Schema.create(Schema.Type.STRING)}
+        case ("scala.Enumeration.Value", _, _) =>  {println("found an enum"); Schema.create(Schema.Type.STRING)}
+        case (_, _, Some(recordGrater: AvroGrater[_])) => recordGrater.asSingleAvroSchema(knownSchemas)
+     //   case (_, _, recordGrater: AvroGrater[_]) => {println("schema recodGrater"); recordGrater.asSingleAvroSchema(knownSchemas)}
+        case (path, _, _) => {println("gonna throw error cuz nothing good was found" + (symbol.path, typeRef, ctx.asInstanceOf[AvroContext].lookp((symbol.path)))); throw new UnknownTypeForAvroSchema(path)}
       }
     }
   }

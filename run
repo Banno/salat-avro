@@ -3,13 +3,10 @@ Loading /usr/share/sbt/bin/sbt-launch-lib.bash
 [0m[[0minfo[0m] [0mLoading project definition from /home/julian/Dropbox/salat-avro/project[0m
 [0m[[0minfo[0m] [0mSet current project to salat-avro (in build file:/home/julian/Dropbox/salat-avro/)[0m
 [0m[[33mwarn[0m] [0mCredentials file /home/julian/.ivy2/.banno_credentials does not exist[0m
+[0m[[0minfo[0m] [0mCompiling 1 Scala source to /home/julian/Dropbox/salat-avro/target/scala-2.9.1/classes...[0m
 [0m[[0minfo[0m] [0mRunning debug.Main [0m
 avro made a package object avro
-avro's graters: 
 package object avro grater 
-salat lookup[] models.MyRecord
-lookup(String) models.MyRecord None
-salat suitable_?
 avro context, it was suitable models.MyRecord
 avro resolve models.MyRecord
 avro package resolve trying
@@ -17,79 +14,182 @@ avro models.MyRecord
 avro clazz 0 null
 avro clazz 0 class models.MyRecord
 class ain't null: class models.MyRecord
-avro IsCaseClass
-avro IsCaseClass unapply
-avrocontext matched iscaseclass class models.MyRecord
 avro accept
-salat Context accept
-made a Concrete Grater
++++++++++++++++++++++++++++
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
++++++++++++++++++++++++++++
 made a SingleAvroGrater
-SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39)
+$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93)
 package object avro grater 
-salat lookup[] models.MyRecord
-lookup(String) models.MyRecord Some(SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
-(models.MyRecord,SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
-salat suitable_?
-avro context, it was suitable models.MyRecord
-avro resolve models.MyRecord
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+avro context, it was suitable com.banno.salat.avro.test.models.Node
+avro resolve com.banno.salat.avro.test.models.Node
 avro package resolve trying
-avro models.MyRecord
+avro com.banno.salat.avro.test.models.Node
 avro clazz 0 null
-avro clazz 0 class models.MyRecord
-class ain't null: class models.MyRecord
-avro IsCaseClass unapply
-avrocontext matched iscaseclass class models.MyRecord
+avro clazz 0 class com.banno.salat.avro.test.models.Node
+class ain't null: class com.banno.salat.avro.test.models.Node
 avro accept
-salat Context accept
-made a Concrete Grater
++++++++++++++++++++++++++++
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
++++++++++++++++++++++++++++
 made a SingleAvroGrater
+package object avro grater 
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+avro context, it was suitable com.banno.salat.avro.test.models.ManyTrees
+avro resolve com.banno.salat.avro.test.models.ManyTrees
+avro package resolve trying
+avro com.banno.salat.avro.test.models.ManyTrees
+avro clazz 0 null
+avro clazz 0 class com.banno.salat.avro.test.models.ManyTrees
+class ain't null: class com.banno.salat.avro.test.models.ManyTrees
+avro accept
++++++++++++++++++++++++++++
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
++++++++++++++++++++++++++++
+made a SingleAvroGrater
+package object avro grater 
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+avro context, it was suitable com.banno.salat.avro.test.models.End
+avro resolve com.banno.salat.avro.test.models.End
+avro package resolve trying
+avro com.banno.salat.avro.test.models.End
+avro clazz 0 null
+avro clazz 0 class com.banno.salat.avro.test.models.End
+class ain't null: class com.banno.salat.avro.test.models.End
+avro accept
++++++++++++++++++++++++++++
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.End,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.End @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
++++++++++++++++++++++++++++
+made a SingleAvroGrater
+package object avro grater 
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.End,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.End @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+avro context, it was suitable com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait
+avro resolve com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait
+avro package resolve trying
+avro com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait
+avro clazz 0 null
+avro clazz 0 class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait
+class ain't null: class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait
+avro accept
++++++++++++++++++++++++++++
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.End,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.End @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
++++++++++++++++++++++++++++
+made a SingleAvroGrater
+package object avro grater 
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.End,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.End @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+avro context, it was suitable com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait
+avro resolve com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait
+avro package resolve trying
+avro com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait
+avro clazz 0 null
+avro clazz 0 class com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait
+class ain't null: class com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait
+avro accept
++++++++++++++++++++++++++++
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.End,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.End @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
++++++++++++++++++++++++++++
+made a SingleAvroGrater
+package object avro grater 
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.End,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.End @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+avro context, it was suitable com.banno.salat.avro.test.models.SomeContainerClass
+avro resolve com.banno.salat.avro.test.models.SomeContainerClass
+avro package resolve trying
+avro com.banno.salat.avro.test.models.SomeContainerClass
+avro clazz 0 null
+avro clazz 0 class com.banno.salat.avro.test.models.SomeContainerClass
+class ain't null: class com.banno.salat.avro.test.models.SomeContainerClass
+avro accept
++++++++++++++++++++++++++++
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeContainerClass,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeContainerClass @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.End,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.End @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
++++++++++++++++++++++++++++
+made a SingleAvroGrater
+called singleavrograter's asAvroSchema
 made a singleAvroSchema
 avro schema AvroSalatSchema
 avro schema schemaFor
-avro schema schemaFields
-avro _indexedFields ClassSymbol(MyRecord, owner=models, flags=40, info=5 ,None)
-MethodSymbol(x, owner=0, flags=29400200, info=28 ,None) 0
-salat object Field
-Field apply
-salat Injectors in
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors package object out
-salat Extractors  out select TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
-salat Extractors found a TypeRefType TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List()) scala.Predef.String
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@43c59008
-Field _out: com.novus.salat.transformers.out.package$$anon$1@5f731ffa
-abstract Field
-MethodSymbol(y, owner=0, flags=29400200, info=40 ,None) 1
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(ThisType(scala),scala.Int,List())
-salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Int,List()) scala.Int
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@721627ee
-Field _out: com.novus.salat.transformers.out.package$$anon$1@c97b4c6
-abstract Field
-MethodSymbol(z, owner=0, flags=29400200, info=48 ,None) 2
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(ThisType(scala),scala.Boolean,List())
-salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Boolean,List()) scala.Boolean
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@3bdd399f
-Field _out: com.novus.salat.transformers.out.package$$anon$1@38f2146d
-abstract Field
+avro schema schemaFields from grater $anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeContainerClass @ com.banno.salat.avro.global.package$$anon$1@1f60cd93)
+avro _indexedFields ClassSymbol(SomeContainerClass, owner=com.banno.salat.avro.test.models, flags=40, info=15 ,None)
+MethodSymbol(e, owner=0, flags=29400200, info=38 ,None) 0
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeContainerClass,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeContainerClass @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.End,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.End @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+wasn't suitable
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeContainerClass,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeContainerClass @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.End,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.End @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+wasn't suitable
+MethodSymbol(theListWhichNeedsToBeTested, owner=0, flags=29400200, info=50 ,None) 1
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeContainerClass,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeContainerClass @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.End,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.End @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+avro context, it was suitable com.banno.salat.avro.test.models.SomeCommonTrait
+avro resolve com.banno.salat.avro.test.models.SomeCommonTrait
+avro package resolve trying
+avro com.banno.salat.avro.test.models.SomeCommonTrait
+avro clazz 0 null
+avro clazz 0 interface com.banno.salat.avro.test.models.SomeCommonTrait
+class ain't null: interface com.banno.salat.avro.test.models.SomeCommonTrait
+avro accept
++++++++++++++++++++++++++++
+(com.banno.salat.avro.test.models.SomeCommonTrait,$anonfun$lookup_$qmark$1$$anon$2(interface com.banno.salat.avro.test.models.SomeCommonTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeContainerClass,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeContainerClass @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.End,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.End @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
++++++++++++++++++++++++++++
+a proxyavrograter was made
 avro schema schemaTypeFor
 avro schema gonna match path scala.Predef.String
 typeRef = TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
@@ -97,9 +197,65 @@ symbol = scala.Predef.String
 symbol.path = scala.Predef.String
 typeArgs = List()
 avrocontext lookup(String) scala.Predef.String
+None
 in context: None
-in context: None
+avrocontext lookup(String) scala.Predef.String
+None
 avro shcmea matched a string 
+avro schema schemaTypeFor
+avro schema gonna match path scala.package.List
+typeRef = TypeRefType(SingleType(SingleType(ThisType(<no symbol>.<root>),scala),scala.package),scala.package.List,List(TypeRefType(ThisType(com.banno.salat.avro.test.models),com.banno.salat.avro.test.models.SomeCommonTrait,List())))
+symbol = scala.package.List
+symbol.path = scala.package.List
+typeArgs = List(TypeRefType(ThisType(com.banno.salat.avro.test.models),com.banno.salat.avro.test.models.SomeCommonTrait,List()))
+avrocontext lookup(String) scala.package.List
+None
+in context: None
+avrocontext lookup(String) scala.package.List
+None
+avro typematchers made a IsTraversable
+avro typematchers istraversable unapply TypeRefType(SingleType(SingleType(ThisType(<no symbol>.<root>),scala),scala.package),scala.package.List,List(TypeRefType(ThisType(com.banno.salat.avro.test.models),com.banno.salat.avro.test.models.SomeCommonTrait,List())))
+made an avro TypeMatchers
+avro typematchers  matchesTraversable TypeRefType(SingleType(SingleType(ThisType(<no symbol>.<root>),scala),scala.package),scala.package.List,List(TypeRefType(ThisType(com.banno.salat.avro.test.models),com.banno.salat.avro.test.models.SomeCommonTrait,List())))
+avro typematchers matchesTraversable found onescala.package.List
+schema found a traversible
+avro schema schemaTypeFor
+avro schema gonna match path com.banno.salat.avro.test.models.SomeCommonTrait
+typeRef = TypeRefType(ThisType(com.banno.salat.avro.test.models),com.banno.salat.avro.test.models.SomeCommonTrait,List())
+symbol = com.banno.salat.avro.test.models.SomeCommonTrait
+symbol.path = com.banno.salat.avro.test.models.SomeCommonTrait
+typeArgs = List()
+avrocontext lookup(String) com.banno.salat.avro.test.models.SomeCommonTrait
+Some($anonfun$lookup_$qmark$1$$anon$2(interface com.banno.salat.avro.test.models.SomeCommonTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+in context: Some($anonfun$lookup_$qmark$1$$anon$2(interface com.banno.salat.avro.test.models.SomeCommonTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+avrocontext lookup(String) com.banno.salat.avro.test.models.SomeCommonTrait
+Some($anonfun$lookup_$qmark$1$$anon$2(interface com.banno.salat.avro.test.models.SomeCommonTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+avro typematchers istraversable unapply TypeRefType(ThisType(com.banno.salat.avro.test.models),com.banno.salat.avro.test.models.SomeCommonTrait,List())
+avro typematchers  matchesTraversable TypeRefType(ThisType(com.banno.salat.avro.test.models),com.banno.salat.avro.test.models.SomeCommonTrait,List())
+avro typematchers matchesTraversable found none 
+avro proxyavrograter asSingleAvroGrater was called 
+ProxyAvroGrater knownSubclassGraters
+proxy knownsub interface com.banno.salat.avro.test.models.SomeCommonTrait com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait
+proxy knownsub interface com.banno.salat.avro.test.models.SomeCommonTrait com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait
+proxyavro knownSubclassGraters: List($anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93), $anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+proxyavro knownSubclassGraters Mapped: 
+ProxyAvroGrater knownSubclassGraters
+proxy knownsub interface com.banno.salat.avro.test.models.SomeCommonTrait com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait
+proxy knownsub interface com.banno.salat.avro.test.models.SomeCommonTrait com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait
+made a singleAvroSchema
+avro schema schemaFor
+avro schema schemaFields from grater $anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93)
+avro _indexedFields ClassSymbol(SomeSubclassExtendingSaidTrait, owner=com.banno.salat.avro.test.models, flags=40, info=15 ,None)
+MethodSymbol(b, owner=0, flags=29400200, info=42 ,None) 0
+(com.banno.salat.avro.test.models.SomeCommonTrait,$anonfun$lookup_$qmark$1$$anon$2(interface com.banno.salat.avro.test.models.SomeCommonTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeContainerClass,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeContainerClass @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.End,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.End @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+wasn't suitable
 avro schema schemaTypeFor
 avro schema gonna match path scala.Int
 typeRef = TypeRefType(ThisType(scala),scala.Int,List())
@@ -107,570 +263,42 @@ symbol = scala.Int
 symbol.path = scala.Int
 typeArgs = List()
 avrocontext lookup(String) scala.Int
+None
 in context: None
-in context: None
-salat Transformer `package` was made
+avrocontext lookup(String) scala.Int
+None
+made a singleAvroSchema
+avro schema schemaFor
+avro schema schemaFields from grater $anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93)
+avro _indexedFields ClassSymbol(AnotherSubclassExtendingSaidTrait, owner=com.banno.salat.avro.test.models, flags=40, info=15 ,None)
+MethodSymbol(d, owner=0, flags=29400200, info=42 ,None) 0
+(com.banno.salat.avro.test.models.SomeCommonTrait,$anonfun$lookup_$qmark$1$$anon$2(interface com.banno.salat.avro.test.models.SomeCommonTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeContainerClass,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeContainerClass @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.End,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.End @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+wasn't suitable
+(com.banno.salat.avro.test.models.SomeCommonTrait,$anonfun$lookup_$qmark$1$$anon$2(interface com.banno.salat.avro.test.models.SomeCommonTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.ManyTrees,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.ManyTrees @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.Node,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.Node @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(models.MyRecord,$anonfun$lookup_$qmark$1$$anon$1(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.SomeContainerClass,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.SomeContainerClass @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.End,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.End @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+(com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait,$anonfun$lookup_$qmark$1$$anon$1(class com.banno.salat.avro.test.models.AnotherSubclassExtendingSaidTrait @ com.banno.salat.avro.global.package$$anon$1@1f60cd93))
+wasn't suitable
 avro schema schemaTypeFor
-avro schema gonna match path scala.Boolean
-typeRef = TypeRefType(ThisType(scala),scala.Boolean,List())
-symbol = scala.Boolean
-symbol.path = scala.Boolean
+avro schema gonna match path scala.Double
+typeRef = TypeRefType(ThisType(scala),scala.Double,List())
+symbol = scala.Double
+symbol.path = scala.Double
 typeArgs = List()
-avrocontext lookup(String) scala.Boolean
+avrocontext lookup(String) scala.Double
+None
 in context: None
-in context: None
-avro made an AvroGenericDatumReader
-avro made an AvroGenericDatumReader
--------- apply values -------
-lookup(String) models.MyRecord Some(SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
-(models.MyRecord,SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
-salat suitable_?
-avro context, it was suitable models.MyRecord
-avro resolve models.MyRecord
-avro package resolve trying
-avro models.MyRecord
-avro clazz 0 null
-avro clazz 0 class models.MyRecord
-class ain't null: class models.MyRecord
-avro IsCaseClass unapply
-avrocontext matched iscaseclass class models.MyRecord
-avro accept
-salat Context accept
-made a Concrete Grater
-made a SingleAvroGrater
-avro _indexedFields ClassSymbol(MyRecord, owner=models, flags=40, info=5 ,None)
-MethodSymbol(x, owner=0, flags=29400200, info=28 ,None) 0
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
-salat Extractors found a TypeRefType TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List()) scala.Predef.String
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@37f3552b
-Field _out: com.novus.salat.transformers.out.package$$anon$1@485c96bf
-abstract Field
-MethodSymbol(y, owner=0, flags=29400200, info=40 ,None) 1
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(ThisType(scala),scala.Int,List())
-salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Int,List()) scala.Int
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@36acfab6
-Field _out: com.novus.salat.transformers.out.package$$anon$1@167fdec5
-abstract Field
-MethodSymbol(z, owner=0, flags=29400200, info=48 ,None) 2
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(ThisType(scala),scala.Boolean,List())
-salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Boolean,List()) scala.Boolean
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@24fa630d
-Field _out: com.novus.salat.transformers.out.package$$anon$1@327cfd72
-abstract Field
-
-
-  Field
-  idx: 0
-  name: 'x'
-  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
-    prefix: SingleType(ThisType(scala),scala.Predef)
-    symbol: scala.Predef.String
-    typeArgs: List()
-
-   Tortoise
-an avro Injectors was made
-avro Injectors select
-made and avro TypeMatchers
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: Tortoise
-
-
-  Field
-  idx: 1
-  name: 'y'
-  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
-    prefix: ThisType(scala)
-    symbol: scala.Int
-    typeArgs: List()
-
-   2
-avro Injectors select
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: 2
-
-
-  Field
-  idx: 2
-  name: 'z'
-  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
-    prefix: ThisType(scala)
-    symbol: scala.Boolean
-    typeArgs: List()
-
-   true
-avro Injectors select
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: true
-avro singleavrograter overrides constr
-MyRecord(Tortoise,2,true)
--------- apply values -------
-lookup(String) models.MyRecord Some(SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
-(models.MyRecord,SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
-salat suitable_?
-avro context, it was suitable models.MyRecord
-avro resolve models.MyRecord
-avro package resolve trying
-avro models.MyRecord
-avro clazz 0 null
-avro clazz 0 class models.MyRecord
-class ain't null: class models.MyRecord
-avro IsCaseClass unapply
-avrocontext matched iscaseclass class models.MyRecord
-avro accept
-salat Context accept
-made a Concrete Grater
-made a SingleAvroGrater
-avro _indexedFields ClassSymbol(MyRecord, owner=models, flags=40, info=5 ,None)
-MethodSymbol(x, owner=0, flags=29400200, info=28 ,None) 0
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
-salat Extractors found a TypeRefType TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List()) scala.Predef.String
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@77db3f0d
-Field _out: com.novus.salat.transformers.out.package$$anon$1@5b08abf4
-abstract Field
-MethodSymbol(y, owner=0, flags=29400200, info=40 ,None) 1
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(ThisType(scala),scala.Int,List())
-salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Int,List()) scala.Int
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@16514edd
-Field _out: com.novus.salat.transformers.out.package$$anon$1@34109a9d
-abstract Field
-MethodSymbol(z, owner=0, flags=29400200, info=48 ,None) 2
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(ThisType(scala),scala.Boolean,List())
-salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Boolean,List()) scala.Boolean
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@2e16d41f
-Field _out: com.novus.salat.transformers.out.package$$anon$1@5cc056dc
-abstract Field
-
-
-  Field
-  idx: 0
-  name: 'x'
-  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
-    prefix: SingleType(ThisType(scala),scala.Predef)
-    symbol: scala.Predef.String
-    typeArgs: List()
-
-   Achilles
-avro Injectors select
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: Achilles
-
-
-  Field
-  idx: 1
-  name: 'y'
-  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
-    prefix: ThisType(scala)
-    symbol: scala.Int
-    typeArgs: List()
-
-   4
-avro Injectors select
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: 4
-
-
-  Field
-  idx: 2
-  name: 'z'
-  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
-    prefix: ThisType(scala)
-    symbol: scala.Boolean
-    typeArgs: List()
-
-   true
-avro Injectors select
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: true
-avro singleavrograter overrides constr
-MyRecord(Achilles,4,true)
--------- apply values -------
-lookup(String) models.MyRecord Some(SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
-(models.MyRecord,SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
-salat suitable_?
-avro context, it was suitable models.MyRecord
-avro resolve models.MyRecord
-avro package resolve trying
-avro models.MyRecord
-avro clazz 0 null
-avro clazz 0 class models.MyRecord
-class ain't null: class models.MyRecord
-avro IsCaseClass unapply
-avrocontext matched iscaseclass class models.MyRecord
-avro accept
-salat Context accept
-made a Concrete Grater
-made a SingleAvroGrater
-avro _indexedFields ClassSymbol(MyRecord, owner=models, flags=40, info=5 ,None)
-MethodSymbol(x, owner=0, flags=29400200, info=28 ,None) 0
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
-salat Extractors found a TypeRefType TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List()) scala.Predef.String
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@36bec9dd
-Field _out: com.novus.salat.transformers.out.package$$anon$1@27b6e83f
-abstract Field
-MethodSymbol(y, owner=0, flags=29400200, info=40 ,None) 1
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(ThisType(scala),scala.Int,List())
-salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Int,List()) scala.Int
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@59499477
-Field _out: com.novus.salat.transformers.out.package$$anon$1@6db23e6c
-abstract Field
-MethodSymbol(z, owner=0, flags=29400200, info=48 ,None) 2
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(ThisType(scala),scala.Boolean,List())
-salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Boolean,List()) scala.Boolean
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@51205cb7
-Field _out: com.novus.salat.transformers.out.package$$anon$1@23a71bfd
-abstract Field
-
-
-  Field
-  idx: 0
-  name: 'x'
-  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
-    prefix: SingleType(ThisType(scala),scala.Predef)
-    symbol: scala.Predef.String
-    typeArgs: List()
-
-   Escher
-avro Injectors select
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: Escher
-
-
-  Field
-  idx: 1
-  name: 'y'
-  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
-    prefix: ThisType(scala)
-    symbol: scala.Int
-    typeArgs: List()
-
-   6
-avro Injectors select
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: 6
-
-
-  Field
-  idx: 2
-  name: 'z'
-  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
-    prefix: ThisType(scala)
-    symbol: scala.Boolean
-    typeArgs: List()
-
-   true
-avro Injectors select
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: true
-avro singleavrograter overrides constr
-MyRecord(Escher,6,true)
--------- apply values -------
-lookup(String) models.MyRecord Some(SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
-(models.MyRecord,SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
-salat suitable_?
-avro context, it was suitable models.MyRecord
-avro resolve models.MyRecord
-avro package resolve trying
-avro models.MyRecord
-avro clazz 0 null
-avro clazz 0 class models.MyRecord
-class ain't null: class models.MyRecord
-avro IsCaseClass unapply
-avrocontext matched iscaseclass class models.MyRecord
-avro accept
-salat Context accept
-made a Concrete Grater
-made a SingleAvroGrater
-avro _indexedFields ClassSymbol(MyRecord, owner=models, flags=40, info=5 ,None)
-MethodSymbol(x, owner=0, flags=29400200, info=28 ,None) 0
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
-salat Extractors found a TypeRefType TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List()) scala.Predef.String
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@26d73a7a
-Field _out: com.novus.salat.transformers.out.package$$anon$1@7c403381
-abstract Field
-MethodSymbol(y, owner=0, flags=29400200, info=40 ,None) 1
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(ThisType(scala),scala.Int,List())
-salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Int,List()) scala.Int
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@5af599e1
-Field _out: com.novus.salat.transformers.out.package$$anon$1@3249b16e
-abstract Field
-MethodSymbol(z, owner=0, flags=29400200, info=48 ,None) 2
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(ThisType(scala),scala.Boolean,List())
-salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Boolean,List()) scala.Boolean
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@41fc68d
-Field _out: com.novus.salat.transformers.out.package$$anon$1@42245518
-abstract Field
-
-
-  Field
-  idx: 0
-  name: 'x'
-  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
-    prefix: SingleType(ThisType(scala),scala.Predef)
-    symbol: scala.Predef.String
-    typeArgs: List()
-
-   hi
-avro Injectors select
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: hi
-
-
-  Field
-  idx: 1
-  name: 'y'
-  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
-    prefix: ThisType(scala)
-    symbol: scala.Int
-    typeArgs: List()
-
-   2
-avro Injectors select
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: 2
-
-
-  Field
-  idx: 2
-  name: 'z'
-  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
-    prefix: ThisType(scala)
-    symbol: scala.Boolean
-    typeArgs: List()
-
-   true
-avro Injectors select
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: true
-avro singleavrograter overrides constr
-MyRecord(hi,2,true)
--------- apply values -------
-lookup(String) models.MyRecord Some(SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
-(models.MyRecord,SingleAvroGrater(class models.MyRecord @ com.banno.salat.avro.global.package$$anon$1@73deac39))
-salat suitable_?
-avro context, it was suitable models.MyRecord
-avro resolve models.MyRecord
-avro package resolve trying
-avro models.MyRecord
-avro clazz 0 null
-avro clazz 0 class models.MyRecord
-class ain't null: class models.MyRecord
-avro IsCaseClass unapply
-avrocontext matched iscaseclass class models.MyRecord
-avro accept
-salat Context accept
-made a Concrete Grater
-made a SingleAvroGrater
-avro _indexedFields ClassSymbol(MyRecord, owner=models, flags=40, info=5 ,None)
-MethodSymbol(x, owner=0, flags=29400200, info=28 ,None) 0
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
-salat Extractors found a TypeRefType TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List()) scala.Predef.String
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@2a3ec96e
-Field _out: com.novus.salat.transformers.out.package$$anon$1@1a6a6d
-abstract Field
-MethodSymbol(y, owner=0, flags=29400200, info=40 ,None) 1
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(ThisType(scala),scala.Int,List())
-salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Int,List()) scala.Int
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@46411a28
-Field _out: com.novus.salat.transformers.out.package$$anon$1@5c1c5c20
-abstract Field
-MethodSymbol(z, owner=0, flags=29400200, info=48 ,None) 2
-Field apply
-salat Injectors in select
-salat: It's TypeRefType
-salat Injector matched a typereftype, now making a new Transformer
-made a salat Transformer
-salat Extractors  out select TypeRefType(ThisType(scala),scala.Boolean,List())
-salat Extractors found a TypeRefType TypeRefType(ThisType(scala),scala.Boolean,List()) scala.Boolean
-salat Extractor matched a TypeRefType
-made a salat Transformer
-Field _in: com.novus.salat.transformers.in.package$$anon$1@49e4681e
-Field _out: com.novus.salat.transformers.out.package$$anon$1@326faf78
-abstract Field
-
-
-  Field
-  idx: 0
-  name: 'x'
-  typeRefType: TypeRefType(SingleType(ThisType(scala),scala.Predef),scala.Predef.String,List())
-    prefix: SingleType(ThisType(scala),scala.Predef)
-    symbol: scala.Predef.String
-    typeArgs: List()
-
-   Hi
-avro Injectors select
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: Hi
-
-
-  Field
-  idx: 1
-  name: 'y'
-  typeRefType: TypeRefType(ThisType(scala),scala.Int,List())
-    prefix: ThisType(scala)
-    symbol: scala.Int
-    typeArgs: List()
-
-   2
-avro Injectors select
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: 2
-
-
-  Field
-  idx: 2
-  name: 'z'
-  typeRefType: TypeRefType(ThisType(scala),scala.Boolean,List())
-    prefix: ThisType(scala)
-    symbol: scala.Boolean
-    typeArgs: List()
-
-   true
-avro Injectors select
-avro found none in avro select: None
-salat Transformer transform_!
-salat Transformer before
-salat Transformer transform
-salat Transformer after: true
-avro singleavrograter overrides constr
-MyRecord(Hi,2,true)
-[0m[[32msuccess[0m] [0mTotal time: 3 s, completed Nov 18, 2013 6:36:37 PM[0m
+avrocontext lookup(String) scala.Double
+None
+[0m[[32msuccess[0m] [0mTotal time: 23 s, completed Nov 23, 2013 12:27:54 AM[0m

@@ -18,7 +18,7 @@ package com.banno.salat.avro
 
 import org.apache.avro.generic.GenericData
 import org.apache.avro.util.Utf8
-import scala.tools.scalap.scalax.rules.scalasig.TypeRefType
+import scala.tools.scalap.scalax.rules.scalasig.{SingleType, TypeRefType }
 import com.novus.salat._
 import impls._
 import transformers._
@@ -33,33 +33,43 @@ println("an avro Injectors was made")
 println("avro Injectors select")
     pt match {
 
-      case IsOption(t@TypeRefType(_, _, _)) => println("avro matched an IsOption");t match {
-       // case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
-         // Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with DoubleToSBigDecimal)
+      case IsOption(t@TypeRefType(_, _, _)) => println("avro Injectors matched an IsOption " + t);t match {
+        case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>{println("avro injectors is option is BigDec")
+          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with BigDecimalInjector)}
 
-        case TypeRefType(_, symbol, _) if isInt(symbol.path) =>
-          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with LongToInt)
 
-       // case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
-       //   Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with ByteArrayToBigInt)
+        case TypeRefType(_, symbol, _) if isInt(symbol.path) =>{println("avro injectors is option is isInt")
+          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with LongToInt)}
 
-        case TypeRefType(_, symbol, _) if isChar(symbol.path) =>
-          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with StringToChar)
+        case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>{println("avro injectors is option is isBigInt")
+          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with BigIntInjector)}
 
-        case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>
-          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with StringToJodaDateTime)
+        case TypeRefType(_, symbol, _) if isChar(symbol.path) =>{println("avro injectors is option is isChar")
+          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with StringToChar)}
 
-        case TypeRefType(_, symbol, _) if IsTraversable.unapply(t).isDefined =>
+        case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) =>{println("avro injectors is option is isJoda")
+          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with StringToJodaDateTime)}
+
+        case TypeRefType(_, symbol, _) if IsTraversable.unapply(t).isDefined => {println("avro injectors is option is traversable")
           Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with TraversableInjector {
             val parentType = t
           })
-
-        case t@TypeRefType(_, _, _) if IsEnum.unapply(t).isDefined => {
-          Some(new Transformer(IsEnum.unapply(t).get.symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector  with EnumInflater)
         }
 
-        case TypeRefType(_, symbol, _) =>
-          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector )
+
+       // case t@TypeRefType(_, _, _) if IsEnum.unapply(t).isDefined => {
+        //  Some(new Transformer(IsEnum.unapply(t).get.symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector  with EnumInflater)
+       // }
+        case t @ TypeRefType(prefix @ SingleType(_, esym), sym, _) if sym.path == "scala.Enumeration.Value" => { println("avro injectors isoption if sym.path")
+          Some(new Transformer(prefix.symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector with EnumInflater)
+        }
+
+        case TypeRefType(_, symbol, _) =>  {println("avro injectors match catch all");
+          Some(new Transformer(symbol.path, t)(ctx) with NullToNoneInjector with OptionInjector )}
+
+        case _ =>         {println("avro injectors match catch all");  Some(new Transformer("", t)(ctx) with NullToNoneInjector with OptionInjector )}
+
+
       }
 
       case IsTraversable(t@TypeRefType(_, _, _)) => println("avro matched an IsTraversable"); t match {
@@ -71,20 +81,20 @@ println("avro Injectors select")
 
 
       case IsMap(_, t@TypeRefType(_, _, _)) => println("avro matched an IsMap"); t match {
-       // case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
-       //   Some(new Transformer(symbol.path, t)(ctx) with DoubleToSBigDecimal with HashMapToMapInjector {
-        //    val parentType = pt
-        //  })
+        case TypeRefType(_, symbol, _) if isBigDecimal(symbol.path) =>
+          Some(new Transformer(symbol.path, t)(ctx) with BigDecimalInjector with MapInjector {
+            val parentType = pt
+          })
 
         case TypeRefType(_, symbol, _) if isInt(symbol.path) =>
           Some(new Transformer(symbol.path, t)(ctx) with LongToInt with HashMapToMapInjector {
             val parentType = pt
           })
 
-       // case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
-         // Some(new Transformer(symbol.path, t)(ctx) with ByteArrayToBigInt with HashMapToMapInjector {
-        //    val parentType = pt
-        //  })
+        case TypeRefType(_, symbol, _) if isBigInt(symbol.path) =>
+          Some(new Transformer(symbol.path, t)(ctx) with BigIntInjector with MapInjector {
+            val parentType = pt
+          })
 
         case TypeRefType(_, symbol, _) if isChar(symbol.path) =>
           Some(new Transformer(symbol.path, t)(ctx) with StringToChar with HashMapToMapInjector {
@@ -129,8 +139,7 @@ trait TraversableInjector extends Transformer {
         case utf8: Utf8 => utf8.toString
         case record: GenericData.Record =>
           val grater: SingleAvroGrater[_] =
-//            ctx.lookup(record.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
-            ctx.lookup(record.getSchema.getFullName).asInstanceOf[SingleAvroGrater[_]]
+            ctx.asInstanceOf[AvroContext].lookp(record.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
         val reader  = grater.asGenericDatumReader
         reader.applyValues(record)
         case v => v

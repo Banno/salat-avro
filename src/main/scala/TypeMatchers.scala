@@ -51,11 +51,11 @@ protected[avro] object Types {
 
 
 protected[avro] object TypeMatchers {
-println("made and avro TypeMatchers")
-  def matchesOneType(t: Type, name: String): Option[Type] = t match {
-    case TypeRefType(_, symbol, List(arg)) if symbol.path == name => Some(arg)
-    case _ => None
-  }
+println("made an avro TypeMatchers")
+  def matchesOneType(t: Type, name: String): Option[Type] = {println("avro typematchers  matches one type " + t);t match {
+    case TypeRefType(_, symbol, List(arg)) if symbol.path == name => {println("avro typematchers matched one type typeref"); Some(arg)}
+    case _ =>  {println("avro typematchers matched one type None");None}
+  }}
 
   def matches(t: TypeRefType, name: String) = t.symbol.path == name
 
@@ -66,10 +66,10 @@ println("made and avro TypeMatchers")
     case _ => None
   }
 
-  def matchesTraversable(t: Type) = t match {
-    case TypeRefType(_, symbol, List(arg)) if Types.isTraversable(symbol) => Some(arg)
-    case _ => None
-  }
+  def matchesTraversable(t: Type) = {println("avro typematchers  matchesTraversable " + t); t match { 
+    case TypeRefType(_, symbol, List(arg)) if Types.isTraversable(symbol) => {println("avro typematchers matchesTraversable found one" + symbol); Some(arg)}
+    case _ => {println("avro typematchers matchesTraversable found none ");None}
+  }}
 
   def matchesBitSet(t: Type) = t match {
     case TypeRefType(_, symbol, _) if Types.isBitSet(symbol) => Some(symbol)
@@ -89,11 +89,12 @@ protected[avro] object IsMap {
 }
 
 protected[avro] object IsTraversable {
-  def unapply(t: Type): Option[Type] = TypeMatchers.matchesTraversable(t)
+println("avro typematchers made a IsTraversable")
+  def unapply(t: Type): Option[Type] = {println("avro typematchers istraversable unapply " + t);TypeMatchers.matchesTraversable(t)}
 }
-
+/*
 object IsEnum   {
-  def unapply(t: TypeRefType): Option[SingleType] = {
+  def unapply(t: TypeRefType): Option[SingleType] = { println("isEnum unapply "  + t)
     t match {
       case TypeRefType(prefix @ SingleType(_, esym), sym, _) if sym.path == "scala.Enumeration.Value" =>
         Some(prefix)
@@ -101,3 +102,4 @@ object IsEnum   {
     }
   }
 }
+*/

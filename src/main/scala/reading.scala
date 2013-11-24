@@ -32,13 +32,14 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
   extends GenericDatumReader[X](schema) with AvroDatumReader[X] {
 println("avro made an AvroGenericDatumReader")
   def read(decoder: Decoder): X = {
+println("reading")
     val collectingGenericData = new CollectingGenericData
     val colletingReader = new CollectingGenericDatumReader(schema, collectingGenericData)
 
     colletingReader.read(null, decoder)
 
     val rootRecord = collectingGenericData.rootRecord
-
+println("passed root " + rootRecord)
     applyValues(rootRecord).asInstanceOf[X]
   }
 
@@ -55,7 +56,7 @@ println("avro made an AvroGenericDatumReader")
     // println("values classes = " + values.map(v => if (v != null) v.getClass else "null"))
 
   //  val grater: SingleAvroGrater[_] = ctx.lookup(genericRecord.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
-    val grater: SingleAvroGrater[_] = ctx.lookup(genericRecord.getSchema.getFullName).asInstanceOf[SingleAvroGrater[_]]
+    val grater: SingleAvroGrater[_] = ctx.asInstanceOf[AvroContext].lookp(genericRecord.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
 
 //println("avro reading grater: SingleAvroGrater: " + grater)
 //grater._indexedFields.foreach(println)
@@ -81,8 +82,9 @@ println("avro made an AvroGenericDatumReader")
   }
 
   protected class CollectingGenericData extends GenericData {
-println("avro reading CollectingGenericData")
+println("avro reading CollectingGenericData ")
     var rootRecord: GenericData.Record = _
+println("root record " + rootRecord)
 
     override def setField(record: Any, name: String, pos: Int, obj: Object) {
 println("avro setting field")

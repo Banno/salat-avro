@@ -17,7 +17,12 @@
 package debug
 import models._
 import com.banno.salat.avro._
+import com.novus._
+import com.novus.salat.annotations._
+import util._
+import test._
 import com.banno.salat.avro.global._
+import test.models._
 import java.io.File
 //import com.novus.salat.annotations.util._
 //import reflect.ScalaSignature
@@ -28,6 +33,11 @@ import org.apache.avro._
 import org.apache.avro.io._
 import org.apache.avro.file._
 import org.apache.avro.generic._
+
+import scala.collection.JavaConversions._
+
+import com.novus.salat.CaseClass
+import java.io.ByteArrayOutputStream
 
 import scala.util.parsing.json._
 
@@ -60,22 +70,87 @@ In order to stream records to an avro file that can be read by an avro datafiler
 //Deserialize from File: Read DataFile, dynamically create the model class and deserialize back to object 
   val infile = new File("input.avro")
 
-
 println(grater[MyRecord])
-  val sameRecordIterator = grater[MyRecord].asObjectsFromFile(infile)
- 
-
+//  val sameRecordIterator = grater[MyRecord].asObjectsFromFile(infile)
+//  sameRecordIterator foreach println
 
   //val sameRecordIterator = grater[MyRecord].asObjectsFromFile(infile)
 
-
   //val sameRecordIterator = com.banno.salat.avro.grater[MyRecord].asObjectsFromFile(streamInfile)
    // println(sameRecordIterator)
-    sameRecordIterator foreach println
+
 
 //Verify Records are Equal
  // println("All Records From Avro Data File Same As The Originals?: " + (sameRecordIterator sameElements myRecordIterator2))
 
+
  
+
+
+
+
+
+
+     // val oldFred = Fred(Alice("x", Some("y"), Basil(Some(123))),
+      //                   Some(Clara()))
+     // val newFred = serializeAndDeserialize(oldFred)
+     // println(newFred == oldFred)
+
+
+
+   
+
+
+      grater[Node]
+      grater[ManyTrees]
+      grater[End]
+      
+      val schema = grater[Node].asAvroSchema
+      println(schema.getName == "union")
+      println(schema)
+      val recordSchema = schema.getTypes().get(0)
+      println(recordSchema.getName == "Node")
+      println(recordSchema.getNamespace == "com.banno.salat.avro.test.models")
+      
+      val recursiveUnion1 = recordSchema.getField("left").schema
+      println(recursiveUnion1.getName == "union")
+      println(recursiveUnion1.getTypes.get(0).getName == "End")
+      println(recursiveUnion1.getTypes.get(1).getName == "ManyTrees")
+      println(recursiveUnion1.getTypes.get(2).getName == "Node")
+      
+      val recursiveUnion2 = recordSchema.getField("right").schema
+      println(recursiveUnion2.getName == "union")
+      println(recursiveUnion2.getTypes.get(0).getName == "End")
+      println(recursiveUnion2.getTypes.get(2).getName == "ManyTrees")
+      println(recursiveUnion2.getTypes.get(1).getName == "Node")
+      //println(recursiveUnion2.getTypes.get(0).getName == "End")
+      //println(recursiveUnion2.getTypes.get(1).getName == "ManyTrees")
+      //println(recursiveUnion2.getTypes.get(2).getName == "Node")
+    
+   
+    
+
+
+  def serializeToJSON[X <: CaseClass : Manifest](x: X, maybeGrater: Option[AvroGrater[X]] = None): String = {
+    val g = maybeGrater.getOrElse(grater[X])
+    val baos = new ByteArrayOutputStream
+    val encoder = EncoderFactory.get.jsonEncoder(g.asAvroSchema, baos)
+    g.serialize(x, encoder)
+    new String(baos.toByteArray())
+  }
+
+  def serializeAndDeserialize[X <: CaseClass : Manifest](old: X, maybeGrater: Option[AvroGrater[X]] = None): X = {
+    val g = maybeGrater.getOrElse(grater[X])
+    val baos = byteArrayOuputStream()
+    val encoder = binaryEncoder(baos)
+    g.serialize(old, encoder)
+    
+    val decoder = binaryDecoder(baos.toByteArray)
+    g.asObject(decoder)
+  }
+
+  def byteArrayOuputStream(): ByteArrayOutputStream = new ByteArrayOutputStream
+  def binaryEncoder(byteArrayOS: ByteArrayOutputStream) = EncoderFactory.get().binaryEncoder(byteArrayOS, null)
+  def binaryDecoder(bytes: Array[Byte]) = DecoderFactory.get().binaryDecoder(bytes, null)
 
 }

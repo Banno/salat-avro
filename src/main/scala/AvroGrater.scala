@@ -24,11 +24,12 @@ import java.io.File
 import scala.collection.mutable.ListBuffer
 import collection.JavaConverters.{asScalaIteratorConverter => _,_}
 
+
 trait AvroGrater[X <: AnyRef] {
   implicit val ctx: Context
   def asAvroSchema: Schema
   private[avro] def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]): Schema
-//  def +(other: AvroGrater[_]): MultiAvroGrater
+  def +(other: AvroGrater[_]): MultiAvroGrater
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean
 
 /*--------METHODS FOR IN-MEMORY SERIALIZATION/DESERIALIZATION-----------------------------------------

@@ -31,7 +31,7 @@ class SingleAvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
     
 println("made a SingleAvroGrater")
 
-  lazy val asAvroSchema: Schema = Schema.createUnion(asSingleAvroSchema(new ListBuffer[Schema]) :: Nil)
+  lazy val asAvroSchema: Schema = {println("called singleavrograter's asAvroSchema"); Schema.createUnion(asSingleAvroSchema(new ListBuffer[Schema]) :: Nil)}
   def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]): Schema = {println("made a singleAvroSchema"); AvroSalatSchema.schemaFor(clazz, this, knownSchemas)}
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = manifest.erasure == clazz
 

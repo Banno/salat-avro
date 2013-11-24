@@ -36,13 +36,17 @@ private[avro] val avroGraters: ConcurrentMap[String, Grater[_ <: AnyRef]] = JCon
   override def accept(grater: Grater[_ <: AnyRef]) = {println("avro accept")
     super.accept(grater)
     avroGraters += (grater.clazz.getName.toString -> grater)
+println("+++++++++++++++++++++++++++")
+avroGraters.foreach(println)
+println("+++++++++++++++++++++++++++")
+avroGraters
   }
 
   var clsLoaders: Vector[ClassLoader] = Vector(this.getClass.getClassLoader)
 
-  def lookp(c: String): Option[Grater[_ <: AnyRef]] = {println("avrocontext lookup(String) " + c); avroGraters.get(c) }
+  def lookp(c: String): Option[Grater[_ <: AnyRef]] = {println("avrocontext lookup(String) " + c); println(avroGraters.get(c)); avroGraters.get(c) }
 
-  override def lookup_?[X <: AnyRef](c: String): Option[Grater[_ <: AnyRef]] =  {//Option[Grater[_ <: AnyRef]](avroGraters.get(c))/* orElse { 
+  override def lookup_?[X <: AnyRef](c: String): Option[Grater[_ <: AnyRef]] =  avroGraters.get(c) orElse { 
 avroGraters.foreach(println)
       if (suitable_?(c)) {println("avro context, it was suitable " + c)
         resolveClass(c, clsLoaders) match {

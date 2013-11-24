@@ -27,17 +27,23 @@ import org.json4s.JsonAST.JObject
 
 class ProxyAvroGrater[X <: AnyRef](clazz: Class[X])(implicit ctx: AvroContext) extends Grater[X](clazz)(ctx) with AvroGrater[X] {
 
-
-  def knownSubclassGraters: List[AvroGrater[_ <: AnyRef]] = ctx.avroGraters.collect {
-    case (subclazz, grater) if clazz.isAssignableFrom(Class.forName(subclazz)) && clazz != subclazz => grater.asInstanceOf[AvroGrater[_ <: AnyRef]]
-  }.toList
+println("a proxyavrograter was made")
+  def knownSubclassGraters: List[AvroGrater[_ <: AnyRef]] ={ println("ProxyAvroGrater knownSubclassGraters"); ctx.avroGraters.collect {
+    case (subclazz, grater) if clazz.isAssignableFrom(Class.forName(subclazz)) && clazz.getName.toString != subclazz => {println("proxy knownsub " + clazz + " " + subclazz); grater.asInstanceOf[AvroGrater[_ <: AnyRef]]
+  }}.toList}
   
-  def asAvroSchema: Schema = asSingleAvroSchema(new ListBuffer[Schema])
+  def asAvroSchema: Schema = {println("proxyavrograter asAvroSchema ");asSingleAvroSchema(new ListBuffer[Schema])}
 
-  private[avro] def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]) =
-    Schema.createUnion(knownSubclassGraters.map(_.asSingleAvroSchema(knownSchemas)).asJava)
+  private[avro] def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]) = {println("avro proxyavrograter asSingleAvroGrater was called ")
+//knownSchemas.foreach()
+//println("proxyavro knownschemas: " + knownSchemas )
+println("proxyavro knownSubclassGraters: " + knownSubclassGraters )
+println("proxyavro knownSubclassGraters Mapped: " )//+ knownSubclassGraters.map(  _.asSingleAvroSchema(new ListBuffer[Schema])  ))
+   // Schema.createUnion(  knownSubclassGraters.map(  _.asSingleAvroSchema(knownSchemas)  ).asJava  )}
+val rootSchema = knownSubclassGraters.head
+    Schema.createUnion(  (knownSubclassGraters.tail.reverse:+(rootSchema)).map(  _.asSingleAvroSchema(knownSchemas)  ).asJava  )}
   
- // def +(other: AvroGrater[_]): MultiAvroGrater = null
+  def +(other: AvroGrater[_]): MultiAvroGrater = null
   
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = false
   
