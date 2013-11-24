@@ -53,7 +53,8 @@ println("made an avro Extractors")
 
 
         case TypeRefType(_, symbol, _) if hint || ctx.asInstanceOf[AvroContext].lookp(symbol.path).isDefined => {println("avro extractors isption hint or lookp is defined")
-          Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor with InContextToDBObject {
+//          Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor with InContextToDBObject {
+          Some(new Transformer(symbol.path, t)(ctx) with OptionExtractor  {
             val grater = ctx.asInstanceOf[AvroContext].lookp(symbol.path)
           })}
 

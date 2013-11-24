@@ -40,8 +40,12 @@ println("a proxyavrograter was made")
 println("proxyavro knownSubclassGraters: " + knownSubclassGraters )
 println("proxyavro knownSubclassGraters Mapped: " )//+ knownSubclassGraters.map(  _.asSingleAvroSchema(new ListBuffer[Schema])  ))
    // Schema.createUnion(  knownSubclassGraters.map(  _.asSingleAvroSchema(knownSchemas)  ).asJava  )}
-val rootSchema = knownSubclassGraters.head
-    Schema.createUnion(  (knownSubclassGraters.tail.reverse:+(rootSchema)).map(  _.asSingleAvroSchema(knownSchemas)  ).asJava  )}
+
+val rootSchema = knownSubclassGraters.last
+val rootAppended = (knownSubclassGraters.dropRight(1).reverse):+rootSchema
+println("root " + rootSchema)
+println("root appended " + rootAppended)
+    Schema.createUnion(  rootAppended.reverse.map(  _.asSingleAvroSchema(knownSchemas)  ).asJava  )}
   
   def +(other: AvroGrater[_]): MultiAvroGrater = null
   

@@ -91,43 +91,16 @@ println(grater[MyRecord])
 
 
 
-     // val oldFred = Fred(Alice("x", Some("y"), Basil(Some(123))),
-      //                   Some(Clara()))
-     // val newFred = serializeAndDeserialize(oldFred)
+//      val oldFred = Fred(    Alice(     "x", Some("y"),     Basil(Some(123)) ),     Some( Clara() )    )
+      val oldFred = Fred(    Alice(     "x", Some("y"),     Basil(Some(123)) ),     Some(Clara())    )
+
+      val newFred = serializeAndDeserialize(oldFred)
      // println(newFred == oldFred)
 
 
 
    
 
-
-      grater[Node]
-      grater[ManyTrees]
-      grater[End]
-      
-      val schema = grater[Node].asAvroSchema
-      println(schema.getName == "union")
-      println(schema)
-      val recordSchema = schema.getTypes().get(0)
-      println(recordSchema.getName == "Node")
-      println(recordSchema.getNamespace == "com.banno.salat.avro.test.models")
-      
-      val recursiveUnion1 = recordSchema.getField("left").schema
-      println(recursiveUnion1.getName == "union")
-      println(recursiveUnion1.getTypes.get(0).getName == "End")
-      println(recursiveUnion1.getTypes.get(1).getName == "ManyTrees")
-      println(recursiveUnion1.getTypes.get(2).getName == "Node")
-      
-      val recursiveUnion2 = recordSchema.getField("right").schema
-      println(recursiveUnion2.getName == "union")
-      println(recursiveUnion2.getTypes.get(0).getName == "End")
-      println(recursiveUnion2.getTypes.get(2).getName == "ManyTrees")
-      println(recursiveUnion2.getTypes.get(1).getName == "Node")
-      //println(recursiveUnion2.getTypes.get(0).getName == "End")
-      //println(recursiveUnion2.getTypes.get(1).getName == "ManyTrees")
-      //println(recursiveUnion2.getTypes.get(2).getName == "Node")
-    
-   
     
 
 
@@ -139,14 +112,14 @@ println(grater[MyRecord])
     new String(baos.toByteArray())
   }
 
-  def serializeAndDeserialize[X <: CaseClass : Manifest](old: X, maybeGrater: Option[AvroGrater[X]] = None): X = {
+  def serializeAndDeserialize[X <: CaseClass : Manifest](old: X, maybeGrater: Option[AvroGrater[X]] = None): Encoder = {
     val g = maybeGrater.getOrElse(grater[X])
     val baos = byteArrayOuputStream()
     val encoder = binaryEncoder(baos)
     g.serialize(old, encoder)
     
-    val decoder = binaryDecoder(baos.toByteArray)
-    g.asObject(decoder)
+   // val decoder = binaryDecoder(baos.toByteArray)
+   // g.asObject(decoder)
   }
 
   def byteArrayOuputStream(): ByteArrayOutputStream = new ByteArrayOutputStream

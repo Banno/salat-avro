@@ -69,6 +69,7 @@
 ** Installation
    =salat-avro= is not yet published anywhere. Sorry. The git repository must be cloned locally and a ~sbt publish-local~ must be given. It currently has a dependency on salat 0.0.7-SNAPSHOT and avro 1.5.
 ** Still To Do
+   A deeper RecursiveTypeSupportSpec
    There are some basic types left to do:
    - Array/List/Seq/Set
    - Map
