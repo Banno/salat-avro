@@ -28,7 +28,7 @@ import java.util.concurrent.{ CopyOnWriteArrayList, ConcurrentHashMap }
 trait AvroContext extends Context {
 
   // since salat's graters is hidden from me, keeping my own collection
-  private[avro] val avroGraters: ConcurrentMap[String, Grater[_ <: AnyRef]] = JConcurrentMapWrapper(new ConcurrentHashMap[String, Grater[_ <: AnyRef]]())
+  private[avro] val avroGraters: scala.collection.concurrent.Map[String, Grater[_ <: AnyRef]] = JConcurrentMapWrapper(new ConcurrentHashMap[String, Grater[_ <: AnyRef]]())
 
   override def accept(grater: Grater[_ <: AnyRef]) = {
     super.accept(grater)

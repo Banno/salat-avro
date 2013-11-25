@@ -83,8 +83,10 @@ Serialize to an in-memory stream with 'serialize', deserialize from in in-memory
 
 //Reading from File
   def asSchemaFromFile(infile: File): Schema = {
-    val bufferedInfile = scala.io.Source.fromFile(infile, "iso-8859-1")
-    val parsable = bufferedInfile.getLine(0).dropWhile(_ != '{')
+  //  val bufferedInfile = scala.io.Source.fromFile(infile, "iso-8859-1")
+  //  val parsable = bufferedInfile.getLine(0).dropWhile(_ != '{')
+
+    val parsable = firstLine(infile).get.dropWhile(_ != '{')
     val schema = Schema.parse(parsable)
     schema
   }

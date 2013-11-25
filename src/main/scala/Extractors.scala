@@ -126,7 +126,7 @@ trait MapToHashMapExtractor extends Transformer {
 
   override def transform(value: Any)(implicit ctx: Context): Any = value
   override def after(value: Any)(implicit ctx: Context) = value match {
-    case map: scala.collection.Map[String, _] =>
+    case map: scala.collection.Map[_, _] =>
       Some(map.asJava)
     case _ =>
       None

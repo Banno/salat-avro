@@ -25,6 +25,15 @@ package object avro {
 
   def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.lookup[X](m).asInstanceOf[AvroGrater[X]]
 
+  def firstLine(f: java.io.File): Option[String] = {
+    val src = io.Source.fromFile(f)
+    try {
+      src.getLines.find(_ => true)
+    } finally {
+      src.close()
+    }
+  }
+
   protected[avro] def getClassNamed_!(c: String)(implicit ctx: AvroContext): Class[_] = getClassNamed(c)(ctx).getOrElse {
     throw new Error("getClassNamed: path='%s' does not resolve in any of %d classloaders registered with context='%s'".
       format(c, ctx.clsLoaders.size, ctx.name))
@@ -70,7 +79,7 @@ package object avro {
       if (clazz != null) Some(clazz.asInstanceOf[Class[X]]) else None
     }
     catch {
-      case _ => None
+      case _ : Throwable => None
     }
   }
 
