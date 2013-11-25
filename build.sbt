@@ -9,11 +9,11 @@ removeExistingHeaderBlock := true
 
 name := "salat-avro"
 
-version := "0.0.9-1"
+version := "0.0.9-2"
 
 organization := "com.banno.salat.avro"
 
-scalaVersion := "2.9.1"
+scalaVersion := "2.9.2"
 
 credentials += Credentials(Path.userHome / ".ivy2" / ".banno_credentials")
 
@@ -23,7 +23,7 @@ publishTo := Some("Banno Repo" at (if (version.toString.endsWith("SNAPSHOT")) "h
 
 libraryDependencies ++= Seq(
   "org.specs2" %% "specs2" % "1.12" % "test",
-  "com.novus" %% "salat-core" % "1.9.2",
+  "com.novus" %% "salat-core" % "1.9.4",
   "org.json4s" %% "json4s-native" % "3.2.5",
   "com.github.nscala-time" %% "nscala-time" % "0.6.0",
   "org.apache.avro" % "avro" % "1.7.4"
