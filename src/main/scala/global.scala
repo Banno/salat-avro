@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 T8 Webware
+ * Copyright 2011-2013 T8 Webware
  *   
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,5 +18,5 @@ package com.banno.salat.avro
 import com.novus.salat.Context
 
 package object global {
-  implicit val ctx = new AvroContext { val name = Some("global") }
+  implicit val ctx = new AvroContext { val name = "global" }
 }

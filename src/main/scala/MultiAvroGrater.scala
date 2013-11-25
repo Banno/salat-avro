@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 T8 Webware
+ * Copyright 2011-2013 T8 Webware
  *   
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import scala.collection.mutable.ListBuffer
 class UnsupportedCaseClassMultiException(obj: Any)
 extends RuntimeException("Cannot serialize " + obj)
 
-class MultiAvroGrater(val graters: LinkedHashSet[SingleAvroGrater[_]])(implicit val ctx: Context)
+class MultiAvroGrater( val graters: LinkedHashSet[SingleAvroGrater[_]])(implicit val ctx: Context)
 extends AvroGrater[CaseClass] {
   
   def +(other: AvroGrater[_]) = other match {
@@ -44,4 +44,3 @@ extends AvroGrater[CaseClass] {
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean =
     graters.exists(_.supports(x))
 }
-

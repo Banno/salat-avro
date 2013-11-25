@@ -56,7 +56,23 @@ object BasicCaseClassSpec extends SalatAvroSpec {
       println(newDep)
       newDep must_== oldDep 
     }
-    
+
+    "be able to serialize to Avro datafile a basic case" in {
+      val oldUser = User("user1")
+      val newUser = serializeAndDeserializeFromDatafile(oldUser)
+      println(newUser)
+      newUser must_== oldUser 
+    }   
+
+
+    "be able to serialize to Avro datafile a Scala Iterator[Record] with an optional list" in {
+      val oldDeps = Iterator[Department](Department(Some(List("me", "you"))), Department(Some(List("them")))) 
+      val(oldDepsOriginal, oldDepsCopy) = oldDeps.duplicate
+      val newDeps = serializeAndDeserializeIteratorFromDatafile(oldDepsCopy)
+
+      newDeps.toList must_== oldDepsOriginal.toList
+    }
+
   }
 
 }

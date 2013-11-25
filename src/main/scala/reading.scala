@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 T8 Webware
+ * Copyright 2011-2013 T8 Webware
  *   
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ trait AvroDatumReader[X] extends DatumReader[X] {
 
 class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
   extends GenericDatumReader[X](schema) with AvroDatumReader[X] {
-
   def read(decoder: Decoder): X = {
     val collectingGenericData = new CollectingGenericData
     val colletingReader = new CollectingGenericDatumReader(schema, collectingGenericData)
@@ -38,7 +37,6 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
     colletingReader.read(null, decoder)
 
     val rootRecord = collectingGenericData.rootRecord
-
     applyValues(rootRecord).asInstanceOf[X]
   }
 
@@ -46,14 +44,18 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
     // println("-------- apply values -------")
     // println("record = " + genericRecord)
     // println("record.schema.fullName = " + genericRecord.getSchema.getFullName)
-    val values = genericRecord.getSchema.getFields.asScala.map(_.name).map(genericRecord.get(_))
+    val values = genericRecord.getSchema.getFields.asScala.map(_.name).map(genericRecord.get(_)) 
+      .map { //Strings are stored as Utf8 in .avro datafiles, need to be converted back to Java Strings when encountered
+      case utf8: org.apache.avro.util.Utf8 => utf8.toString()
+      case v => v
+    } 
     // println("values = " + values)
     // println("values classes = " + values.map(v => if (v != null) v.getClass else "null"))
 
-    val grater: SingleAvroGrater[_] = ctx.lookup(genericRecord.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
+    val grater: SingleAvroGrater[_] = ctx.asInstanceOf[AvroContext].lookp(genericRecord.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
 
     val arguments = grater._indexedFields.zip(values).map {
-      case (field, record: GenericData.Record) =>
+      case (field, record: GenericData.Record) => 
         val inTransformer = Injectors.select(field.typeRefType).getOrElse(field.in)
         val applied = applyValues(record)
         inTransformer.transform_!(applied).orElse(Some(applied))
@@ -64,7 +66,7 @@ class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
     }.map(_.getOrElse(None).asInstanceOf[AnyRef])
 
     // println("arguments = " + arguments)
-    // println("argument classes = " + arguments.map(_.getClass))
+     //println("argument classes = " + arguments.map(_.getClass))
 
     grater._constructor.newInstance(arguments: _*).asInstanceOf[AnyRef]
   }
