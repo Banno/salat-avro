@@ -24,7 +24,7 @@ import scala.collection.JavaConverters._
 
 
 
-import org.scala_tools.time.Imports._
+import com.github.nscala_time.time.Imports._
 import org.joda.time.format.ISODateTimeFormat
 
 object Extractors {
@@ -127,8 +127,14 @@ println("made an avro Extractors")
         Some( new Transformer(prefix.symbol.path, t)(ctx) with EnumStringifier)
       }
 
-      case TypeRefType(_, symbol, _) if hint || Option(ctx.asInstanceOf[AvroContext].lookp(symbol.path)).isDefined =>{println("avro extractor lookp'ed" + t)
+
+
+      case TypeRefType(_, symbol, _) if (symbol.path == "com.github.nscala_time.time.TypeImports.DateTime") =>{println("avro extractor lookp'ed" + t)
+        Some(new Transformer(symbol.path, t)(ctx) with JodaTimeToString {})}
+
+      case TypeRefType(_, symbol, _) if hint || Option(ctx.asInstanceOf[AvroContext].lookp(symbol.path)).isDefined =>{println("avro extractor lookp'ed "  + symbol + " "+ t)
         Some(new Transformer(symbol.path, t)(ctx) {})}
+
 
 
       case _ => None

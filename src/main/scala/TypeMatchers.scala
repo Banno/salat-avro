@@ -22,10 +22,14 @@ import tools.scalap.scalax.rules.scalasig.{ SingleType, TypeRefType, Type, Symbo
 
 protected[avro] object Types {
   val Date = "java.util.Date"
-  val DateTime = Set("org.joda.time.DateTime", "org.scala_tools.time.TypeImports.DateTime")
-  val LocalDateTime = Set("org.joda.time.LocalDateTime", "org.scala_tools.time.TypeImports.LocalDateTime")
+//com.github.nscala_time.time.Imports._
+//  val DateTime = Set("org.joda.time.DateTime", "org.scala_tools.time.TypeImports.DateTime")
+  val DateTime = Set("org.joda.time.DateTime", "com.github.nscala_time.time.TypeImports.DateTime")
+//  val LocalDateTime = Set("org.joda.time.LocalDateTime", "org.scala_tools.time.TypeImports.LocalDateTime")
+  val LocalDateTime = Set("org.joda.time.LocalDateTime", "com.github.nscala_time.time.TypeImports.LocalDateTime")
   val TimeZone = "java.util.TimeZone"
-  val DateTimeZone = Set("org.joda.time.DateTimeZone", "org.scala_tools.time.TypeImports.DateTimeZone")
+//  val DateTimeZone = Set("org.joda.time.DateTimeZone", "org.scala_tools.time.TypeImports.DateTimeZone")
+  val DateTimeZone = Set("org.joda.time.DateTimeZone", "com.github.nscala_time.time.TypeImports.DateTimeZone")
   val Oid = Set("org.bson.types.ObjectId", "com.mongodb.casbah.commons.TypeImports.ObjectId")
   val BsonTimestamp = "org.bson.types.BSONTimestamp"
   val SBigDecimal = Set("scala.math.BigDecimal", "scala.package.BigDecimal")

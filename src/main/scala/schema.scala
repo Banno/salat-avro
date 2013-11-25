@@ -64,6 +64,8 @@ object AvroSalatSchema {
         case (path, _, _) if isDouble(path) => Schema.create(Schema.Type.DOUBLE) //is it ok to override Double & BigDecimal like this?
         case (path, _, _) if isBigDecimal(path) => Schema.create(Schema.Type.DOUBLE)
         case (path, _, _) if isJodaDateTime(path) => Schema.create(Schema.Type.STRING)
+        case ("com.github.nscala_time.time.TypeImports.DateTime", _, _) => Schema.create(Schema.Type.STRING)
+
         case ("scala.Option", _, _) => optional(schemaTypeFor(typeArgs(0), knownSchemas))
         case (_, IsTraversable(_), _) => {println("schema found a traversible");Schema.createArray(schemaTypeFor(typeArgs(0), knownSchemas))}
         case (_, IsMap(k, v), _) => {println("schema found a traversible"); Schema.createMap(schemaTypeFor(v, knownSchemas))}

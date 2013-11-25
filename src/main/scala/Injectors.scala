@@ -24,7 +24,7 @@ import impls._
 import transformers._
 import in._
 import com.novus.salat.Context
-import org.scala_tools.time.Imports._
+import com.github.nscala_time.time.Imports._
 import org.joda.time.format.ISODateTimeFormat
 
 object Injectors {
@@ -110,6 +110,9 @@ println("avro Injectors select")
           val parentType = pt
         })
       }
+
+      case TypeRefType(_, symbol, _) if (symbol.path == "com.github.nscala_time.time.TypeImports.DateTime") => { println("avro matched a TypeRefType, gonna make a Transformer");
+        Some(new Transformer(symbol.path, pt)(ctx) with StringToJodaDateTime) }
 
       case TypeRefType(_, symbol, _) if isJodaDateTime(symbol.path) => { println("avro matched a TypeRefType, gonna make a Transformer");
         Some(new Transformer(symbol.path, pt)(ctx) with StringToJodaDateTime) }

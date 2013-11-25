@@ -15,7 +15,7 @@
  */
 
 package debug
-import models._
+//import models._
 import com.banno.salat.avro._
 import com.novus._
 import com.novus.salat.annotations._
@@ -28,7 +28,7 @@ import java.io.File
 //import reflect.ScalaSignature
 //import reflect.generic.ByteCodecs
 //import scala.tools.scalap.scalax.rules.scalasig._
-import org.objectweb.asm._
+//import org.objectweb.asm._
 import org.apache.avro._
 import org.apache.avro.io._
 import org.apache.avro.file._
@@ -70,7 +70,7 @@ In order to stream records to an avro file that can be read by an avro datafiler
 //Deserialize from File: Read DataFile, dynamically create the model class and deserialize back to object 
   val infile = new File("input.avro")
 
-println(grater[MyRecord])
+//println(grater[MyRecord])
 //  val sameRecordIterator = grater[MyRecord].asObjectsFromFile(infile)
 //  sameRecordIterator foreach println
 
@@ -89,20 +89,47 @@ println(grater[MyRecord])
 
 
 
+//package com.banno.salat.avro.test
+
+//import com.banno.salat.avro._
+//import global._
+//import org.apache.avro.Schema
 
 
-//      val oldFred = Fred(    Alice(     "x", Some("y"),     Basil(Some(123)) ),     Some( Clara() )    )
-      val oldFred = Fred(    Alice(     "x", Some("y"),     Basil(Some(123)) ),     Some(Clara())    )
+      val schema = grater[Neville].asAvroSchema
+      println(schema)
+      val recordSchema = schema.getTypes().get(0)
 
-      val newFred = serializeAndDeserialize(oldFred)
-     // println(newFred == oldFred)
-
-
-
-   
 
     
 
+/*
+      import org.scala_tools.time.Imports._
+      val dt = DateTime.now
+      val oldNeville = Neville(asOf = dt)
+      val newNeville = serializeAndDeserialize(oldNeville)
+      println(newNeville == oldNeville)
+    
+*/
+
+
+      import com.github.nscala_time.time.Imports._
+      val dt = DateTime.now
+      val oldNeville = Neville(asOf = dt)
+      val newNeville = serializeAndDeserialize(oldNeville)
+      println(newNeville == oldNeville)
+    
+    /*
+
+      import org.joda.time._
+      val dt = new DateTime
+      val oldNeville = Neville(asOf = dt)
+      val newNeville = serializeAndDeserialize(oldNeville)
+      println(newNeville == oldNeville)
+    
+ 
+    
+*/
 
   def serializeToJSON[X <: CaseClass : Manifest](x: X, maybeGrater: Option[AvroGrater[X]] = None): String = {
     val g = maybeGrater.getOrElse(grater[X])
@@ -112,14 +139,14 @@ println(grater[MyRecord])
     new String(baos.toByteArray())
   }
 
-  def serializeAndDeserialize[X <: CaseClass : Manifest](old: X, maybeGrater: Option[AvroGrater[X]] = None): Encoder = {
+  def serializeAndDeserialize[X <: CaseClass : Manifest](old: X, maybeGrater: Option[AvroGrater[X]] = None): X = {
     val g = maybeGrater.getOrElse(grater[X])
     val baos = byteArrayOuputStream()
     val encoder = binaryEncoder(baos)
     g.serialize(old, encoder)
     
-   // val decoder = binaryDecoder(baos.toByteArray)
-   // g.asObject(decoder)
+    val decoder = binaryDecoder(baos.toByteArray)
+    g.asObject(decoder)
   }
 
   def byteArrayOuputStream(): ByteArrayOutputStream = new ByteArrayOutputStream

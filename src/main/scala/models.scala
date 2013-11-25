@@ -17,7 +17,8 @@ package com.banno.salat.avro.test.models
 
 import com.novus.salat.annotations._
 import scala.math.{BigDecimal => ScalaBigDecimal}
-import org.scala_tools.time.Imports._
+//import org.scala_tools.time.Imports._
+import com.github.nscala_time.time.Imports._
 import scala.collection.immutable.{Map => IMap}
 import scala.collection.mutable.{Map => MMap}
 
