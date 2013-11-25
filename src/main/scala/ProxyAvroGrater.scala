@@ -26,33 +26,28 @@ import org.json4s.JsonAST.JObject
 
 class ProxyAvroGrater[X <: AnyRef](clazz: Class[X])(implicit ctx: AvroContext) extends Grater[X](clazz)(ctx) with AvroGrater[X] {
 
-println("a proxyavrograter was made")
-  def knownSubclassGraters: List[AvroGrater[_ <: AnyRef]] ={ println("ProxyAvroGrater knownSubclassGraters"); ctx.avroGraters.collect {
-    case (subclazz, grater) if clazz.isAssignableFrom(Class.forName(subclazz)) && clazz.getName.toString != subclazz => {println("proxy knownsub " + clazz + " " + subclazz); grater.asInstanceOf[AvroGrater[_ <: AnyRef]]
-  }}.toList}
+  def knownSubclassGraters: List[AvroGrater[_ <: AnyRef]] = ctx.avroGraters.collect {
+    case (subclazz, grater) if clazz.isAssignableFrom(Class.forName(subclazz)) && clazz.getName.toString != subclazz =>  grater.asInstanceOf[AvroGrater[_ <: AnyRef]]}.toList
   
-  def asAvroSchema: Schema = {println("proxyavrograter asAvroSchema ");asSingleAvroSchema(new ListBuffer[Schema])}
+  def asAvroSchema: Schema = asSingleAvroSchema(new ListBuffer[Schema])
 
   private[avro] def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]) = {
-    //the RecursiveTypeSpec requires that the knownSubclassGraters' contained schemas be in certain order: 
+    //knownSubclassGraters' contained schemas get reordered here because the RecursiveTypeSpec requires a certain order: 
     val rootSchema = knownSubclassGraters.last
-    val rootAppended = (knownSubclassGraters.dropRight(1).reverse):+rootSchema
-    Schema.createUnion(  rootAppended.reverse.map(  _.asSingleAvroSchema(knownSchemas)  ).asJava  )}
+    val reordered = (knownSubclassGraters.dropRight(1).reverse):+rootSchema
+    Schema.createUnion(  reordered.reverse.map(  _.asSingleAvroSchema(knownSchemas)  ).asJava  )}
   
   def +(other: AvroGrater[_]): MultiAvroGrater = null
   
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = false
   
   def asDBObject(o: X): DBObject =
-//    ctx.lookup_!(o.getClass.getName).asInstanceOf[Grater[X]].asDBObject(o)
     ctx.lookup(o.getClass.getName).asInstanceOf[Grater[X]].asDBObject(o)
 
   def asObject[A <% MongoDBObject](dbo: A): X =
-//    ctx.lookup_!(dbo).asInstanceOf[Grater[X]].asObject(dbo)
     ctx.lookup(dbo).asInstanceOf[Grater[X]].asObject(dbo)
 
   def iterateOut[T](o: X)(f: ((String, Any)) => T): Iterator[T] =
-//    ctx.lookup_!(o.getClass.getName).asInstanceOf[Grater[X]].iterateOut(o)(f)
     ctx.lookup(o.getClass.getName).asInstanceOf[Grater[X]].iterateOut(o)(f)
 
   def fromJSON(j: JObject) = ctx.lookup(j).asInstanceOf[Grater[X]].fromJSON(j)

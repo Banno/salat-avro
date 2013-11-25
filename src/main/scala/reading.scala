@@ -30,21 +30,18 @@ trait AvroDatumReader[X] extends DatumReader[X] {
 
 class AvroGenericDatumReader[X](schema: Schema)(implicit ctx: Context)
   extends GenericDatumReader[X](schema) with AvroDatumReader[X] {
-println("avro made an AvroGenericDatumReader")
   def read(decoder: Decoder): X = {
-println("reading")
     val collectingGenericData = new CollectingGenericData
     val colletingReader = new CollectingGenericDatumReader(schema, collectingGenericData)
 
     colletingReader.read(null, decoder)
 
     val rootRecord = collectingGenericData.rootRecord
-println("passed root " + rootRecord)
     applyValues(rootRecord).asInstanceOf[X]
   }
 
   def applyValues(genericRecord: GenericData.Record): AnyRef = {
-     println("-------- apply values -------")
+    // println("-------- apply values -------")
     // println("record = " + genericRecord)
     // println("record.schema.fullName = " + genericRecord.getSchema.getFullName)
     val values = genericRecord.getSchema.getFields.asScala.map(_.name).map(genericRecord.get(_)) 
@@ -55,21 +52,14 @@ println("passed root " + rootRecord)
     // println("values = " + values)
     // println("values classes = " + values.map(v => if (v != null) v.getClass else "null"))
 
-  //  val grater: SingleAvroGrater[_] = ctx.lookup(genericRecord.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
     val grater: SingleAvroGrater[_] = ctx.asInstanceOf[AvroContext].lookp(genericRecord.getSchema.getFullName).get.asInstanceOf[SingleAvroGrater[_]]
-
-//println("avro reading grater: SingleAvroGrater: " + grater)
-//grater._indexedFields.foreach(println)
 
     val arguments = grater._indexedFields.zip(values).map {
       case (field, record: GenericData.Record) => 
-        println(field + " " + record)
-      //  val inTransformer = Injectors.select(field.typeRefType).getOrElse(field.in)
         val inTransformer = Injectors.select(field.typeRefType).getOrElse(field.in)
         val applied = applyValues(record)
         inTransformer.transform_!(applied).orElse(Some(applied))
       case (field, value) =>
-        println(field + " " + value)
         val inTransformer = Injectors.select(field.typeRefType).getOrElse(field.in)
         inTransformer.transform_!(value)
 //      case (field, _) => grater.safeDefault(field)
@@ -82,12 +72,9 @@ println("passed root " + rootRecord)
   }
 
   protected class CollectingGenericData extends GenericData {
-println("avro reading CollectingGenericData ")
     var rootRecord: GenericData.Record = _
-println("root record " + rootRecord)
 
     override def setField(record: Any, name: String, pos: Int, obj: Object) {
-println("avro setting field")
       val genericRecord = record.asInstanceOf[GenericData.Record]
       // The last record to have a field set is the root record
       rootRecord = genericRecord

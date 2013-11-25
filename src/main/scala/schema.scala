@@ -24,8 +24,7 @@ import Schema.{ Field => SField }
 import scala.tools.scalap.scalax.rules.scalasig.{ SingleType, Type, TypeRefType }
 
 object AvroSalatSchema {
-  println("avro schema AvroSalatSchema")
-  def schemaFor[X <: CaseClass](clazz: Class[X], grater: SingleAvroGrater[X], knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Schema = {println("avro schema schemaFor")
+  def schemaFor[X <: CaseClass](clazz: Class[X], grater: SingleAvroGrater[X], knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Schema = {
     val schemaName = clazz.getName
     knownSchemas.find(_.getFullName == schemaName) getOrElse {
       val schema = Schema.createRecord(schemaName, "", "", false)
@@ -35,29 +34,23 @@ object AvroSalatSchema {
     }
   }
   
-  private def schemaFields(grater: SingleAvroGrater[_], knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Seq[SField] = { println("avro schema schemaFields from grater " + grater)
+  private def schemaFields(grater: SingleAvroGrater[_], knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Seq[SField] = 
     grater._indexedFields.map { field => 
       new SField(field.name, schemaTypeFor(field.typeRefType, knownSchemas), null, null)
     }
-  }
 
-  private def schemaTypeFor(typeRefType: Type, knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Schema = { println("avro schema schemaTypeFor")
+  private def schemaTypeFor(typeRefType: Type, knownSchemas: ListBuffer[Schema])(implicit ctx: Context): Schema = {
     val typeRef @ TypeRefType(_, symbol, typeArgs) = typeRefType
 
-    knownSchemas.find(_.getFullName == symbol.path) getOrElse { println("avro schema gonna match path " + symbol.path)
-       println("typeRef = %s".format(typeRef))
-       println("symbol = %s".format(symbol))
-       println("symbol.path = %s".format(symbol.path))
-       println("typeArgs = %s".format(typeArgs))
-       println("in context: " + ctx.asInstanceOf[AvroContext].lookp(symbol.path))
-     //  println("in context: " + ctx.lookup((symbol.path).get))
-   //    println("in context: " + "None")
+    knownSchemas.find(_.getFullName == symbol.path) getOrElse { 
+     //  println("typeRef = %s".format(typeRef))
+     //  println("symbol = %s".format(symbol))
+     //  println("symbol.path = %s".format(symbol.path))
+     //  println("typeArgs = %s".format(typeArgs))
+     //  println("in context: " + ctx.asInstanceOf[AvroContext].lookp(symbol.path))
 
-     // (symbol.path, typeRef, ctx.lookup(symbol.path)) match {
-    //  (symbol.path, typeRef, ctx.lookup_!((symbol.path))) match {
       (symbol.path, typeRef, ctx.asInstanceOf[AvroContext].lookp((symbol.path))) match {
-
-        case ("scala.Predef.String", _, _) => println("avro shcmea matched a string "); Schema.create(Schema.Type.STRING)
+        case ("scala.Predef.String", _, _) => Schema.create(Schema.Type.STRING)
         case ("scala.Boolean", _, _) => Schema.create(Schema.Type.BOOLEAN)
         case (path, _, _) if isInt(path) => Schema.create(Schema.Type.INT)
         case (path, _, _) if isLong(path) => Schema.create(Schema.Type.LONG)
@@ -67,20 +60,11 @@ object AvroSalatSchema {
         case ("com.github.nscala_time.time.TypeImports.DateTime", _, _) => Schema.create(Schema.Type.STRING)
 
         case ("scala.Option", _, _) => optional(schemaTypeFor(typeArgs(0), knownSchemas))
-        case (_, IsTraversable(_), _) => {println("schema found a traversible");Schema.createArray(schemaTypeFor(typeArgs(0), knownSchemas))}
-        case (_, IsMap(k, v), _) => {println("schema found a traversible"); Schema.createMap(schemaTypeFor(v, knownSchemas))}
-       // case (_, IsEnum(prefix), _) => {println("found an enum"); enumSchema(prefix)}
-       // case (_, IsEnum(prefix), _) => {println("found an enum"); enumSchema(prefix)}
-
-              //    case t @ TypeRefType(prefix @ SingleType(_, esym), sym, _) if sym.path == "scala.Enumeration.Value" => {
-          //new Transformer(prefix.symbol.path, t)(ctx) with OptionInjector with EnumInflater
-        //}
-        //case (prefix @ SingleType(_, esym), sym, _) =>  {println("found an enum"); enumSchema()}
-       // case (s, sym, _) => {println("found an enum"); Schema.create(Schema.Type.STRING)}
-        case ("scala.Enumeration.Value", _, _) =>  {println("found an enum"); Schema.create(Schema.Type.STRING)}
+        case (_, IsTraversable(_), _) => Schema.createArray(schemaTypeFor(typeArgs(0), knownSchemas))
+        case (_, IsMap(k, v), _) => Schema.createMap(schemaTypeFor(v, knownSchemas))
+        case ("scala.Enumeration.Value", _, _) => Schema.create(Schema.Type.STRING)
         case (_, _, Some(recordGrater: AvroGrater[_])) => recordGrater.asSingleAvroSchema(knownSchemas)
-     //   case (_, _, recordGrater: AvroGrater[_]) => {println("schema recodGrater"); recordGrater.asSingleAvroSchema(knownSchemas)}
-        case (path, _, _) => {println("gonna throw error cuz nothing good was found" + (symbol.path, typeRef, ctx.asInstanceOf[AvroContext].lookp((symbol.path)))); throw new UnknownTypeForAvroSchema(path)}
+        case (path, _, _) => throw new UnknownTypeForAvroSchema(path)
       }
     }
   }

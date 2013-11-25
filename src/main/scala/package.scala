@@ -22,27 +22,20 @@ import com.banno.salat.avro.global._
 case class MyRecord(x: Int)
 
 package object avro {
-println("avro made a package object avro")
-  //def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = {println("package object avro grater "); ctx.lookup_![X](m).asInstanceOf[AvroGrater[X]]}
-def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = {println("package object avro grater "); ctx.lookup[X](m).asInstanceOf[AvroGrater[X]]}
 
- 
+  def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.lookup[X](m).asInstanceOf[AvroGrater[X]]
 
-
-  protected[avro] def getClassNamed_!(c: String)(implicit ctx: AvroContext): Class[_] = { println("avro package getClassNamed_!"); getClassNamed(c)(ctx).getOrElse {
+  protected[avro] def getClassNamed_!(c: String)(implicit ctx: AvroContext): Class[_] = getClassNamed(c)(ctx).getOrElse {
     throw new Error("getClassNamed: path='%s' does not resolve in any of %d classloaders registered with context='%s'".
       format(c, ctx.clsLoaders.size, ctx.name))
-  }}
-
-  protected[avro] def getClassNamed(c: String)(implicit ctx: AvroContext): Option[Class[_]] = {println("avro package getClassNamed")
-    resolveClass(c, ctx.clsLoaders)
   }
 
-   protected[avro] def getCaseClass(c: String)(implicit ctx: AvroContext): Option[Class[CaseClass]] = {
-println("avro package getClassNamed")
-    getClassNamed(c).filter(_.getInterfaces.contains(classOf[Product])).
-      map(_.asInstanceOf[Class[CaseClass]])}
+  protected[avro] def getClassNamed(c: String)(implicit ctx: AvroContext): Option[Class[_]] =
+    resolveClass(c, ctx.clsLoaders)
 
+  protected[avro] def getCaseClass(c: String)(implicit ctx: AvroContext): Option[Class[CaseClass]] = 
+    getClassNamed(c).filter(_.getInterfaces.contains(classOf[Product])).
+      map(_.asInstanceOf[Class[CaseClass]])
 
   protected[avro] def isCaseClass(clazz: Class[_]) = clazz.getInterfaces.contains(classOf[Product])
 
@@ -50,39 +43,31 @@ println("avro package getClassNamed")
     clazz.getInterfaces.contains(classOf[ScalaObject]) && clazz.getName.endsWith("$")
 
 
-
-   def resClass_!(c: String, classLoaders: Seq[ClassLoader]): Class[_] = {println("salat Util resolveClass_!"); resolveClass(c, classLoaders).getOrElse {
+   def resClass_!(c: String, classLoaders: Seq[ClassLoader]): Class[_] = resolveClass(c, classLoaders).getOrElse {
     throw new Error("resolveClass: path='%s' does not resolve in any of %d available classloaders".format(c, classLoaders.size))
-  }}
+  }
 
     def toUsableClazzName(clazz: String) = if (clazz.endsWith("$")) clazz.substring(0, clazz.size - 1) else clazz
 
-    def resolveClass[X <: AnyRef](c: String, classLoaders: Seq[ClassLoader]): Option[Class[X]] = { println("avro resolve " + c)
+    def resolveClass[X <: AnyRef](c: String, classLoaders: Seq[ClassLoader]): Option[Class[X]] = { 
     //    log.info("resolveClass(): looking for %s in %d classloaders", c, classLoaders.size)
     try {
-println("avro package resolve trying")
       var clazz: Class[_] = null
             var count = 0
       val iter = classLoaders.iterator
 
       while (clazz == null && iter.hasNext) {
         try {
-
- println("avro " + c );
-
-println("avro clazz " + count + " " + clazz)
           clazz = Class.forName(c, true, iter.next())
-println("avro clazz " + count + " " + clazz)
         }
         catch {
           case e: ClassNotFoundException => // keep going, maybe it's in the next one
         }
-
         //        log.info("resolveClass: %s %s in classloader '%s' %d of %d", c, (if (clazz != null) "FOUND" else "NOT FOUND"), ctx.name.getOrElse("N/A"), count, ctx.classloaders.size)
                 count += 1
       }
 
-      if (clazz != null) {println("class ain't null: " + clazz.asInstanceOf[Class[X]]); Some(clazz.asInstanceOf[Class[X]])} else None
+      if (clazz != null) Some(clazz.asInstanceOf[Class[X]]) else None
     }
     catch {
       case _ => None

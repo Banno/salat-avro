@@ -22,13 +22,9 @@ import tools.scalap.scalax.rules.scalasig.{ SingleType, TypeRefType, Type, Symbo
 
 protected[avro] object Types {
   val Date = "java.util.Date"
-//com.github.nscala_time.time.Imports._
-//  val DateTime = Set("org.joda.time.DateTime", "org.scala_tools.time.TypeImports.DateTime")
   val DateTime = Set("org.joda.time.DateTime", "com.github.nscala_time.time.TypeImports.DateTime")
-//  val LocalDateTime = Set("org.joda.time.LocalDateTime", "org.scala_tools.time.TypeImports.LocalDateTime")
   val LocalDateTime = Set("org.joda.time.LocalDateTime", "com.github.nscala_time.time.TypeImports.LocalDateTime")
   val TimeZone = "java.util.TimeZone"
-//  val DateTimeZone = Set("org.joda.time.DateTimeZone", "org.scala_tools.time.TypeImports.DateTimeZone")
   val DateTimeZone = Set("org.joda.time.DateTimeZone", "com.github.nscala_time.time.TypeImports.DateTimeZone")
   val Oid = Set("org.bson.types.ObjectId", "com.mongodb.casbah.commons.TypeImports.ObjectId")
   val BsonTimestamp = "org.bson.types.BSONTimestamp"
@@ -55,11 +51,10 @@ protected[avro] object Types {
 
 
 protected[avro] object TypeMatchers {
-println("made an avro TypeMatchers")
-  def matchesOneType(t: Type, name: String): Option[Type] = {println("avro typematchers  matches one type " + t);t match {
-    case TypeRefType(_, symbol, List(arg)) if symbol.path == name => {println("avro typematchers matched one type typeref"); Some(arg)}
-    case _ =>  {println("avro typematchers matched one type None");None}
-  }}
+  def matchesOneType(t: Type, name: String): Option[Type] = t match {
+    case TypeRefType(_, symbol, List(arg)) if symbol.path == name => Some(arg)
+    case _ =>  None
+  }
 
   def matches(t: TypeRefType, name: String) = t.symbol.path == name
 
@@ -70,10 +65,10 @@ println("made an avro TypeMatchers")
     case _ => None
   }
 
-  def matchesTraversable(t: Type) = {println("avro typematchers  matchesTraversable " + t); t match { 
-    case TypeRefType(_, symbol, List(arg)) if Types.isTraversable(symbol) => {println("avro typematchers matchesTraversable found one" + symbol); Some(arg)}
-    case _ => {println("avro typematchers matchesTraversable found none ");None}
-  }}
+  def matchesTraversable(t: Type) = t match { 
+    case TypeRefType(_, symbol, List(arg)) if Types.isTraversable(symbol) => Some(arg)
+    case _ => None
+  }
 
   def matchesBitSet(t: Type) = t match {
     case TypeRefType(_, symbol, _) if Types.isBitSet(symbol) => Some(symbol)
@@ -93,17 +88,5 @@ protected[avro] object IsMap {
 }
 
 protected[avro] object IsTraversable {
-println("avro typematchers made a IsTraversable")
-  def unapply(t: Type): Option[Type] = {println("avro typematchers istraversable unapply " + t);TypeMatchers.matchesTraversable(t)}
+  def unapply(t: Type): Option[Type] = TypeMatchers.matchesTraversable(t)
 }
-/*
-object IsEnum   {
-  def unapply(t: TypeRefType): Option[SingleType] = { println("isEnum unapply "  + t)
-    t match {
-      case TypeRefType(prefix @ SingleType(_, esym), sym, _) if sym.path == "scala.Enumeration.Value" =>
-        Some(prefix)
-      case _ => None
-    }
-  }
-}
-*/

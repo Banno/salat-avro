@@ -96,40 +96,10 @@ In order to stream records to an avro file that can be read by an avro datafiler
 //import org.apache.avro.Schema
 
 
-      val schema = grater[Neville].asAvroSchema
-      println(schema)
-      val recordSchema = schema.getTypes().get(0)
-
 
     
 
-/*
-      import org.scala_tools.time.Imports._
-      val dt = DateTime.now
-      val oldNeville = Neville(asOf = dt)
-      val newNeville = serializeAndDeserialize(oldNeville)
-      println(newNeville == oldNeville)
-    
-*/
-
-
-      import com.github.nscala_time.time.Imports._
-      val dt = DateTime.now
-      val oldNeville = Neville(asOf = dt)
-      val newNeville = serializeAndDeserialize(oldNeville)
-      println(newNeville == oldNeville)
-    
-    /*
-
-      import org.joda.time._
-      val dt = new DateTime
-      val oldNeville = Neville(asOf = dt)
-      val newNeville = serializeAndDeserialize(oldNeville)
-      println(newNeville == oldNeville)
-    
- 
-    
-*/
+   
 
   def serializeToJSON[X <: CaseClass : Manifest](x: X, maybeGrater: Option[AvroGrater[X]] = None): String = {
     val g = maybeGrater.getOrElse(grater[X])

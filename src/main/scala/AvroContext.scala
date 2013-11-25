@@ -16,11 +16,8 @@
 package com.banno.salat.avro
 
 import util._
-import com.novus.salat._
 import java.lang.reflect.Modifier
-//import com.novus.salat.{ Context, Grater, ProxyGrater, ConcreteGrater, IsCaseClass, CaseClass }
-//import com.novus.salat.{ Context, Grater, ProxyGrater, ConcreteGrater, CaseClass }
-
+import com.novus.salat.{ Context, Grater, ProxyGrater, ConcreteGrater, CaseClass }
 import java.util.Comparator
 import java.util.concurrent.ConcurrentSkipListMap
 import scala.collection.mutable.SynchronizedQueue
@@ -31,40 +28,34 @@ import java.util.concurrent.{ CopyOnWriteArrayList, ConcurrentHashMap }
 trait AvroContext extends Context {
 
   // since salat's graters is hidden from me, keeping my own collection
-private[avro] val avroGraters: ConcurrentMap[String, Grater[_ <: AnyRef]] = JConcurrentMapWrapper(new ConcurrentHashMap[String, Grater[_ <: AnyRef]]())
+  private[avro] val avroGraters: ConcurrentMap[String, Grater[_ <: AnyRef]] = JConcurrentMapWrapper(new ConcurrentHashMap[String, Grater[_ <: AnyRef]]())
 
-  override def accept(grater: Grater[_ <: AnyRef]) = {println("avro accept")
+  override def accept(grater: Grater[_ <: AnyRef]) = {
     super.accept(grater)
     avroGraters += (grater.clazz.getName.toString -> grater)
-println("+++++++++++++++++++++++++++")
-avroGraters.foreach(println)
-println("+++++++++++++++++++++++++++")
-avroGraters
   }
 
   var clsLoaders: Vector[ClassLoader] = Vector(this.getClass.getClassLoader)
 
-  def lookp(c: String): Option[Grater[_ <: AnyRef]] = {println("avrocontext lookup(String) " + c); println(avroGraters.get(c)); avroGraters.get(c) }
+  def lookp(c: String): Option[Grater[_ <: AnyRef]] = avroGraters.get(c) 
 
   override def lookup_?[X <: AnyRef](c: String): Option[Grater[_ <: AnyRef]] =  avroGraters.get(c) orElse { 
-avroGraters.foreach(println)
-      if (suitable_?(c)) {println("avro context, it was suitable " + c)
+    if (suitable_?(c)) {
         resolveClass(c, clsLoaders) match {
-        case Some(clazz) if needsProxyGrater(clazz) => {
-          log.trace("lookup_?: creating proxy grater for clazz='%s'", clazz.getName)
-          Some((new ProxyAvroGrater(clazz.asInstanceOf[Class[X]])(this) {}).asInstanceOf[Grater[_ <: AnyRef]])
-       }
+      case Some(clazz) if needsProxyGrater(clazz) => {
+        log.trace("lookup_?: creating proxy grater for clazz='%s'", clazz.getName)
+        Some((new ProxyAvroGrater(clazz.asInstanceOf[Class[X]])(this) {}).asInstanceOf[Grater[_ <: AnyRef]])
+      }
       case Some(clazz) if isCaseClass(clazz) => {
           Some((new SingleAvroGrater[CaseClass](clazz.asInstanceOf[Class[CaseClass]])(this) {}).asInstanceOf[Grater[_ <: AnyRef]])
         }
       case _ => None
      }  
      }
-  else {println("wasn't suitable"); None}
+  else None
   }
 }
 
 object ClassComparator extends Comparator[Class[_]] {
-println("made a classComparator")
   def compare(c1: Class[_], c2: Class[_]) = c1.getName.compare(c2.getName)
 }

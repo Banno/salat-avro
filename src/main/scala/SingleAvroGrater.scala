@@ -15,8 +15,6 @@
  */
 package com.banno.salat.avro
 
-
-
 import com.novus.salat._
 import com.novus.salat.util._
 import org.apache.avro.Schema
@@ -28,11 +26,9 @@ import java.lang.reflect.{ Constructor }
 
 class SingleAvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   extends ConcreteGrater[X](clazz) with AvroGrater[X] {
-    
-println("made a SingleAvroGrater")
 
-  lazy val asAvroSchema: Schema = {println("called singleavrograter's asAvroSchema"); Schema.createUnion(asSingleAvroSchema(new ListBuffer[Schema]) :: Nil)}
-  def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]): Schema = {println("made a singleAvroSchema"); AvroSalatSchema.schemaFor(clazz, this, knownSchemas)}
+  lazy val asAvroSchema: Schema = Schema.createUnion(asSingleAvroSchema(new ListBuffer[Schema]) :: Nil)
+  def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]): Schema =  AvroSalatSchema.schemaFor(clazz, this, knownSchemas)
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = manifest.erasure == clazz
 
   def +(other: AvroGrater[_]): MultiAvroGrater = other match {
@@ -40,43 +36,27 @@ println("made a SingleAvroGrater")
     case mg: MultiAvroGrater => new MultiAvroGrater(mg.graters + this)
   }
 
-
-/*
-protected lazy val _sym = parseScalaSig match {
-    case Some(x) =>
-      x.topLevelClasses.headOption.getOrElse(
-        x.topLevelObjects.headOption.getOrElse(
-          throw new Exception("parsed pickled Scala signature, but no expected type found: %s".format(clazz))))
-    case _ => throw new Exception("failed to parse pickled Scala signature from %s".format(clazz))
-  }
-*/
    protected lazy val sym = ScalaSigParser.parse(clazz).get.topLevelClasses.head
-    lazy val constructor: Constructor[X] = {println("avro singleavrograter overrides constr");  BestAvailableConstructor(clazz)}
+    lazy val constructor: Constructor[X] = BestAvailableConstructor(clazz)
   // expose some nice methods for Datum Writers/Readers
    val classAnalyzer = ClassAnalyzer(clazz)
   // TODO: for some reason, Grater.indexedFields is no protected to just salat (just copied it for now)
   private[avro] lazy val _indexedFields  = {
     // don't use allTheChildren here!  this is the indexed fields for clazz and clazz alone
-println("avro _indexedFields " + sym )
     sym.children
       .filter(c => c.isCaseAccessor && !c.isPrivate)
       .map(_.asInstanceOf[MethodSymbol])
       .zipWithIndex
       .map {
-      case (ms, idx) => { println(ms + " " + idx);
+      case (ms, idx) => {
         //        log.info("indexedFields: clazz=%s, ms=%s, idx=%s", clazz, ms, idx)
-        
-       // Field(idx, keyOverridesFromAbove.get(ms).getOrElse(ms.name), typeRefType(ms), clazz.getMethod(ms.name))
         Field(idx, classAnalyzer.keyOverridesFromAbove.get(ms).getOrElse(ms.name), ClassAnalyzer.typeRefType(ms), clazz.getMethod(ms.name))
       }
 
     }
   }
 
-//println(_indexedFields)
-
 
   private[avro] lazy val _constructor = constructor
    override def safeDefault(field: Field) = super.safeDefault(field)
-   //override def safeDefault(field: Field) = super.safeDefault(field)
 }
