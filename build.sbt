@@ -9,7 +9,7 @@ removeExistingHeaderBlock := true
 
 name := "salat-avro"
 
-version := "0.0.10-0"
+version := "0.0.10-3"
 
 organization := "com.banno.salat.avro"
 
