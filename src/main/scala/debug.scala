@@ -89,16 +89,46 @@ In order to stream records to an avro file that can be read by an avro datafiler
 
 
 
-//package com.banno.salat.avro.test
 
-//import com.banno.salat.avro._
-//import global._
-//import org.apache.avro.Schema
+      val json = serializeToJSON(ed)
+      println(json)
 
 
+/*
+      val oldDeps = Iterator[Department](Department(Some(List("me", "you"))), Department(Some(List("them")))) 
+      val(oldDepsOriginal, oldDepsCopy) = oldDeps.duplicate
+      val newDeps = serializeAndDeserializeIteratorFromDatafile(oldDepsCopy)
 
+      println(newDeps.toList == oldDepsOriginal.toList)
+    */
     
 
+  def serializeAndDeserializeFromDatafile[X <: CaseClass : Manifest](old: X, maybeGrater: Option[AvroGrater[X]] = None): Unit
+ = {
+    val g = maybeGrater.getOrElse(grater[X])
+
+    //Serialize to an Avro DataFile
+    val outfile1 = new File("/tmp/file1.avro")   
+    outfile1.delete() // For testing only, make sure that the file is empty for each run of the test
+    g.serializeToFile(outfile1, old) 
+
+    //Deserialize from File: Read DataFile and deserialize back to object 
+    val infile = outfile1
+    g.asObjectsFromFile(infile).next  
+  }
+
+  def serializeAndDeserializeIteratorFromDatafile[X <: CaseClass : Manifest](old: Iterator[X], maybeGrater: Option[AvroGrater[X]] = None): Iterator[X] = {
+    val g = maybeGrater.getOrElse(grater[X])
+
+    //Serialize to an Avro DataFile
+    val outfile2 = new File ("/tmp/file2.avro")
+    outfile2.delete() // For testing only, make sure that the file is empty for each run of the test
+    g.serializeCollectionToFile(outfile2, old)
+  
+    //Deserialize from File: Read DataFile and deserialize back to object 
+    val iteratorInfile = outfile2
+    g.asObjectsFromFile(iteratorInfile)   
+  }
    
 
   def serializeToJSON[X <: CaseClass : Manifest](x: X, maybeGrater: Option[AvroGrater[X]] = None): String = {

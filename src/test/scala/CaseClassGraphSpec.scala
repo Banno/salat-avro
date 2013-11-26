@@ -4,7 +4,9 @@ import com.banno.salat.avro._
 import global._
 import org.apache.avro.Schema
 
-object CaseClassGraphSpec extends SalatAvroSpec {
+import org.specs2.matcher.JsonMatchers
+
+object CaseClassGraphSpec extends SalatAvroSpec with JsonMatchers {
   import models._
 
   "a grater for nested case classes" should {

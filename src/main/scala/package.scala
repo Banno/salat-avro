@@ -26,7 +26,7 @@ package object avro {
   def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.lookup[X](m).asInstanceOf[AvroGrater[X]]
 
   def firstLine(f: java.io.File): Option[String] = {
-    val src = io.Source.fromFile(f)
+    val src = io.Source.fromFile(f, "iso-8859-1")
     try {
       src.getLines.find(_ => true)
     } finally {

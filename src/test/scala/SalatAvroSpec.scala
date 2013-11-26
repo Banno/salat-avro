@@ -42,12 +42,12 @@ trait SalatAvroSpec extends Specification {
   def serializeAndDeserializeFromDatafile[X <: CaseClass : Manifest](old: X, maybeGrater: Option[AvroGrater[X]] = None): X = {
     val g = maybeGrater.getOrElse(grater[X])
 
-//Serialize to an Avro DataFile
+    //Serialize to an Avro DataFile
     val outfile1 = new File("/tmp/file1.avro")   
     outfile1.delete() // For testing only, make sure that the file is empty for each run of the test
     g.serializeToFile(outfile1, old) 
 
-//Deserialize from File: Read DataFile and deserialize back to object 
+    //Deserialize from File: Read DataFile and deserialize back to object 
     val infile = outfile1
     g.asObjectsFromFile(infile).next  
   }
@@ -55,12 +55,12 @@ trait SalatAvroSpec extends Specification {
   def serializeAndDeserializeIteratorFromDatafile[X <: CaseClass : Manifest](old: Iterator[X], maybeGrater: Option[AvroGrater[X]] = None): Iterator[X] = {
     val g = maybeGrater.getOrElse(grater[X])
 
-//Serialize to an Avro DataFile
+    //Serialize to an Avro DataFile
     val outfile2 = new File ("/tmp/file2.avro")
     outfile2.delete() // For testing only, make sure that the file is empty for each run of the test
     g.serializeCollectionToFile(outfile2, old)
   
-//Deserialize from File: Read DataFile and deserialize back to object 
+    //Deserialize from File: Read DataFile and deserialize back to object 
     val iteratorInfile = outfile2
     g.asObjectsFromFile(iteratorInfile)   
   }

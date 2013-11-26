@@ -7,13 +7,16 @@ import java.io.ByteArrayOutputStream
 import org.apache.avro.io.{ DatumReader, DatumWriter, DecoderFactory, EncoderFactory }
 import org.apache.avro.Schema
 
-object BasicCaseClassSpec extends SalatAvroSpec {
-  import models._
+import org.specs2.matcher.JsonMatchers
 
+object BasicCaseClassSpec extends SalatAvroSpec with JsonMatchers {
+  import models._
+   //   val json = serializeToJSON(ed)
+     // println(json)
   "a grater" should {
     "make an avro schema for a basic case class" in {
       val schema = grater[Edward].asAvroSchema
-      println(schema)
+   //   println(schema)
       schema.getName must_== "union"
       val recordSchema = schema.getTypes().get(0)
       recordSchema.getName must_== "Edward"
@@ -29,7 +32,7 @@ object BasicCaseClassSpec extends SalatAvroSpec {
       recordSchema must containField("ccc", List(Schema.Type.DOUBLE, Schema.Type.NULL))
     }
 
-    "make a datum writer for a basic case class" in {
+    "make a datum writer for a basic case class" >> {
       val json = serializeToJSON(ed)
       println(json)
       json must /("com.banno.salat.avro.test.models.Edward") /("a" -> ed.a)
