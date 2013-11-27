@@ -18,12 +18,20 @@ package com.banno.salat
 import com.novus.salat._
 import util._
 import com.banno.salat.avro.global._
+import org.apache.avro.Schema
 
 case class MyRecord(x: Int)
 
 package object avro {
 
   def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.lookup[X](m).asInstanceOf[AvroGrater[X]]
+
+  def getSchemaAsString(infile: java.io.File): String = {
+    val bufferedInfile = scala.io.Source.fromFile(infile, "iso-8859-1")
+    val parsable = new String(bufferedInfile.getLines.mkString.dropWhile(_ != '{').toCharArray)
+    val avroSchema = new Schema.Parser().parse(parsable)
+    avroSchema.toString
+  }
 
   def firstLine(f: java.io.File): Option[String] = {
     val src = io.Source.fromFile(f, "iso-8859-1")
@@ -33,6 +41,9 @@ package object avro {
       src.close()
     }
   }
+
+
+
 
   protected[avro] def getClassNamed_!(c: String)(implicit ctx: AvroContext): Class[_] = getClassNamed(c)(ctx).getOrElse {
     throw new Error("getClassNamed: path='%s' does not resolve in any of %d classloaders registered with context='%s'".
