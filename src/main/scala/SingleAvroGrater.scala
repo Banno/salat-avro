@@ -27,8 +27,9 @@ import java.lang.reflect.{ Constructor }
 class SingleAvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
   extends ConcreteGrater[X](clazz) with AvroGrater[X] {
 
+
   lazy val asAvroSchema: Schema = Schema.createUnion(asSingleAvroSchema(new ListBuffer[Schema]) :: Nil)
-  def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]): Schema =  AvroSalatSchema.schemaFor(clazz, this, knownSchemas)
+  def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]): Schema = AvroSalatSchema.schemaFor(clazz, this, knownSchemas)
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean = manifest.erasure == clazz
 
   def +(other: AvroGrater[_]): MultiAvroGrater = other match {
@@ -36,14 +37,14 @@ class SingleAvroGrater[X <: CaseClass](clazz: Class[X])(implicit ctx: Context)
     case mg: MultiAvroGrater => new MultiAvroGrater(mg.graters + this)
   }
 
-   protected lazy val sym = ScalaSigParser.parse(clazz).get.topLevelClasses.head
-    lazy val constructor: Constructor[X] = BestAvailableConstructor(clazz)
+  lazy val constructor: Constructor[X] = BestAvailableConstructor(clazz)
   // expose some nice methods for Datum Writers/Readers
-   val classAnalyzer = ClassAnalyzer(clazz)
+  val classAnalyzer = ClassAnalyzer(clazz)
+
   // TODO: for some reason, Grater.indexedFields is no protected to just salat (just copied it for now)
-  private[avro] lazy val _indexedFields  = {
+  private[avro] lazy val _indexedFields  = { //println("singleavrograter indexed fields was finally called")
     // don't use allTheChildren here!  this is the indexed fields for clazz and clazz alone
-    sym.children
+    classAnalyzer.sym.children
       .filter(c => c.isCaseAccessor && !c.isPrivate)
       .map(_.asInstanceOf[MethodSymbol])
       .zipWithIndex

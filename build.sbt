@@ -22,7 +22,6 @@ publishMavenStyle := true
 publishTo := Some("Banno Repo" at (if (version.toString.endsWith("SNAPSHOT")) "http://nexus.banno.com/nexus/content/repositories/snapshots" else "http://nexus.banno.com/nexus/content/repositories/releases"))
 
 libraryDependencies ++= Seq(
- // "org.specs2" %% "specs2" % "1.14" % "test",
   "org.specs2" %% "specs2" % "2.3.4" % "test",
   "com.novus" %% "salat" % "1.9.4",
   "org.json4s" %% "json4s-native" % "3.2.5",

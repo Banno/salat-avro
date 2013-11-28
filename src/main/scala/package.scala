@@ -24,7 +24,8 @@ case class MyRecord(x: Int)
 
 package object avro {
 
-  def grater[X <: CaseClass](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.lookup[X](m).asInstanceOf[AvroGrater[X]]
+  def grater[X <: AnyRef](implicit ctx: Context, m: Manifest[X]): AvroGrater[X] = ctx.asInstanceOf[AvroContext].lookup[X](m).asInstanceOf[AvroGrater[X]]
+
 
   def getSchemaAsString(infile: java.io.File): String = {
     val bufferedInfile = scala.io.Source.fromFile(infile, "iso-8859-1")

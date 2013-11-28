@@ -15,9 +15,11 @@
  */
 package com.banno.salat.avro
 
-import util._
+
 import java.lang.reflect.Modifier
 import com.novus.salat.{ Context, Grater, ProxyGrater, ConcreteGrater, CaseClass }
+import util._
+import com.novus.salat.util.GraterGlitch
 import java.util.Comparator
 import java.util.concurrent.ConcurrentSkipListMap
 import scala.collection.mutable.SynchronizedQueue
@@ -37,7 +39,14 @@ trait AvroContext extends Context {
 
   var clsLoaders: Vector[ClassLoader] = Vector(this.getClass.getClassLoader)
 
+  override def lookup(c: String): Grater[_ <: AnyRef] = { 
+    val g = lookup_?(c)
+    if (g.isDefined) g.get else throw GraterGlitch(c)(this)
+  }
+
   def lookp(c: String): Option[Grater[_ <: AnyRef]] = avroGraters.get(c) 
+
+  override def lookup[A <: AnyRef: Manifest]: Grater[A] = lookup(manifest[A].runtimeClass.getName).asInstanceOf[Grater[A]]
 
   override def lookup_?[X <: AnyRef](c: String): Option[Grater[_ <: AnyRef]] =  avroGraters.get(c) orElse { 
     if (suitable_?(c)) {
