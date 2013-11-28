@@ -11,8 +11,7 @@ import org.specs2.matcher.JsonMatchers
 
 object BasicCaseClassSpec extends SalatAvroSpec with JsonMatchers {
   import models._
-   //   val json = serializeToJSON(ed)
-     // println(json)
+
   "a grater" should {
     "make an avro schema for a basic case class" in {
       val schema = grater[Edward].asAvroSchema

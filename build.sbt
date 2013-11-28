@@ -24,7 +24,7 @@ publishTo := Some("Banno Repo" at (if (version.toString.endsWith("SNAPSHOT")) "h
 libraryDependencies ++= Seq(
  // "org.specs2" %% "specs2" % "1.14" % "test",
   "org.specs2" %% "specs2" % "2.3.4" % "test",
-  "com.novus" %% "salat-core" % "1.9.4",
+  "com.novus" %% "salat" % "1.9.4",
   "org.json4s" %% "json4s-native" % "3.2.5",
   "com.github.nscala-time" %% "nscala-time" % "0.6.0",
   "org.apache.avro" % "avro" % "1.7.4"
