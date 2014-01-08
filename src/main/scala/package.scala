@@ -20,7 +20,6 @@ import util._
 import com.banno.salat.avro.global._
 import org.apache.avro.Schema
 
-case class MyRecord(x: Int)
 
 package object avro {
 
@@ -42,9 +41,6 @@ package object avro {
       src.close()
     }
   }
-
-
-
 
   protected[avro] def getClassNamed_!(c: String)(implicit ctx: AvroContext): Class[_] = getClassNamed(c)(ctx).getOrElse {
     throw new Error("getClassNamed: path='%s' does not resolve in any of %d classloaders registered with context='%s'".
@@ -68,32 +64,33 @@ package object avro {
     throw new Error("resolveClass: path='%s' does not resolve in any of %d available classloaders".format(c, classLoaders.size))
   }
 
-    def toUsableClazzName(clazz: String) = if (clazz.endsWith("$")) clazz.substring(0, clazz.size - 1) else clazz
+  def toUsableClazzName(clazz: String) = if (clazz.endsWith("$")) clazz.substring(0, clazz.size - 1) else clazz
 
-    def resolveClass[X <: AnyRef](c: String, classLoaders: Seq[ClassLoader]): Option[Class[X]] = { 
+  def resolveClass[X <: AnyRef](c: String, classLoaders: Seq[ClassLoader]): Option[Class[X]] = { 
     //    log.info("resolveClass(): looking for %s in %d classloaders", c, classLoaders.size)
     try {
       var clazz: Class[_] = null
             var count = 0
-      val iter = classLoaders.iterator
+      
+      val (iter, dup) = classLoaders.iterator.duplicate
 
       while (clazz == null && iter.hasNext) {
-        try {
-          clazz = Class.forName(c, true, iter.next())
+        try { 
+          clazz = Class.forName(c.replace("<empty>.", ""), true, iter.next())
         }
         catch {
-          case e: ClassNotFoundException => // keep going, maybe it's in the next one
+          case e: ClassNotFoundException => // keep going, maybe it's in the next classloader
         }
         //        log.info("resolveClass: %s %s in classloader '%s' %d of %d", c, (if (clazz != null) "FOUND" else "NOT FOUND"), ctx.name.getOrElse("N/A"), count, ctx.classloaders.size)
                 count += 1
       }
 
-      if (clazz != null) Some(clazz.asInstanceOf[Class[X]]) else None
+      if (clazz != null)  Some(clazz.asInstanceOf[Class[X]])
+      else None
     }
     catch {
       case _ : Throwable => None
     }
   }
-
-
+  
 }

@@ -30,9 +30,9 @@ import java.util.concurrent.{ CopyOnWriteArrayList, ConcurrentHashMap }
 trait AvroContext extends Context {
 
   // since salat's graters is hidden from me, keeping my own collection
-  private[avro] val avroGraters: scala.collection.concurrent.Map[String, Grater[_ <: AnyRef]] = JConcurrentMapWrapper(new ConcurrentHashMap[String, Grater[_ <: AnyRef]]())
+  private[avro] val avroGraters: scala.collection.concurrent.Map[String, Grater[_ <: AnyRef]] = JConcurrentMapWrapper(new ConcurrentHashMap[String, Grater[_ <: AnyRef]]()) 
 
-  override def accept(grater: Grater[_ <: AnyRef]) = {
+  override def accept(grater: Grater[_ <: AnyRef]) = { 
     super.accept(grater)
     avroGraters += (grater.clazz.getName.toString -> grater)
   }
@@ -44,26 +44,37 @@ trait AvroContext extends Context {
     if (g.isDefined) g.get else throw GraterGlitch(c)(this)
   }
 
-  def lookp(c: String): Option[Grater[_ <: AnyRef]] = avroGraters.get(c) 
+  def lookp(c: String): Option[Grater[_ <: AnyRef]] =  { avroGraters.get(c) orElse { 
+      if (suitable_?(c)) { 
+          resolveClass(c, clsLoaders) match {
+        case Some(clazz) if isCaseClass(clazz) => { 
+          Some((new SingleAvroGrater[CaseClass](clazz.asInstanceOf[Class[CaseClass]])(this) {}).asInstanceOf[Grater[_ <: AnyRef]])
+        }
+        case _ =>  None
+        }  
+      }
+    else None
+    }
+  }
 
   override def lookup[A <: AnyRef: Manifest]: Grater[A] = lookup(manifest[A].runtimeClass.getName).asInstanceOf[Grater[A]]
 
-  override def lookup_?[X <: AnyRef](c: String): Option[Grater[_ <: AnyRef]] =  avroGraters.get(c) orElse { 
+  override def lookup_?[X <: AnyRef](c: String): Option[Grater[_ <: AnyRef]] =  { avroGraters.get(c) orElse { 
     if (suitable_?(c)) {
         resolveClass(c, clsLoaders) match {
-      case Some(clazz) if needsProxyGrater(clazz) => {
+      case Some(clazz) if needsProxyGrater(clazz) => { 
         log.trace("lookup_?: creating proxy grater for clazz='%s'", clazz.getName)
         Some((new ProxyAvroGrater(clazz.asInstanceOf[Class[X]])(this) {}).asInstanceOf[Grater[_ <: AnyRef]])
       }
-      case Some(clazz) if isCaseClass(clazz) => {
+      case Some(clazz) if isCaseClass(clazz) => { 
           Some((new SingleAvroGrater[CaseClass](clazz.asInstanceOf[Class[CaseClass]])(this) {}).asInstanceOf[Grater[_ <: AnyRef]])
         }
-      case _ => None
+      case _ =>  None
      }  
      }
-  else None
+  else  None
   }
-}
+}}
 
 object ClassComparator extends Comparator[Class[_]] {
   def compare(c1: Class[_], c2: Class[_]) = c1.getName.compare(c2.getName)
