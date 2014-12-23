@@ -47,8 +47,8 @@ class ProxyAvroGrater[X <: AnyRef](clazz: Class[X])(implicit ctx: AvroContext) e
   def asObject[A <% MongoDBObject](dbo: A): X =
     ctx.lookup(dbo).asInstanceOf[Grater[X]].asObject(dbo)
 
-  def iterateOut[T](o: X)(f: ((String, Any)) => T): Iterator[T] =
-    ctx.lookup(o.getClass.getName).asInstanceOf[Grater[X]].iterateOut(o)(f)
+  def iterateOut[T](o: X, outputNulls: Boolean)(f: ((String, Any)) => T): Iterator[T] =
+    ctx.lookup(o.getClass.getName).asInstanceOf[Grater[X]].iterateOut(o, true)(f)
 
   def fromJSON(j: JObject) = ctx.lookup(j).asInstanceOf[Grater[X]].fromJSON(j)
 

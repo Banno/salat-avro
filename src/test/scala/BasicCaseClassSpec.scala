@@ -34,16 +34,22 @@ object BasicCaseClassSpec extends SalatAvroSpec with JsonMatchers {
     "make a datum writer for a basic case class" >> {
 //Had to comment out a few tests because Specs2 doesn't seem to see the JSON elements in the correct order after updating from 2.9.2 to 2.10.X
       val json = serializeToJSON(ed)
+
       println(json)
       json must /("com.banno.salat.avro.test.models.Edward") /("a" -> ed.a)
+
       json must /("com.banno.salat.avro.test.models.Edward") /("b" -> ed.b)
+
      // json must /("com.banno.salat.avro.test.models.Edward") /("c" -> ed.c)
       json must /("com.banno.salat.avro.test.models.Edward") /("aa") /("string" -> ed.aa.get)
       json must /("com.banno.salat.avro.test.models.Edward") /("bb") /("int" -> ed.bb.get)
      // json must /("com.banno.salat.avro.test.models.Edward") /("cc") /("double" -> ed.cc.get)
+
+
       json must /("com.banno.salat.avro.test.models.Edward") /("aaa" -> null)
       json must /("com.banno.salat.avro.test.models.Edward") /("bbb" -> null)
       json must /("com.banno.salat.avro.test.models.Edward") /("ccc" -> null)
+
     }
 
     "make a datum reader for a basic case class" in {
