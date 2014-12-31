@@ -52,19 +52,6 @@ trait SalatAvroSpec extends Specification {
     g.asObjectsFromFile(infile).next  
   }
 
-  def serializeAndDeserializeIteratorFromDatafile[X <: CaseClass : Manifest](old: Iterator[X], maybeGrater: Option[AvroGrater[X]] = None): Iterator[X] = {
-    val g = maybeGrater.getOrElse(grater[X])
-
-    //Serialize to an Avro DataFile
-    val outfile2 = new File ("/tmp/file2.avro")
-    outfile2.delete() // For testing only, make sure that the file is empty for each run of the test
-    g.serializeCollectionToFile(outfile2, old)
-  
-    //Deserialize from File: Read DataFile and deserialize back to object 
-    val iteratorInfile = outfile2
-    g.asObjectsFromFile(iteratorInfile)   
-  }
-
   def containField(name: String, schemaType: Schema.Type): Matcher[Schema] =
     ((_: Schema).getFields.map(f => (f.name, f.schema.getType)).contains(Pair(name, schemaType)),
      (schema: Schema) => "Schema\n\t%s\n\tdoesn't have a field named '%s' of type '%s'".format(schema, name, schemaType))
