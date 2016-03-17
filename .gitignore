@@ -2,5 +2,6 @@ lib_managed/
 src_managed/
 target/
 /project/boot/
-
+idea/
+.ensime
 /project/plugins/project/build.properties

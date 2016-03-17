@@ -3,6 +3,7 @@ package com.banno.salat.avro.test
 import com.banno.salat.avro._
 import global._
 import org.apache.avro.Schema
+import scala.collection.JavaConverters._
 
 object RecursiveTypeSupportSpec extends SalatAvroSpec {
   import models._
@@ -22,15 +23,11 @@ object RecursiveTypeSupportSpec extends SalatAvroSpec {
       
       val recursiveUnion1 = recordSchema.getField("left").schema
       recursiveUnion1.getName must_== "union"
-      recursiveUnion1.getTypes.get(0).getName must_== "End"
-      recursiveUnion1.getTypes.get(1).getName must_== "ManyTrees"
-      recursiveUnion1.getTypes.get(2).getName must_== "Node"
+      recursiveUnion1.getTypes.asScala.map(_.getName) must contain(exactly("ManyTrees", "End", "Node"))
       
       val recursiveUnion2 = recordSchema.getField("right").schema
       recursiveUnion2.getName must_== "union"
-      recursiveUnion2.getTypes.get(0).getName must_== "End"
-      recursiveUnion2.getTypes.get(1).getName must_== "ManyTrees"
-      recursiveUnion2.getTypes.get(2).getName must_== "Node"
+      recursiveUnion2.getTypes.asScala.map(_.getName) must contain(exactly("ManyTrees", "End", "Node"))
     }
 
     "be able to read and write" in {

@@ -3,6 +3,7 @@ package com.banno.salat.avro.test
 import com.banno.salat.avro._
 import global._
 import org.apache.avro.Schema
+import scala.collection.JavaConverters._
 
 object PolymorphismSupportSpec extends SalatAvroSpec {
   import models._
@@ -23,8 +24,7 @@ object PolymorphismSupportSpec extends SalatAvroSpec {
 
       val subclassSchemas = recordSchema.getField("theListWhichNeedsToBeTested").schema.getElementType
       subclassSchemas.getName must_== "union"
-      subclassSchemas.getTypes.get(0).getName must_== "AnotherSubclassExtendingSaidTrait"
-      subclassSchemas.getTypes.get(1).getName must_== "SomeSubclassExtendingSaidTrait"
+      subclassSchemas.getTypes.asScala.map(_.getName) must contain(exactly("AnotherSubclassExtendingSaidTrait", "SomeSubclassExtendingSaidTrait"))
     }
 
     "serialize and deserialize an object" in {
