@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 T8 Webware
+ * Copyright 2011-2013 T8 Webware
  *   
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,12 @@ import org.apache.avro.io.Decoder
 import org.apache.avro.io.Encoder
 import scala.collection.JavaConversions._
 import scala.collection.mutable.LinkedHashSet
+import scala.collection.mutable.ListBuffer
 
 class UnsupportedCaseClassMultiException(obj: Any)
 extends RuntimeException("Cannot serialize " + obj)
 
-class MultiAvroGrater(val graters: LinkedHashSet[SingleAvroGrater[_]])(implicit val ctx: Context)
+class MultiAvroGrater( val graters: LinkedHashSet[SingleAvroGrater[_]])(implicit val ctx: Context)
 extends AvroGrater[CaseClass] {
   
   def +(other: AvroGrater[_]) = other match {
@@ -35,9 +36,11 @@ extends AvroGrater[CaseClass] {
     case sg: SingleAvroGrater[_] => new MultiAvroGrater(graters + sg)
   }
   
-  lazy val asAvroSchema: Schema = Schema.createUnion(graters.toList.map(_.asSingleAvroSchema))
+  lazy val asAvroSchema: Schema = asSingleAvroSchema(new ListBuffer[Schema])
+  
+  private[avro] def asSingleAvroSchema(knownSchemas: ListBuffer[Schema]) =
+    Schema.createUnion(graters.toList.map(_.asSingleAvroSchema(knownSchemas)))
   
   def supports[X](x: X)(implicit manifest: Manifest[X]): Boolean =
     graters.exists(_.supports(x))
 }
-

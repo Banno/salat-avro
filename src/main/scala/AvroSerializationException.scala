@@ -15,8 +15,7 @@
  */
 package com.banno.salat.avro
 
-import com.novus.salat.Context
-
-package object global {
-  implicit val ctx = new AvroContext { val name = "global" }
-}
+class AvroSerializationException(grater: AvroGrater[_], tryingToSerialize: AnyRef, cause: Throwable) extends Exception(
+  "grater \"%s\" ran into problem \"%s\" when serializing \"%s\"".format(grater, cause.getMessage, tryingToSerialize),
+  cause
+)

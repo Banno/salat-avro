@@ -28,10 +28,26 @@
   
 #+END_SRC
    
+   Reading and writing Avro datafiles is done like so:
+#+BEGIN_SRC scala
+
+  val iterAlice = Iterator[Alice](oldAlice)
+  val file = new File("output.avro")
+
+  grater[Alice].serializeToFile(file, iterAlice)
+
+  val iterAliceNew = grater[Alice].asObjectsFromFile(file)
+  val sameIter =  iterAlice.corresponds(sameIter)
+
+#+END_SRC
+
    In the case that you need an Avro schema (say for the JsonEncoder), you can get it via:
 #+BEGIN_SRC scala
   val schema: Schema = grater[Alice].asAvroSchema
 #+END_SRC
+
+  Runable sample projects can be found in the various branches [[https://github.com/julianpeeters/salat-avro-example][here]]  
+
 *** Types that salat-avro supports
     - Boolean
     - String
@@ -67,13 +83,8 @@
 
  salat uses the ScalaSig (scalap) library for inspecting case classes without the use of reflection. It is also able to extract values without reflection. This makes it fast.
 ** Installation
-   =salat-avro= is not yet published anywhere. Sorry. The git repository must be cloned locally and a ~sbt publish-local~ must be given. It currently has a dependency on salat 0.0.7-SNAPSHOT and avro 1.5.
-** Still To Do
-   There are some basic types left to do:
-   - Array/List/Seq/Set
-   - Map
-   - etc.
-   Look at [[https://github.com/novus/salat/tree/master/salat-core/src/test/scala/com/novus/salat/test][salat-core's tests]] for inspiration.
+   =salat-avro= is not yet published anywhere. Sorry. The git repository must be cloned locally and a ~sbt publish-local~ must be given.
+
 ** Contributing
    Fork away, commit, and send off a pull request to me. Make sure your tests pass before you send the pull request.
 ** License

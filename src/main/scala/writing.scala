@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 T8 Webware
+ * Copyright 2011-2013 T8 Webware
  *   
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,19 +27,15 @@ class AvroGenericDatumWriter[X](schema: Schema)(implicit ctx: Context) extends G
 class AvroProductGenericData(implicit ctx: Context) extends GenericData {
   override def getField(record: Any, name: String, pos: Int): Object = {
     val caseClass = record.asInstanceOf[Product]
-    val grater: SingleAvroGrater[_] = ctx.lookup(caseClass.getClass.getName).get.asInstanceOf[SingleAvroGrater[_]]
-    // println("getField in grater %s\n\twith record %s\n\twith name %s \n\tat pos %s".format(grater, record, name, pos))
+    val grater: SingleAvroGrater[_] = ctx.asInstanceOf[AvroContext].lookp(caseClass.getClass.getName).get.asInstanceOf[SingleAvroGrater[_]]
 
     val (value, field) = caseClass.productIterator.zip(grater._indexedFields.iterator).toList.apply(pos)
     val outTransformer = Extractors.select(field.typeRefType).getOrElse(field.out)
-    // println("out transformer is " + outTransformer)
     val returnedValue = outTransformer.transform_!(value) match {
       case Some(None) => None
       case Some(serialized) => serialized.asInstanceOf[AnyRef]
       case _ => None
     }
-    // println("returnedValue = " + returnedValue)
-    // println("returnedValue.class = " + returnedValue.getClass)
     returnedValue
   }
 

@@ -4,7 +4,9 @@ import com.banno.salat.avro._
 import global._
 import org.apache.avro.Schema
 
-object CaseClassGraphSpec extends SalatAvroSpec {
+import org.specs2.matcher.JsonMatchers
+
+object CaseClassGraphSpec extends SalatAvroSpec with JsonMatchers {
   import models._
 
   "a grater for nested case classes" should {
@@ -31,7 +33,7 @@ object CaseClassGraphSpec extends SalatAvroSpec {
       json must /("com.banno.salat.avro.test.models.Alice") /("z") /("p") /("int" -> graph.z.p.get)
       json must /("com.banno.salat.avro.test.models.Alice") /("z") /("q" -> graph.z.q)
     }
-    
+
     "serialize and deserialize an object" in {
       val oldGraph = graph()
       val newGraph = serializeAndDeserialize(oldGraph)
@@ -43,6 +45,13 @@ object CaseClassGraphSpec extends SalatAvroSpec {
       val newUser = serializeAndDeserialize(oldUser)
       println("new user = " + newUser)
       newUser must_== oldUser
+    }
+
+    "serialize and deserialize an optional nested case class" in {
+      val oldFred = Fred(Alice("x", Some("y"), Basil(Some(123))),
+                         Some(Clara()))
+      val newFred = serializeAndDeserialize(oldFred)
+      newFred must_== oldFred
     }
   }
 }

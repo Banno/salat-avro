@@ -4,9 +4,9 @@ import com.banno.salat.avro.MultiAvroGrater
 import com.banno.salat.avro._
 import global._
 
-import org.specs2.mutable._
 import com.novus.salat.CaseClass
 import java.io.ByteArrayOutputStream
+import java.io.File
 import scala.collection.JavaConversions._
 import org.specs2.mutable._
 import org.specs2.matcher.Matcher
@@ -38,6 +38,19 @@ trait SalatAvroSpec extends Specification {
   def byteArrayOuputStream(): ByteArrayOutputStream = new ByteArrayOutputStream
   def binaryEncoder(byteArrayOS: ByteArrayOutputStream) = EncoderFactory.get().binaryEncoder(byteArrayOS, null)
   def binaryDecoder(bytes: Array[Byte]) = DecoderFactory.get().binaryDecoder(bytes, null)
+
+  def serializeAndDeserializeFromDatafile[X <: CaseClass : Manifest](old: X, maybeGrater: Option[AvroGrater[X]] = None): X = {
+    val g = maybeGrater.getOrElse(grater[X])
+
+    //Serialize to an Avro DataFile
+    val outfile1 = new File("/tmp/file1.avro")   
+    outfile1.delete() // For testing only, make sure that the file is empty for each run of the test
+    g.serializeToFile(outfile1, old) 
+
+    //Deserialize from File: Read DataFile and deserialize back to object 
+    val infile = outfile1
+    g.asObjectsFromFile(infile).next  
+  }
 
   def containField(name: String, schemaType: Schema.Type): Matcher[Schema] =
     ((_: Schema).getFields.map(f => (f.name, f.schema.getType)).contains(Pair(name, schemaType)),
